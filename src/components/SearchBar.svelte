@@ -1,10 +1,10 @@
 <script>
 </script>
 
-<input id="searchBar" type="text">
+<input id="searchBar" type="text" class=" w-64 bg-primary-1 rounded-3xl h-3/6 self-center border-none mx-2">
 
 <style>
-    #searchBar {
+    /* #searchBar {
         width: 250px;
         background-color: white;
         border-radius: 20px;
@@ -13,6 +13,6 @@
         border: none;
         margin-left: 10px;
         margin-right: 10px;
-    }
+    } */
 
 </style>

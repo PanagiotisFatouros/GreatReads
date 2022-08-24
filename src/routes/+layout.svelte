@@ -3,4 +3,5 @@
     import NavBar from "../components/NavBar.svelte"
 </script>
 <NavBar/>
-<slot>Hello!</slot>
+
+<slot></slot>
