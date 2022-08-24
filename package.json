@@ -13,6 +13,7 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
+		"@babel/eslint-parser": "^7.18.9",
 		"@playwright/test": "^1.22.2",
 		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "next",
