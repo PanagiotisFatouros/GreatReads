@@ -30,7 +30,7 @@ jobs:
     - run: npm ci
     - run: npm install @babel/eslint-parser --save-dev
     - run: npm init @eslint/config
-    - run: npx eslint src
+    - run: npx --fix eslint src
     - run: npm run build --if-present
     - run: npx playwright install
     - run: npm test
