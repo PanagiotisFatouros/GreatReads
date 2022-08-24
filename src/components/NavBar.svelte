@@ -3,11 +3,11 @@
 </script>
 
 <div id="navBar">
-    <h1 id="logo">GreatReads</h1>
+    <a id="logo" href="null">GreatReads</a>
     
     <ol>
-        <li>Browse</li>
-        <li>My Library</li>
+        <a href="null"><li>Browse</li></a>
+        <a href="null"><li>My Library</li></a>
     </ol>
 
     <img id="userIcon" src={"./images/user.svg"} alt="User Icon"/>
@@ -32,6 +32,7 @@
         padding: 1em;
         font-family: 'Crete Round', serif;
         color: white;
+        font-size: x-large;
     }
     #userIcon {
         margin-right: 10px;
@@ -50,5 +51,11 @@
         display: flex;
         justify-content: space-around;
         align-self: center;
+    }
+    a {
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: none;
     }
 </style>
