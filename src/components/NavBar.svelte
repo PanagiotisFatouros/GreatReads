@@ -1,16 +1,20 @@
 <script>
-
+    import SearchBar from "./SearchBar.svelte";
 </script>
 
 <div id="navBar">
     <a id="logo" href="null">GreatReads</a>
     
-    <ol>
-        <a href="null"><li>Browse</li></a>
-        <a href="null"><li>My Library</li></a>
-    </ol>
+    <div id="rightNav">
+        <ul>
+            <a href="null"><li>Browse</li></a>
+            <a href="null"><li>My Library</li></a>
+        </ul>
 
-    <img id="userIcon" src={"./images/user.svg"} alt="User Icon"/>
+        <SearchBar/>
+
+        <img id="userIcon" src={"./images/user.svg"} alt="User Icon"/>
+    </div>
 
 </div>
 
@@ -38,7 +42,6 @@
         margin-right: 10px;
         height: 40px;
         width: auto;
-        align-self: center;
     }
     li {
         list-style: none;
@@ -46,16 +49,22 @@
         color: white;
         font-family: 'Quicksand', sans-serif;
         font-size: larger;
+        white-space: nowrap;
     }
-    ol {
+    ul {
         display: flex;
         justify-content: space-around;
-        align-self: center;
     }
     a {
         text-decoration: none;
     }
     a:hover {
         text-decoration: none;
+    }
+
+    #rightNav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
     }
 </style>
