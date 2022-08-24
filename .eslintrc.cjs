@@ -3,9 +3,9 @@ module.exports = {
 	extends: ['eslint:recommended', 'prettier'],
 	rules: {
 		// enable additional rules
-		indent: ["error", 4],
-		quotes: ["error", "double"],
-		semi: ["error", "always"],
+		indent: ["warning", 4],
+		quotes: ["warning", "single"],
+		semi: ["warning", "always"],
 	},
 	plugins: ['svelte3'],
 	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
