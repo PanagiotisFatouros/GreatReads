@@ -10,7 +10,7 @@
     }
 </script>
 
-<form on:submit|preventDefault={handleSubmit} class="flex content-center justify-center h-1/2 self-center rounded-full overflow-hidden font-body text-primary-3">
+<form on:submit|preventDefault={handleSubmit} class="flex content-center justify-center h-1/2 self-center rounded-full overflow-hidden font-body text-primary-3 text-body1">
     <div class=" bg-primary-1 flex">
         <select bind:value={selected} class=" bg-transparent w-full pl-2 cursor-pointer focus:outline-none">
             {#each searchTypes as searchType}
