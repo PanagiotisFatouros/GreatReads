@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Crete+Round&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito&display=swap');
+
+/* import tailwind utilities */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+    font-family: 'Crete Round', serif;
+}
+
+/* may be used if we add multiple themes */
+/* .theme-light {
+    --color-primary-1: 238, 238, 238;
+    --color-primary-2: 255, 149, 83;
+    --color-primary-3: 66, 76, 85;
+    --color-secondary: 21, 176, 151;
+    --color-accent: 255, 102, 99;
+} */
