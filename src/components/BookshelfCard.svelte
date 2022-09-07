@@ -1,30 +1,31 @@
 <script>
+    let bookshelf = {
+        name: "20 Characters Max",
+        books : [{
+            img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        }]
+
+    }
 </script>
 
-<div id="library">
-    <div id="card" class="bg-primary-3">
-        <div id="Header" class="bg-secondary">
-            <span>Tear Jerkers</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-        </div>
-        <div id="Book1" class="bg-primary-3"> </div>
-        <div id="Book2" class="bg-primary-3"> </div>
-        <div id="Book3" class="bg-primary-3"> </div>
-        <div id="Footer" class="bg-secondary"></div>
+<div id="card" class="bg-primary-3">
+    <div id="Header" class="bg-secondary">
+        <span>{bookshelf.name}</span>
+        <svg id="more" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
     </div>
-</div>
+    <div id="Book1" class="bg-primary-3"> <img src={bookshelf.books[0].img} alt=""> </div>
+    <div id="Book2" class="bg-primary-3"> <img src={bookshelf.books[0].img} alt=""> </div>
+    <div id="Book3" class="bg-primary-3"> </div>
+    <div id="Footer" class="bg-secondary"> </div>
+    </div>
 
 <style>
-    #library {
-        width: 100%;
-        height: 40vh;
-    }
-    #card {
+   #card {
         border-radius: 10px;
-        height: 80%;
-        width: 15%;
+        height: 270px;
+        width: 200px;
         margin: 5%;
         display: flex;
         flex-direction: column;
@@ -36,22 +37,27 @@
         height: 13%;
         border-radius: 10px 10px 0 0;
         display: flex;
-        justify-content: space-between;
+        white-space: nowrap;
     }
-
     #Header > * {
         margin-left: 5%;
         margin-right: 5%;
         align-self: center;
     }
-
+    #more {
+        position: absolute;
+        left: 80%;
+    }
     #Book1, #Book2, #Book3 {
         position: absolute;
         box-shadow: 2px 2px 5px black;
-        height: 50%;
-        width: 40%;
+        height: 128px;
+        width: 80px;
     }
-
+    img {
+        width: 100%;
+        height: 100%;
+    }
     #Book1 {
         top: 20%;
         left: 10%;
