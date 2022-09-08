@@ -7,9 +7,14 @@ module.exports = {
 		quotes: ["warn", "single"],
 		semi: ["warn", "always"],
 	},
-	plugins: ['svelte3'],
-	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
-	parser: "@babel/eslint-parser",
+	plugins: [
+		'svelte3',
+		'@typescript-eslint'
+	],
+	overrides: [
+		{ files: ['*.svelte'], processor: 'svelte3/svelte3' }
+	],
+	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		requireConfigFile: false,
 		sourceType: 'module',
@@ -19,5 +24,8 @@ module.exports = {
 		browser: true,
 		es2017: true,
 		node: true
+	},
+	settings: {
+		'svelte3/typescript': () => require('typescript'), // pass the TypeScript package to the Svelte plugim
 	}
 };

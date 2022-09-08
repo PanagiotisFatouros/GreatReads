@@ -19,7 +19,13 @@ module.exports = {
         logo: ['Crete Round', 'serif'],
         heading: ['Quicksand', 'sans-serif'],
         body: ['Nunito', 'sans-serif'],
-      }
+      },
+      fontSize: {
+        "heading1": '1.85rem',
+        "heading2": '1.5rem',
+        "body1": '1.1rem',
+        "body2": '0.9rem',
+      },
     },
   },
   plugins: [],
