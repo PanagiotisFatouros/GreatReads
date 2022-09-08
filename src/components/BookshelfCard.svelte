@@ -19,7 +19,7 @@
     <div id="Book2" class="bg-primary-3"> <img src={bookshelf.books[0].img} alt=""> </div>
     <div id="Book3" class="bg-primary-3"> </div>
     <div id="Footer" class="bg-secondary"> </div>
-    </div>
+</div>
 
 <style>
    #card {
