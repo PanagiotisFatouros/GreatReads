@@ -1,5 +1,6 @@
 <script lang="ts">
     export let rating:number;
+    export let showRating:boolean = true;
 
     let numStars:number = Math.floor(rating);
     let fraction:number = rating - numStars;
@@ -7,7 +8,9 @@
 </script>
 
 <div class="text-primary-2 font-body flex content-center space-x-1/2">
+    {#if showRating}
     <p class="pr-2">{rating.toFixed(1)}</p>
+    {/if}
 
     <!-- whole stars -->
     {#each Array(numStars) as _}
