@@ -9,3 +9,4 @@
 <StarRating rating={0.5} />
 <StarRating rating={4.9} />
 <StarRating rating={4.8} />
+
