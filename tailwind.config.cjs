@@ -23,6 +23,12 @@ module.exports = {
       width: {
         '34': '8.5rem',
       }
+      fontSize: {
+        "heading1": '1.85rem',
+        "heading2": '1.5rem',
+        "body1": '1.1rem',
+        "body2": '0.9rem',
+      },
     },
   },
   plugins: [
