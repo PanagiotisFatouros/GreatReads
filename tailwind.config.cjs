@@ -19,8 +19,13 @@ module.exports = {
         logo: ['Crete Round', 'serif'],
         heading: ['Quicksand', 'sans-serif'],
         body: ['Nunito', 'sans-serif'],
+      },
+      width: {
+        '34': '8.5rem',
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }
