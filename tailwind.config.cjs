@@ -26,6 +26,10 @@ module.exports = {
         "body1": '1.1rem',
         "body2": '0.9rem',
       },
+      spacing: {
+        'coverHeight': '29.375rem',
+        'coverWidth': '18.359rem',
+      },
     },
   },
   plugins: [],

@@ -18,4 +18,6 @@
 <RatingInput bind:rating={rating} />
 <p>input rating: {rating}</p>
 
+<a href="/books/zyTCAlFPjgYC">Book Link</a>
+
 
