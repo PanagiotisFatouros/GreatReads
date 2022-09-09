@@ -5,27 +5,36 @@ name: Build and deploy Node.js app to Azure Web App - GreatReads
 
 on:
   push:
-    branches:
-      - IT-28
+    branches: [ "main", "IT-28" ]
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+      runs-on: ubuntu-latest
 
-      - name: Set up Node.js version
-        uses: actions/setup-node@v1
+      strategy:
+        matrix:
+          node-version: [18.x]
+          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
+      steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
         with:
-          node-version: '16.x'
-
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm run build --if-present
-          npm run test --if-present
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm install --save typescript
+      - run: npm install --save-dev eslint-plugin-svelte3
+      - run: npm install --save-dev "@typescript-eslint/eslint-plugin"
+      - run: npm install --save-dev '@typescript-eslint/parser'
+      - run: npm init @eslint/config
+      - run: npx --fix eslint src
+      - run: npm run build --if-present
+      - run: npx playwright install
+      - run: npm test
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
