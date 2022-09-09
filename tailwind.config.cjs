@@ -22,7 +22,7 @@ module.exports = {
       },
       width: {
         '34': '8.5rem',
-      }
+      },
       fontSize: {
         "heading1": '1.85rem',
         "heading2": '1.5rem',
