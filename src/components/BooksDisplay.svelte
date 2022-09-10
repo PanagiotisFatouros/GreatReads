@@ -1,17 +1,9 @@
 <script>
     let display = {
-        name: "Currently Reading",
+        name: "Currently Reading (Shows maximum 8)",
         books:
         [{
             name: "A tale of two cities and two cities and two cities",
-            img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-        },
-        {
-            name: "A tale of two cities",
-            img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
-        },
-        {
-            name: "A tale of two cities",
             img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api"
         },
         {
@@ -93,7 +85,7 @@
 
     #books-container {
         display: flex;
-        justify-content: space-between;
+        justify-content: flex-start;
         padding: 10px;
     }
 
@@ -103,6 +95,8 @@
         flex-direction: column;
         justify-content: space-between;
         align-content: center;
+        margin-left: 2%;
+        margin-right: 2%;
     }
 
     #title {
@@ -113,5 +107,4 @@
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
     }
-
 </style>
