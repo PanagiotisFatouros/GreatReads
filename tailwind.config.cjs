@@ -22,7 +22,7 @@ module.exports = {
       },
       fontSize: {
         "heading1": '1.85rem',
-        "heading2": '1.5rem',
+        "heading2": '1.3rem',
         "body1": '1.1rem',
         "body2": '0.9rem',
       },
@@ -33,4 +33,9 @@ module.exports = {
     },
   },
   plugins: [],
+  variants: {
+    extend: {
+      boxShadow: ['active']
+    }
+  }
 }

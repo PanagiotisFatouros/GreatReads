@@ -1,31 +1,35 @@
 <script lang="ts">
-
+    import StarRating from '../../../components/StarRating.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
     //TODO: store in separate file and change to match format of api response
     type Book = {
-        name: string,
-        author: string,
-        numPages: number,
-        rating: number,
+        title: string,
+        authors: string[],
+        pageCount: number,
+        //will be computed from stored ratings not saved with book
+        avgRating: number,
+        numRatings: number,
         description: string,
         //will be array of Review types not strings
         reviews: string[],
-        genre: string,
+        genres: string[],
         isbn: string,
         //could be Date
         datePublished: string,
-        imageURL: string
+        imageURL: string,
+        //TODO: maybe add language
     }
 
     let book:Book = {
-        name: "The Hunger Games",
-        author: "Suzanne Collins",
-        numPages: 384,
-        rating: 4.3,
+        title: "The Hunger Games",
+        authors: ["Suzanne Collins"],
+        pageCount: 384,
+        avgRating: 4.3,
+        numRatings: 35,
         description: "The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.",
         reviews: ["great", "terrible"],
-        genre: "Dystopian",
+        genres: ["Dystopian", "science fiction", "drama", "action"],
         isbn: "9780440335702",
         datePublished: "1st December 2011",
         imageURL: "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api"
@@ -35,30 +39,50 @@
         //TODO: save book to user's bookshelf
         
     }
+
+    function convertToString (val:any) {
+        if (Array.isArray(val) && val.every(i => typeof i === "string")) {
+            return val.join(', ')
+        }
+        return '';
+    }
 </script>
 
-<div class=" grid grid-cols-9">
+<div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
     <!-- left column - cover image and info -->
-    <div class=" col-span-3 flex justify-center items-center flex-col bg-red-600">
+    <div class=" col-span-3 flex justify-center items-center flex-col">
         <div class=" h-coverHeight w-coverWidth my-5">
             <img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain">
         </div>
 
-        <button on:click={saveBook} class=" bg-secondary rounded-3xl text-white px-4 py-1">+ Save Book</button>
+        <!-- TODO: show popup to select which bookshelf to save it in, and change text to "saved" after -->
+        <button on:click={saveBook} class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 hover:bg-opacity-80 shadow-md active:shadow-none">+ Save Book</button>
 
-        <ul>
-            
+        <ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
+            <li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>
+            <li><p><span class=" text-secondary">Genres: </span>{convertToString(book.genres)}</p></li>
+            <li><p><span class=" text-secondary">Number of Pages: </span>{book.pageCount}</p></li>
+            <li><p><span class=" text-secondary">ISBN: </span>{book.isbn}</p></li>
         </ul>
         
     </div>
 
     <!-- middle column - book overview and reviews/notes -->
-    <div class=" col-span-4 bg-blue-500">
-        <p>div2</p>
+    <div class=" col-span-5 mt-5 mr-3">
+        <div class="flex justify-start items-center flex-wrap">
+            <h1 class=" text-heading1 font-heading text-secondary mr-5">{book.title}</h1>
+            <StarRating rating={book.avgRating} />
+            <p class=" text-body2 ml-4">{book.numRatings} Reviews</p>
+        </div>
+
+        <h2 class=" text-heading2 font-heading">{convertToString(book.authors)}</h2>
+        <p class="mt-3">{book.description}</p>
+        
     </div>
 
     <!-- right column - similar books -->
-    <div class=" col-span-2 bg-green-700">
-        <p>div3</p>
+    <div class=" col-span-2 bg-primary-1 rounded-3xl m-4 py-2 px-3">
+        <h2 class=" text-heading2 font-heading">Similar Books</h2>
+        <hr class=" border-1 border-primary-3">
     </div>
 </div>
