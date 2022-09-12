@@ -1,25 +1,9 @@
 <script lang="ts">
     import StarRating from '../../../components/StarRating.svelte';
+    import BookPageContent from '../../../components/BookPageContent.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-    //TODO: store in separate file and change to match format of api response
-    type Book = {
-        title: string,
-        authors: string[],
-        pageCount: number,
-        //will be computed from stored ratings not saved with book
-        avgRating: number,
-        numRatings: number,
-        description: string,
-        //will be array of Review types not strings
-        reviews: string[],
-        genres: string[],
-        isbn: string,
-        //could be Date
-        datePublished: string,
-        imageURL: string,
-        //TODO: maybe add language
-    }
+    import type {Book} from '../../../types/book.type'
 
     let book:Book = {
         title: "The Hunger Games",
@@ -76,7 +60,9 @@
         </div>
 
         <h2 class=" text-heading2 font-heading">{convertToString(book.authors)}</h2>
-        <p class="mt-3">{book.description}</p>
+        <p class="mt-3 mb-5">{book.description}</p>
+
+        <BookPageContent book={book} />
         
     </div>
 
