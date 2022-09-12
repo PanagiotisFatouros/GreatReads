@@ -1,27 +1,38 @@
 <script lang="ts">
     let colourUp:string = "text-primary-3"
     let colourDown:string = "text-primary-3"
-    let voteCount:number = 0
+    let hoverable:string = "hover:text-accent"
+    let clickedUp:boolean = false
+    let clickedDown:boolean = false
+    let voteCount:number = 0 // get from database
 
-    function handleMouseOver(colour:string) {
-		colour = 'text-accent';
-	}
-    function handleMouseOut(colour:string) {
-		colour = 'text-primary-3';
-	}
-    function handleClick(colour:string) {
-        if (colour = "text-primary-3") {
+    // User can vote at most once in either direction, and can change their vote
+    function handleClickUp() {
+        if (!clickedUp) {
             voteCount++;
-            colour = "text-accent";
+            colourUp = "text-accent";
+            colourDown = "text-primary-3"
+            clickedUp = true
+            clickedDown = false
         }
-        
+        hoverable = ""
+    }
+    function handleClickDown() {
+        if (!clickedDown) {
+            voteCount--;
+            colourDown = "text-accent";
+            colourUp = "text-primary-3"
+            clickedDown = true
+            clickedUp = false
+        }
+        hoverable = ""
     }
 </script>
 
 <div class="w-4">
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <div class="w-4" style="cursor:pointer" on:mouseover={() => handleMouseOver(colourUp)} on:mouseout={() => handleMouseOut(colourUp)} on:click={() => handleClick(colourUp)}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 {colourUp}" >
+    <div class="w-4" style="cursor:pointer" on:click={() => handleClickUp()}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 {colourUp} {hoverable}">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"/>
         </svg>  
     </div>
@@ -29,8 +40,8 @@
     <p class="text-primary-3 font-body text-center w-6">{voteCount}</p>
 
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <div class="w-4" style="cursor:pointer" on:mouseover={() => handleMouseOver(colourDown)} on:mouseout={() => handleMouseOut(colourDown)} on:click={() => handleClick(colourDown)}>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 {colourDown}" >
+    <div class="w-4" style="cursor:pointer" on:click={() => handleClickDown()}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6 {colourDown} {hoverable}" >
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"/>
         </svg>  
     </div>
