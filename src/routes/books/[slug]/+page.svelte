@@ -1,6 +1,6 @@
 <script lang="ts">
     import StarRating from '../../../components/StarRating.svelte';
-    import BookPageContent from '../../../components/BookPageContent.svelte';
+    import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
     import type {Book} from '../../../types/book.type'
@@ -40,7 +40,7 @@
         </div>
 
         <!-- TODO: show popup to select which bookshelf to save it in, and change text to "saved" after -->
-        <button on:click={saveBook} class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 hover:bg-opacity-80 shadow-md active:shadow-none">+ Save Book</button>
+        <button on:click={saveBook} class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn">+ Save Book</button>
 
         <ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
             <li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>

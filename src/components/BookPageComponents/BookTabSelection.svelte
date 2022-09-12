@@ -1,5 +1,5 @@
 <script lang='ts'>
-    import {Tabs} from '../types/bookPageTabs.enum'
+    import {Tabs} from '../../types/bookPageTabs.enum'
     
     export let selectedTab:Tabs;
 
