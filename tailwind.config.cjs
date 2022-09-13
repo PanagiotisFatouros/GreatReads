@@ -20,6 +20,9 @@ module.exports = {
         heading: ['Quicksand', 'sans-serif'],
         body: ['Nunito', 'sans-serif'],
       },
+      width: {
+        '34': '8.5rem',
+      },
       fontSize: {
         "heading1": '1.85rem',
         "heading2": '1.5rem',
@@ -28,5 +31,7 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
 }
