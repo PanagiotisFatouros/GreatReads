@@ -2,4 +2,6 @@
     import ReviewInput from "./ReviewInput.svelte";
 </script>
 
-<ReviewInput />
+<div class=" mt-3">
+    <ReviewInput />
+</div>

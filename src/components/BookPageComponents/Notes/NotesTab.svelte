@@ -2,4 +2,6 @@
 
 </script>
 
-<h1>Notes</h1>
+<div class=" mt-3">
+    <h2 class=" text-accent">Collections</h2>
+</div>

@@ -17,11 +17,11 @@ function handleClick(starIndex:number) {
 
 </script>
 
-<div class="text-primary-2 font-body flex content-center space-x-1/2">
+<div class="text-primary-2 font-body flex content-center space-x-0">
     
     {#each Array(5) as _, index}
         <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-        <div class=" w-6 h-6" on:mouseover={() => handleMouseOver(index+1)} on:mouseout={handleMouseOut} on:click={() => handleClick(index+1)}>
+        <div class=" w-6 h-6 cursor-pointer" on:mouseover={() => handleMouseOver(index+1)} on:mouseout={handleMouseOut} on:click={() => handleClick(index+1)}>
             {#if index+1 <= hoverIndex}
                 <!-- hover -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-accent">
