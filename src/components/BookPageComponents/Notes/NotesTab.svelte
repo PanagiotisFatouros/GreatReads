@@ -1,4 +1,6 @@
-<script>
+<script lang='ts'>
+
+    let isOverlayOpen:boolean = false;
 
 </script>
 
