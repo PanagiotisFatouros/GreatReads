@@ -36,7 +36,7 @@
 	"dependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
-		"esbuild-darwin-64": "^0.15.7",
+		"esbuild": "^0.15.7",
 		"postcss-load-config": "^4.0.1"
 	}
 }
