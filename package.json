@@ -36,6 +36,7 @@
 	"dependencies": {
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
+		"mysql2": "^2.3.3",
 		"postcss-load-config": "^4.0.1"
 	}
 }
