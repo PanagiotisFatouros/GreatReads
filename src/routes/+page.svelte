@@ -2,8 +2,12 @@
     //TODO: remove
 	import StarRating from '../components/StarRating.svelte';
     import RatingInput from '../components/RatingInput.svelte';
-
-    let rating:number = 0;
+    import BookReview from '../components/BookReview.svelte';
+    import BooksDisplay from '../components/BooksDisplay.svelte';
+    import BookshelfCard from '../components/BookshelfCard.svelte';
+    import AbbreviatedBookCard from '../components/AbbreviatedBookCard.svelte';
+   
+   let rating:number = 0;
 </script>
 
 <StarRating rating={4.3} />
@@ -17,6 +21,14 @@
 
 <RatingInput bind:rating={rating} />
 <p>input rating: {rating}</p>
+
+<BookReview/>
+<BooksDisplay/>
+<BookshelfCard/>
+
+<AbbreviatedBookCard/>
+
+
 
 
 
