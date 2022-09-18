@@ -3,8 +3,32 @@
     import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-    import type {Book} from '../../../types/book.type'
+    import type {Book, Review, User, Collection} from '../../../types/book.type'
+    let user: User = {
+        name: "",
+        id: 123,
+        profilePic: "",
+    }
 
+    let review1:Review = {
+        title: "",
+        comment: "",
+        rating: 3,
+        date: new Date(),
+        upvotes: 5,
+        user: user
+    }
+
+    let collection1:Collection = {
+        id: 1,
+        title: "Summary",
+        creationDate: new Date(),
+        isPublic: true,
+        upvotes: 4,
+        user: user,
+        notes: []
+    }
+    
     let book:Book = {
         title: "The Hunger Games",
         authors: ["Suzanne Collins"],
@@ -12,12 +36,18 @@
         avgRating: 4.3,
         numRatings: 35,
         description: "The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.",
-        reviews: ["great", "terrible"],
+        reviews: [review1],
         genres: ["Dystopian", "science fiction", "drama", "action"],
         isbn: "9780440335702",
         datePublished: "1st December 2011",
-        imageURL: "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api"
+        imageURL: "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api",
+        userNotes: [collection1, collection1],
+        publicNotes: [collection1, collection1],
     }
+
+    
+
+    
 
     function saveBook() {
         //TODO: save book to user's bookshelf

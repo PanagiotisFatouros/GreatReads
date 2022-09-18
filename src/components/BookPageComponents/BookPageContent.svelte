@@ -15,10 +15,12 @@
 
 <BookTabSelection bind:selectedTab={selectedTab} />
 
-{#if selectedTab === Tabs.reviews}
-    <ReviewsTab />
-{:else if selectedTab === Tabs.notes}
-    <NotesTab />
-{:else}
-    <PublicNotesTab />
-{/if}
+<div class=" flex justify-center">
+    {#if selectedTab === Tabs.reviews}
+        <ReviewsTab />
+    {:else if selectedTab === Tabs.notes}
+        <NotesTab collections={book.publicNotes} />
+    {:else}
+        <PublicNotesTab />
+    {/if}
+</div>

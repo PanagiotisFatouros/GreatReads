@@ -25,8 +25,8 @@
 
 <div class=" flex flex-col space-y-2 text-body1 font-body">
     <RatingInput bind:rating />
-    <input type="text" bind:value={title} class=" bg-primary-1 py-1 px-2 rounded-lg" placeholder="Title...">
-    <textarea cols="30" rows="5" bind:value={comment} class=" bg-primary-1 py-1 px-2 rounded-lg resize-none" placeholder="Write a review..."></textarea>
+    <input type="text" bind:value={title} class=" standard_input" placeholder="Title...">
+    <textarea cols="30" rows="5" bind:value={comment} class=" bg-primary-1 py-1 px-2 rounded-lg resize-none border-none" placeholder="Write a review..."></textarea>
 
     <button on:click={postReview} class=" bg-accent w-24 self-end text-white rounded-full btn">Post</button>
 </div>
