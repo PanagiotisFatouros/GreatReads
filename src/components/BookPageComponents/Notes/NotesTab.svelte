@@ -24,7 +24,7 @@
 
 </script>
 
-<div class="flex flex-col justify-start w-10/12">
+<div class="flex flex-col justify-start w-full">
 
     <!-- TODO: maybe move to new component -->
     <!-- show form to create new collection -->

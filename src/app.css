@@ -35,7 +35,15 @@ h1 {
         @apply hover:bg-opacity-80 shadow-lg active:shadow-none
     }
 
-    .standard_input {
+    .std_button {
+        @apply bg-accent w-24 text-white rounded-full btn
+    }
+
+    .std_input {
         @apply bg-primary-1 py-1 px-2 rounded-lg border-none
+    }
+
+    .std_text_area {
+        @apply bg-primary-1 py-1 px-2 rounded-lg resize-none border-none
     }
 }
