@@ -3,7 +3,9 @@
 
 
 module.exports = {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: [
+    './src/**/*.{html,js,svelte,ts}',
+  ],
   theme: {
     extend: {
       colors: {
@@ -25,13 +27,22 @@ module.exports = {
       },
       fontSize: {
         "heading1": '1.85rem',
-        "heading2": '1.5rem',
+        "heading2": '1.3rem',
         "body1": '1.1rem',
         "body2": '0.9rem',
+      },
+      spacing: {
+        'coverHeight': '29.375rem',
+        'coverWidth': '18.359rem',
       },
     },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
   ],
+  variants: {
+    extend: {
+      boxShadow: ['active']
+    }
+  }
 }
