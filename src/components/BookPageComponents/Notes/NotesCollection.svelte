@@ -3,6 +3,7 @@
     import { onMount } from 'svelte';
     import {isOverlayOpen} from '../../../stores/OverlayStore.js'
     import Confirmation from '../../Confirmation.svelte'
+    import NoteCard from './NoteCard.svelte'
 
     onMount(() => {
         if (collection != null) {
@@ -107,6 +108,18 @@
         <input type="text" bind:value={title} class="std_input" placeholder="Title...">
         <textarea bind:value={noteContent} cols="30" rows="5" class="std_text_area" placeholder="Note..."></textarea>
         <button on:click={saveNote} class="std_button self-end">Save</button>
+    </div>
+
+    <hr class=" border-1 border-primary-3 my-3">
+
+    <!-- Note Cards -->
+    <div class=" space-y-3 mt-1 mb-5">
+        {#if collection != null}
+            {#each collection.notes as note}
+                <NoteCard note={note} />
+            {/each}
+        {/if}
+        
     </div>
 
 </div>

@@ -3,7 +3,7 @@
     import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-    import type {Book, Review, User, Collection} from '../../../types/book.type'
+    import type {Book, Review, User, Collection, Note} from '../../../types/book.type'
     let user: User = {
         name: "",
         id: 123,
@@ -19,6 +19,13 @@
         user: user
     }
 
+    let note1: Note = {
+        title: "Testing",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet sodales risus et pulvinar. Vivamus vitae lectus varius, tempus turpis id, hendrerit elit. Donec gravida finibus aliquam. Integer enim diam, interdum non finibus nec, blandit vitae tortor. Donec vitae mattis quam, ac pellentesque neque. Integer sit amet tortor odio. Integer sit amet lobortis magna, eu egestas lectus. Nam in convallis nisi. Suspendisse facilisis mollis sapien, a viverra sem pellentesque eget. Quisque quis interdum enim, et commodo est.",
+        creationDate: new Date(),
+        pageNum: 124
+    }
+
     let collection1:Collection = {
         id: 1,
         title: "Summary",
@@ -26,7 +33,7 @@
         isPublic: true,
         upvotes: 4,
         user: user,
-        notes: []
+        notes: [note1, note1, note1]
     }
     
     let book:Book = {
