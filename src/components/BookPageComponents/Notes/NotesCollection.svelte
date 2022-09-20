@@ -73,6 +73,9 @@
 
             //add note to local collection object so it doesn't have to be reloaded
             collection!.notes.push(newNote);
+            
+            //trigger reload
+            collection!.notes = collection!.notes;
 
             //reset
             pageNum = 0;

@@ -1,6 +1,6 @@
 <script lang='ts'>
     import NotesCollection from "./NotesCollection.svelte";
-	import type { Collection } from "src/types/book.type";
+	import type { Collection, User } from "src/types/book.type";
 
     export let collections: Collection[];
 
@@ -10,10 +10,32 @@
 
     function createNewCollection() {
         //TODO: check string is not empty and add to database
-        alert(`Title: ${newCollectionTitle}, isPublic: ${isPublic}`);
+        // alert(`Title: ${newCollectionTitle}, isPublic: ${isPublic}`);
         
         //remove overlay
         isOverlayOpen.set(false);
+
+        // TODO: get user from session
+        let user: User = {
+            name: "James Smith",
+            id: 123,
+            profilePic: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450",
+        }
+
+        let newCollection:Collection = {
+            //TODO: get actual id from database
+            id: Math.floor(Math.random() * 1000),
+            title: newCollectionTitle,
+            creationDate: new Date(),
+            isPublic: isPublic,
+            upvotes: 0,
+            user: user,
+            notes: [],
+        }
+
+        collections.push(newCollection);
+        //trigger refresh
+        collections = collections;
 
         //reset
         newCollectionTitle = "";
