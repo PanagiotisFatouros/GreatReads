@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Review, User } from "src/types/book.type";
+	import type { Review } from "src/types/book.type";
     import StarRating from "../../StarRating.svelte";
     import VoteButtons from "../../VoteButtons.svelte";
 

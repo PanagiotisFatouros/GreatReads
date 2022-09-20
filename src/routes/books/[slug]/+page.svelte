@@ -1,7 +1,6 @@
 <script lang="ts">
     import StarRating from '../../../components/StarRating.svelte';
     import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
-    import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
     import type {Book, Review, User, Collection, Note} from '../../../types/book.type'
