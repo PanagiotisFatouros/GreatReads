@@ -1,22 +1,32 @@
 <script lang="ts">
     import StarRating from '../../../components/StarRating.svelte';
     import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
+    import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
     import type {Book, Review, User, Collection, Note} from '../../../types/book.type'
     let user: User = {
-        name: "",
+        name: "James Smith",
         id: 123,
-        profilePic: "",
+        profilePic: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450",
     }
 
     let review1:Review = {
-        title: "",
-        comment: "",
+        title: "Terrible",
+        comment: "Lorem Ipsum",
         rating: 3,
         date: new Date(),
         upvotes: 5,
         user: user
+    }
+
+    let review2:Review = {
+        title: "60 Characters Max",
+        date: new Date("04 Dec 2021 00:12:00 GMT"),
+        comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.",
+        rating: 4.5,
+        user: user,
+        upvotes: -3
     }
 
     let note1: Note = {
@@ -43,7 +53,7 @@
         avgRating: 4.3,
         numRatings: 35,
         description: "The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.",
-        reviews: [review1],
+        reviews: [review1, review2],
         genres: ["Dystopian", "science fiction", "drama", "action"],
         isbn: "9780440335702",
         datePublished: "1st December 2011",
@@ -71,7 +81,7 @@
 
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
     <!-- left column - cover image and info -->
-    <div class=" col-span-3 flex justify-center items-center flex-col">
+    <div class=" col-span-3 flex justify-center items-center flex-col self-start">
         <div class=" h-coverHeight w-coverWidth my-5">
             <img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain">
         </div>
@@ -107,5 +117,6 @@
     <div class=" col-span-2 bg-primary-1 rounded-3xl m-4 py-2 px-3">
         <h2 class=" text-heading2 font-heading">Similar Books</h2>
         <hr class=" border-1 border-primary-3">
+        <!-- TODO: add a loop showing all books -->
     </div>
 </div>

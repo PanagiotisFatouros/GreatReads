@@ -7,6 +7,8 @@
     import BooksDisplay from '../components/BooksDisplay.svelte';
     import BookshelfCard from '../components/BookshelfCard.svelte';
     import AbbreviatedBookCard from '../components/AbbreviatedBookCard.svelte';
+    import BookCard from '../components/BookCard.svelte';
+    import VoteButtons from '../components/VoteButtons.svelte'
    
    let rating:number = 0;
 
@@ -32,6 +34,8 @@
 <BookshelfCard/>
 
 <AbbreviatedBookCard/>
+<BookCard />
 
+<VoteButtons />
 
 
