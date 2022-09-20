@@ -12,6 +12,7 @@
     }
 
     let review1:Review = {
+        id: 5413,
         title: "Terrible",
         comment: "Lorem Ipsum",
         rating: 3,
@@ -21,6 +22,7 @@
     }
 
     let review2:Review = {
+        id: 32451,
         title: "60 Characters Max",
         date: new Date("04 Dec 2021 00:12:00 GMT"),
         comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.",
@@ -30,23 +32,43 @@
     }
 
     let note1: Note = {
+        id: 9078,
         title: "Testing",
         content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet sodales risus et pulvinar. Vivamus vitae lectus varius, tempus turpis id, hendrerit elit. Donec gravida finibus aliquam. Integer enim diam, interdum non finibus nec, blandit vitae tortor. Donec vitae mattis quam, ac pellentesque neque. Integer sit amet tortor odio. Integer sit amet lobortis magna, eu egestas lectus. Nam in convallis nisi. Suspendisse facilisis mollis sapien, a viverra sem pellentesque eget. Quisque quis interdum enim, et commodo est.",
         creationDate: new Date(),
         pageNum: 124
     }
 
+    let note2: Note = {
+        id: 45078,
+        title: "Testing 2",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet sodales risus et pulvinar. Vivamus vitae lectus varius, tempus turpis id, hendrerit elit. Donec gravida finibus aliquam.",
+        creationDate: new Date(),
+        pageNum: 254
+    }
+
     let collection1:Collection = {
-        id: 1,
+        id: 2345,
         title: "Summary",
         creationDate: new Date(),
         isPublic: true,
         upvotes: 4,
         user: user,
-        notes: [note1, note1, note1]
+        notes: [note1, note2]
+    }
+
+    let collection2:Collection = {
+        id: 2343545,
+        title: "Chapter Analysis",
+        creationDate: new Date(),
+        isPublic: true,
+        upvotes: -3,
+        user: user,
+        notes: [note1, note2]
     }
     
     let book:Book = {
+        id: 154769832,
         title: "The Hunger Games",
         authors: ["Suzanne Collins"],
         pageCount: 384,
@@ -57,9 +79,9 @@
         genres: ["Dystopian", "science fiction", "drama", "action"],
         isbn: "9780440335702",
         datePublished: "1st December 2011",
-        imageURL: "http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api",
-        userNotes: [collection1, collection1],
-        publicNotes: [collection1, collection1],
+        imageURL: "https://goshenpl.lib.in.us/wp-content/uploads/2020/07/hunger-games.jpg",
+        userNotes: [collection1, collection2],
+        publicNotes: [collection1, collection2],
     }
 
     

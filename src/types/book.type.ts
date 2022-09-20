@@ -1,5 +1,6 @@
 //TODO: update to match actual type in database
 export type Book = {
+    id:number,
     title: string,
     authors: string[],
     pageCount: number,
@@ -37,6 +38,7 @@ export type User = {
 }
 
 export type Review = {
+    id:number,
     title: string,
     comment: string,
     rating: number,
@@ -62,6 +64,7 @@ export type Collection = {
 }
 
 export type Note = {
+    id:number,
     title: string,
     content: string,
     creationDate: Date,

@@ -22,6 +22,20 @@
 
     let selectedCollection: Collection | null = null;
 
+    function deleteCollection() {
+        if (selectedCollection != null) {
+            let deletedCollection: Collection = selectedCollection;
+
+            collections = collections.filter(c => c.id !== deletedCollection!.id);
+            selectedCollection = null;
+
+            //TODO: remove deletedCollection from database
+        }
+        
+    }
+
+    $: collections;
+
 </script>
 
 <div class="flex flex-col justify-start w-full">
@@ -50,7 +64,7 @@
         </form>
     {:else if selectedCollection != null}
         <!-- show selected collection -->
-        <NotesCollection bind:collection={selectedCollection} />
+        <NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} />
     {:else}
         <!-- show list of collections -->
         <div class=" mt-3 flex">
