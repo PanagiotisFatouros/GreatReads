@@ -1,0 +1,27 @@
+datasource db {
+  provider = "mysql"
+  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/testdb"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String           @id @unique
+  identifier_token String           @unique
+  hashed_password  String?
+  RefreshToken     RefreshToken[]
+  username         String           @db.VarChar(70)
+  @@map("user")
+}
+
+model RefreshToken {
+  id            Int    @id @unique @default(autoincrement())
+  refresh_token String @unique @db.VarChar(512)
+  user          User  @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id       String
+
+  @@index([user_id])
+  @@map("refresh_token")
+}

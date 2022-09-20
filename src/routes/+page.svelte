@@ -1,7 +1,21 @@
 <script lang='ts'>
     //TODO: remove
+    import {getSession} from "lucia-sveltekit/client"
 	import StarRating from '../components/StarRating.svelte';
-    import RatingInput from '../components/RatingInput.svelte';
+    import RatingInput from '../components/RatingInput.svelte'
+	import { browser } from "$app/environment";
+	import { goto } from "$app/navigation";
+
+    const session = getSession();
+
+    if ($session){
+        console.log($session)
+    }
+    else{
+        if (browser){
+            goto("/authentication");
+        }
+    }
 
     let rating:number = 0;
 </script>

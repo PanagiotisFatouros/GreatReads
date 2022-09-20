@@ -16,7 +16,7 @@
 		"@babel/eslint-parser": "^7.18.9",
 		"@playwright/test": "^1.22.2",
 		"@sveltejs/adapter-auto": "next",
-		"@sveltejs/kit": "next",
+		"@sveltejs/kit": "^1.0.0-next.484",
 		"@tailwindcss/line-clamp": "^0.4.2",
 		"autoprefixer": "^10.4.8",
 		"eslint": "^8.16.0",
@@ -34,9 +34,12 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@lucia-sveltekit/adapter-prisma": "^0.3.3",
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
+		"lucia-sveltekit": "^0.8.6",
 		"mysql2": "^2.3.3",
-		"postcss-load-config": "^4.0.1"
+		"postcss-load-config": "^4.0.1",
+		"prisma": "^4.3.1"
 	}
 }
