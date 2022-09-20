@@ -1,6 +1,7 @@
 <script lang="ts">
     //TODO:  - changing vote from up to down or vice versa should change count by 2 otherwise its just resetting to what it was before
     //       - clicking same button again should undo vote
+    //       - pass in voteCount from parent component and dispatch event when changed
     
     let colourUp:string = "text-primary-3"
     let colourDown:string = "text-primary-3"
@@ -32,18 +33,18 @@
     }
 </script>
 
-<div class="flex flex-col justify-center">
+<div class="flex flex-col justify-center items-center">
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <div class="w-5 h-5 m-0" style="cursor:pointer" on:click={() => handleClickUp()}>
+    <div class="w-5 h-5" style="cursor:pointer" on:click|stopPropagation={() => handleClickUp()}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 {colourUp} {hoverable}">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"/>
         </svg>  
     </div>
 
-    <p class="text-primary-3 font-body text-center">{voteCount}</p>
+    <p class="text-primary-3 font-body text-center leading-tight">{voteCount}</p>
 
     <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-    <div class="w-5 h-5" style="cursor:pointer" on:click={() => handleClickDown()}>
+    <div class="w-5 h-5" style="cursor:pointer" on:click|stopPropagation={() => handleClickDown()}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5 {colourDown} {hoverable}" >
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"/>
         </svg>  

@@ -1,6 +1,7 @@
 <script lang='ts'>
     import NotesCollection from "./NotesCollection.svelte";
 	import type { Collection, User } from "src/types/book.type";
+    import { getTimeAgo } from '../../../scripts'
 
     export let collections: Collection[];
 
@@ -96,8 +97,13 @@
         
         <div class="flex flex-col mt-1">
             {#each collections as collection}
-                <div on:click={() => selectedCollection = collection} class=" bg-primary-1 my-2 rounded-lg pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70">
-                    <p>{collection.title}</p>
+                <div on:click={() => selectedCollection = collection} class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70">
+                    <div>
+                        <p class="text-secondary">{collection.title}</p>
+                        <!-- TODO: maybe change to last edited -->
+                        <p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+                    </div>
+                    
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-secondary">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                     </svg>

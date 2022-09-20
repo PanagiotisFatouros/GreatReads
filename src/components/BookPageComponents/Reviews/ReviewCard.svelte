@@ -3,44 +3,9 @@
     import StarRating from "../../StarRating.svelte";
     import VoteButtons from "../../VoteButtons.svelte";
 
-    const MINUTE = 60;
-    const HOUR = MINUTE * 60;
-    const DAY = HOUR * 24;
-    const WEEK = DAY * 7;
-    const MONTH = DAY * 30;
-    const YEAR = DAY * 365;
-
-    function getTimeAgo(date:Date) {
-        const secondsAgo = Math.round((Date.now() - Number(date)) / 1000);
-
-        if (secondsAgo < MINUTE) {
-            return secondsAgo + ` second${secondsAgo !== 1 ? "s" : ""} ago`;
-        }
-
-        let divisor;
-        let unit = "";
-
-        if (secondsAgo < HOUR) {
-            [divisor, unit] = [MINUTE, "minute"];
-        } else if (secondsAgo < DAY) {
-            [divisor, unit] = [HOUR, "hour"];
-        } else if (secondsAgo < WEEK) {
-            [divisor, unit] = [DAY, "day"];
-        } else if (secondsAgo < MONTH) {
-            [divisor, unit] = [WEEK, "week"];
-        } else if (secondsAgo < YEAR) {
-            [divisor, unit] = [MONTH, "month"];
-        } else {
-            [divisor, unit] = [YEAR, "year"];
-        }
-
-        const count = Math.floor(secondsAgo / divisor);
-        return `${count} ${unit}${count > 1 ? "s" : ""} ago`;
-    }
+    import { getTimeAgo } from '../../../scripts'
     
     export let review: Review;
-
-    
 
     let diff = getTimeAgo(review.date);
 
@@ -49,7 +14,7 @@
 <div class="bg-primary-1 rounded-lg my-3 px-3">
     <div class="flex justify-between items-center py-2"> 
         <div class="flex items-center space-x-3">
-            <div class=" w-12 h-12 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center">
+            <div class=" profile_pic_small">
                 <img src={review.user.profilePic} alt="user profile pic">
             </div>
             
