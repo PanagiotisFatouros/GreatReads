@@ -21,8 +21,10 @@
     #card {
         display: flex;
         flex-direction: column;
+        justify-content: space-between;
         border-radius: 15px;
         width: 350px;
+        height: 150px;
         padding: 10px;
         overflow-x: auto;
         white-space: nowrap;
