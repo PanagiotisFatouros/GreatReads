@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Review, User } from '../../../types/book.type';
+	import type { User } from '../../../types/book.type';
     import BooksDisplay from '../../../components/BooksDisplay.svelte';
     import ProfileStatistics from '../../../components/ProfileStatistics.svelte';
     import ReviewsDisplay from '../../../components/ReviewsDisplay.svelte';
