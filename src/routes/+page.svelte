@@ -7,10 +7,13 @@
     import BooksDisplay from '../components/BooksDisplay.svelte';
     import BookshelfCard from '../components/BookshelfCard.svelte';
     import AbbreviatedBookCard from '../components/AbbreviatedBookCard.svelte';
+    import FilterPanel from '../components/FilterPanel.svelte';
    
    let rating:number = 0;
 
 </script>
+
+<FilterPanel/>
 
 <StarRating rating={4.3} />
 <StarRating rating={1.0} />

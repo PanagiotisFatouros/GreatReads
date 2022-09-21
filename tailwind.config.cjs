@@ -1,7 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 
 
-
 module.exports = {
   content: [
     './src/**/*.{html,js,svelte,ts}',
@@ -39,8 +38,14 @@ module.exports = {
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    
   ],
   variants: {
+    backgroundColor: ['checked'],
+    border: ['checked'],
+    width: ['checked'],
+    height: ['checked'],
+    ring: ['checked'],
     extend: {
       boxShadow: ['active']
     }
