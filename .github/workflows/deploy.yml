@@ -31,7 +31,6 @@ jobs:
       - run: npm install --save-dev "@typescript-eslint/eslint-plugin"
       - run: npm install --save-dev '@typescript-eslint/parser'
       - run: npm init @eslint/config
-      - run: npx --fix eslint src
       - run: npm run build --if-present
       - run: npx playwright install
       - run: npm test
