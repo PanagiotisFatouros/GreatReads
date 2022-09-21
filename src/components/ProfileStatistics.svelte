@@ -23,7 +23,7 @@
         flex-direction: column;
         justify-content: space-between;
         border-radius: 15px;
-        width: 350px;
+        width: 100%;
         height: 150px;
         padding: 10px;
         overflow-x: auto;
