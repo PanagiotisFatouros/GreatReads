@@ -27,11 +27,5 @@
 
 <a href="/books/zyTCAlFPjgYC">Book Link</a>
 
-<BookReview/>
-<BooksDisplay/>
-<BookshelfCard/>
-
-<AbbreviatedBookCard/>
-
 
 

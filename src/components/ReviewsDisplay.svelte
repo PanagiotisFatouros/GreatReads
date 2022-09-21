@@ -65,9 +65,8 @@
         flex-direction: column;
         align-items: center;
         overflow-y: auto;
+        height: 90%;
         padding-top: 10px;
         padding-bottom: 10px;
     }
-
-
 </style>

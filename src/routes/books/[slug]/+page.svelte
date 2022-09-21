@@ -8,6 +8,8 @@
         name: "",
         id: 123,
         profilePic: "",
+        reviews: [],
+        bio: "",
     }
 
     let review1:Review = {
@@ -16,7 +18,8 @@
         rating: 3,
         date: new Date(),
         upvotes: 5,
-        user: user
+        user: user,
+        img: ""
     }
 
     let note1: Note = {
