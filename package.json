@@ -4,6 +4,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
+		"start": "vite build && vite dev",
 		"package": "svelte-kit package",
 		"preview": "vite preview",
 		"check": "svelte-check --tsconfig ./jsconfig.json",
@@ -15,7 +16,7 @@
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.18.9",
 		"@playwright/test": "^1.22.2",
-		"@sveltejs/adapter-auto": "next",
+		"@sveltejs/adapter-node": "next",
 		"@sveltejs/kit": "^1.0.0-next.484",
 		"@tailwindcss/line-clamp": "^0.4.2",
 		"autoprefixer": "^10.4.8",

@@ -5,7 +5,7 @@ name: Build and deploy Node.js app to Azure Web App - GreatReads
 
 on:
   push:
-    branches: [ "" ] # Update later when we want to start deploying, currently just going to take up time
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
