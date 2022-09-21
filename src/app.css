@@ -48,6 +48,6 @@ h1 {
     }
 
     .profile_pic_small {
-        @apply w-12 h-12 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center
+        @apply w-14 h-14 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center
     }
 }

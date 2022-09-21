@@ -1,6 +1,7 @@
 <script lang="ts">
     import StarRating from '../../../components/StarRating.svelte';
     import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
+    import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
     // TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
     import type {Book, Review, User, Collection, Note} from '../../../types/book.type'
@@ -138,6 +139,12 @@
     <div class=" col-span-2 bg-primary-1 rounded-3xl m-4 py-2 px-3">
         <h2 class=" text-heading2 font-heading">Similar Books</h2>
         <hr class=" border-1 border-primary-3">
-        <!-- TODO: add a loop showing all books -->
+
+        <div class=" space-y-3 mt-3">
+            <!-- TODO: add a loop showing all books -->
+            <AbbreviatedBookCard />
+            <AbbreviatedBookCard />
+        </div>
+        
     </div>
 </div>

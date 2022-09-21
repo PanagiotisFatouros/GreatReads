@@ -3,6 +3,7 @@
 	import type { Collection } from 'src/types/book.type';
     import SearchBar from '../../SearchBar.svelte';
     import VoteButtons from '../../VoteButtons.svelte';
+    import PublicCollection from './PublicCollection.svelte';
 
     export let collections:Collection[];
 
@@ -10,7 +11,12 @@
     let searchText:string = '';
 
     // runs every time searchText changes
-    $: filteredCollections = collections.filter(collection => collection.title.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase()));
+    $: filteredCollections = collections.filter(collection => {
+        let titleCheck:boolean = collection.title.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase());
+        let authorCheck:boolean = collection.user.name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase());
+
+        return titleCheck || authorCheck;
+    });
 
     let selectedCollection: Collection | null = null;
 
@@ -20,17 +26,16 @@
     
 
     {#if selectedCollection != null}
-        <div>
-            <button on:click={() => selectedCollection = null}>back</button>
-        </div>
+        <PublicCollection bind:collection={selectedCollection} />
     {:else}
         <!-- header -->
         <div class="flex justify-between">
             <h2 class=" text-accent mr-3">Collections</h2>
 
             <!-- don't need to handle on:click since search happens automatically -->
-            <SearchBar bind:searchText={searchText} />
+            <SearchBar bind:searchText={searchText} placeholder="Search  by title or author..."/>
 
+            <!-- TODO: add filter options -->
             <button class=" ml-3">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5" />
@@ -47,7 +52,7 @@
                     
                     <VoteButtons />
 
-                    <div class="flex ml-3 space-x-3">
+                    <div class="flex ml-3 space-x-3 items-center">
                         <div class="profile_pic_small">
                             <img src={collection.user.profilePic} alt="profile pic">
                         </div>

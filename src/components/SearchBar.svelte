@@ -1,11 +1,12 @@
 <script lang="ts">
 
     export let searchText:string;
+    export let placeholder:string = '';
 
 </script>
 
 <div class=" flex bg-primary-1 rounded-full w-full py-1 px-2">
-    <input type="text" bind:value={searchText} class=" bg-transparent w-full focus:outline-none px-2">
+    <input type="text" bind:value={searchText} class=" bg-transparent w-full focus:outline-none px-2" placeholder={placeholder}>
     
     <!-- pass on:click handling to parent component-->
     <button on:click class=" hover:opacity-70">
