@@ -53,6 +53,7 @@
     #page {
         display: flex;
         justify-content: space-around;
+        padding: 20px;
     }
 
     #right {

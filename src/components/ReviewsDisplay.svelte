@@ -40,7 +40,9 @@
         display: flex;
         justify-content: space-between;
         width : 100%;
-        height: 15%;
+        height: 10%;
+        padding-top: 4px;
+        padding-bottom: 4px;
         border-radius: 10px 10px 0 0;
         color: white;
         font-weight: 300;
