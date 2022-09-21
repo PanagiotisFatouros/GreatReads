@@ -1,5 +1,5 @@
 <script>
-    let bookcard = {
+    export let bookcard = {
         img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
         name: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
         author: "Author",
