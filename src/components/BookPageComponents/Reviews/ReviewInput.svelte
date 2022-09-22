@@ -11,14 +11,14 @@
         if (rating != 0 && title != '' && comment != '') {
             //TODO: save to db
             //alert(`rating: ${rating} \ntitle: ${title} \ncomment: ${comment}`)
-            let review:Review = {
-                rating: rating,
-                title: title,
-                id: Math.floor(Math.random() * 1000),
-                comment: comment,
-                date: new Date(),
-                upvotes: 0
-            }
+            // let review:Review = {
+            //     rating: rating,
+            //     title: title,
+            //     id: Math.floor(Math.random() * 1000),
+            //     comment: comment,
+            //     date: new Date(),
+            //     upvotes: 0
+            // }
 
             //reset input
             rating = 0;
