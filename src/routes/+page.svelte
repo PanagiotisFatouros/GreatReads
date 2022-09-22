@@ -3,7 +3,6 @@
 	import StarRating from '../components/StarRating.svelte';
     import RatingInput from '../components/RatingInput.svelte';
 
-   
    let rating:number = 0;
 
 </script>
