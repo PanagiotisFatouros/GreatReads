@@ -6,6 +6,7 @@
     let user1: User = {
         id: 1,
         reviews: [{
+            id: 123,
             title: "Worst Book Ever",
             comment: "This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks",
             date: new Date(),
@@ -23,7 +24,7 @@
 
 <div id="page">
     <div id="left">
-        <img id="profilePic" src={user1.profilePic} alt="Profile Picture">
+        <img id="profilePic" src={user1.profilePic} alt="Profile pic">
         <p class="text-heading1 text-secondary">{user1.name}</p>
         <p id="bio" class="font-body">{user1.bio}</p>
         <ProfileStatistics/>
@@ -31,7 +32,9 @@
     <div id="right">
         <BooksDisplay/>
         <!-- "ignore error: will fix itself when using type 'review' instead of placeholder values" -->
-        <ReviewsDisplay name={user1.name} reviews={user1.reviews}/>
+        {#if user1.reviews}
+            <ReviewsDisplay name={user1.name} reviews={user1.reviews}/>
+        {/if}
     </div>
 </div>
 
