@@ -1,5 +1,5 @@
 <script lang='ts'>
-	import type { Review } from 'src/types/book.type';
+	//import type { Review } from 'src/types/book.type';
     import RatingInput from './../../RatingInput.svelte'
 
     let rating:number = 0;
