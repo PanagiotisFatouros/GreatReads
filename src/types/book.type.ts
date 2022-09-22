@@ -46,7 +46,7 @@ export type Review = {
     rating: number,
     date: Date,
     upvotes: number,
-    img: string,
+    img?: string,
     // could save time by not loading entire user object - only need name, profile pic and id
     user?: User
 }
