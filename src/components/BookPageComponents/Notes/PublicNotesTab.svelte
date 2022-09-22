@@ -33,7 +33,7 @@
             <h2 class=" text-accent mr-3">Collections</h2>
 
             <!-- don't need to handle on:click since search happens automatically -->
-            <SearchBar bind:searchText={searchText} placeholder="Search  by title or author..."/>
+            <SearchBar bind:searchText={searchText} placeholder="Search by title or author..."/>
 
             <!-- TODO: add filter options -->
             <button class=" ml-3">
