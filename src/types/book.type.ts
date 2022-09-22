@@ -35,7 +35,7 @@ export type User = {
     profilePic: string,
 
     // all other details in user collection
-    reviews: Review[],
+    reviews?: Review[],
     bio: string,
 }
 
