@@ -25,10 +25,7 @@
             intWarn = false
             pageWarn = false
         }
-        
     }
-    
-
 </script>
 
 <div class="bg-white w-96 pb-3 m-4 rounded border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2">
