@@ -47,20 +47,23 @@
 <div id="review" class="bg-primary-1">
     <div id="cover"><img src={review.img} alt=""></div>
     <div id="text"> 
-        <h1 class="font-heading text-body1">
-            <p id="title">{review.title}</p>
+        <div class="flex items-center text-secondary">
+            <h2 id="title">{review.title}</h2>
             <StarRating rating={review.rating} showRating={false}/>
-        </h1>
+        </div>
         <p class="text-primary-3 text-body2 font-body">{diff}</p>
         <p id="comment" class="text-primary-3">{review.comment}</p>
     </div>
 </div>
 
 <style>
+    /* TODO: add button to expand review when clicked */
     #review {
         display: flex;
-        width: 95%;
-        height: 30%;
+
+        width: 100%;
+        height: 200px;
+
         border-radius: 10px;
         margin-bottom: 10px;
         padding: 8px;
@@ -76,6 +79,7 @@
         justify-content: space-around;
         width: 90%;
     }
+
     #comment {
         display: -webkit-box;
         overflow: hidden;
