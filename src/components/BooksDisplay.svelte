@@ -51,8 +51,8 @@
 
 <style>
     #display {
-        width: 850px;
-        height: 195px;
+        width: 100%;
+        height: auto;
         display: flex;
         flex-direction: column;
         justify-content: space-between;

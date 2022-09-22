@@ -3,12 +3,6 @@
 	import StarRating from '../components/StarRating.svelte';
     import RatingInput from '../components/RatingInput.svelte';
 
-    import BookReview from '../components/BookReview.svelte';
-    import BooksDisplay from '../components/BooksDisplay.svelte';
-    import BookshelfCard from '../components/BookshelfCard.svelte';
-    import AbbreviatedBookCard from '../components/AbbreviatedBookCard.svelte';
-    import BookCard from '../components/BookCard.svelte';
-    import VoteButtons from '../components/VoteButtons.svelte'
    
    let rating:number = 0;
 
@@ -29,13 +23,6 @@
 
 <a href="/books/zyTCAlFPjgYC">Book Link</a>
 
-<BookReview/>
-<BooksDisplay/>
-<BookshelfCard/>
 
-<AbbreviatedBookCard/>
-<BookCard />
-
-<VoteButtons />
 
 

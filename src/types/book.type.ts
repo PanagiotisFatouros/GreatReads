@@ -35,6 +35,8 @@ export type User = {
     profilePic: string,
 
     // all other details in user collection
+    reviews: Review[],
+    bio: string,
 }
 
 export type Review = {
@@ -44,9 +46,9 @@ export type Review = {
     rating: number,
     date: Date,
     upvotes: number,
-
+    img: string,
     // could save time by not loading entire user object - only need name, profile pic and id
-    user: User
+    user?: User
 }
 
 export type Collection = {

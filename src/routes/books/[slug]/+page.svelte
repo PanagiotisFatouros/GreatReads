@@ -8,7 +8,11 @@
     let user: User = {
         name: "James Smith",
         id: 123,
+
         profilePic: "https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450",
+
+        reviews: [],
+        bio: "",
     }
 
     let review1:Review = {
@@ -18,7 +22,8 @@
         rating: 3,
         date: new Date(),
         upvotes: 5,
-        user: user
+        user: user,
+        img: ""
     }
 
     let review2:Review = {
