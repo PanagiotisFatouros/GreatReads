@@ -61,8 +61,8 @@
     #review {
         display: flex;
 
-        width: 100%;
-        height: 200px;
+        width: 98%;
+        height: 150px;
 
         border-radius: 10px;
         margin-bottom: 10px;
@@ -85,10 +85,6 @@
         overflow: hidden;
         -webkit-line-clamp: 2;
         -webkit-box-orient: vertical;
-    }
-    h1 {
-        color: #15B097;
-        display: flex;
     }
 
     #cover {

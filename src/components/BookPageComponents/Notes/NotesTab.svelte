@@ -35,6 +35,8 @@
             notes: [],
         }
 
+        
+
         collections.push(newCollection);
         //trigger refresh
         collections = collections;
