@@ -3,17 +3,9 @@
 	import StarRating from '../components/StarRating.svelte';
     import RatingInput from '../components/RatingInput.svelte';
 
-    import BookReview from '../components/BookReview.svelte';
-    import BooksDisplay from '../components/BooksDisplay.svelte';
-    import BookshelfCard from '../components/BookshelfCard.svelte';
-    import AbbreviatedBookCard from '../components/AbbreviatedBookCard.svelte';
-    import FilterPanel from '../components/FilterPanel.svelte';
-   
    let rating:number = 0;
 
 </script>
-
-<FilterPanel/>
 
 <StarRating rating={4.3} />
 <StarRating rating={1.0} />
@@ -30,11 +22,6 @@
 
 <a href="/books/zyTCAlFPjgYC">Book Link</a>
 
-<BookReview/>
-<BooksDisplay/>
-<BookshelfCard/>
-
-<AbbreviatedBookCard/>
 
 
 

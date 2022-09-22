@@ -13,9 +13,9 @@
 <div id="card">
     <div id="cover"><img src={book.img} alt=""></div>
     <div id="text">
-        <h1 class="text-heading2 text-secondary font-body font-400">{book.name}</h1>
-        <p id="rating" class="text-primary-2">{book.rating} <StarRating rating={1} showRating={false}/></p>
-        <p class="text-primary-3 font-body">{book.author}</p>
+        <p class="text-body1 text-secondary ">{book.name}</p>
+        <p id="rating" class="text-primary-2 text-body2">{book.rating} <StarRating rating={1} showRating={false} isSmall={true}/></p>
+        <p class="text-primary-3 text-body2">{book.author}</p>
     </div>
 </div>
 
@@ -24,15 +24,13 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        width: 500px;
-        height: 250px;
-        /* delete later (border to see container more easily when using this component) */
-        border: 1px solid black;
+        width: 100%;
+        height: auto;
     }
 
     #cover {
-        width: auto;
-        height: 80%;
+        width: 30%;
+        height: auto;
         margin-right: 10px;
     }
 
@@ -47,7 +45,6 @@
     #rating {
         display: flex;
         justify-content: flex-start;
-        font-size: larger;
         align-items: center;
     }
 

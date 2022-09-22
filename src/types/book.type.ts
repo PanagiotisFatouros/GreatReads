@@ -1,5 +1,6 @@
 //TODO: update to match actual type in database
 export type Book = {
+    id:number,
     title: string,
     authors: string[],
     pageCount: number,
@@ -34,17 +35,20 @@ export type User = {
     profilePic: string,
 
     // all other details in user collection
+    reviews?: Review[],
+    bio: string,
 }
 
 export type Review = {
+    id:number,
     title: string,
     comment: string,
     rating: number,
     date: Date,
     upvotes: number,
-
+    img?: string,
     // could save time by not loading entire user object - only need name, profile pic and id
-    user: User
+    user?: User
 }
 
 export type Collection = {
@@ -62,6 +66,7 @@ export type Collection = {
 }
 
 export type Note = {
+    id:number,
     title: string,
     content: string,
     creationDate: Date,

@@ -1,4 +1,5 @@
 <script lang='ts'>
+	//import type { Review } from 'src/types/book.type';
     import RatingInput from './../../RatingInput.svelte'
 
     let rating:number = 0;
@@ -9,9 +10,16 @@
         
         if (rating != 0 && title != '' && comment != '') {
             //TODO: save to db
-            alert(`rating: ${rating} \ntitle: ${title} \ncomment: ${comment}`)
+            //alert(`rating: ${rating} \ntitle: ${title} \ncomment: ${comment}`)
+            // let review:Review = {
+            //     rating: rating,
+            //     title: title,
+            //     id: Math.floor(Math.random() * 1000),
+            //     comment: comment,
+            //     date: new Date(),
+            //     upvotes: 0
+            // }
 
-            //TODO: decide if allowing multiple reviews from 1 user
             //reset input
             rating = 0;
             title = '';

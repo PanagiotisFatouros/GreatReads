@@ -1,6 +1,6 @@
 <script lang='ts'>
 	import type { Collection, Note } from "src/types/book.type";
-    import { onMount } from 'svelte';
+    import { onMount, createEventDispatcher } from 'svelte';
     import {isOverlayOpen} from '../../../stores/OverlayStore.js'
     import Confirmation from '../../Confirmation.svelte'
     import NoteCard from './NoteCard.svelte'
@@ -13,6 +13,8 @@
             isPublic = false;
         }
     })
+
+    const dispatch = createEventDispatcher();
 
     //selected collection
     export let collection: Collection | null;
@@ -28,12 +30,27 @@
         //alert(isPublic);
     }
 
+    // keep track of which confirmation message to show
+    let deletingCollection:boolean = false;
+    let deletingNote:boolean = false;
+
+    function showDeleteCollectionConfirmation() {
+        deletingCollection = true;
+        isOverlayOpen.set(true);
+    }
+
+    function cancelDeleteCollection() {
+        deletingCollection = false;
+        isOverlayOpen.set(false);
+    }
+
     function deleteCollection() {
-        //TODO: delete collection from database
 
         isOverlayOpen.set(false);
-        //go back to collections page
-        collection = null;
+        deletingCollection = false;
+
+        dispatch('delete');
+
     }
 
     let pageNum: number = 0;
@@ -44,16 +61,21 @@
         
         if (title != '' && noteContent != '') {
                 let newNote:Note = {
-                pageNum: pageNum,
-                title: title,
-                content: noteContent,
-                creationDate: new Date()
-            }
+                    //TODO: get actual id from database
+                    id: Math.floor(Math.random() * 1000),
+                    pageNum: pageNum,
+                    title: title,
+                    content: noteContent,
+                    creationDate: new Date()
+                }
 
             //TODO: save note to collection in database
 
             //add note to local collection object so it doesn't have to be reloaded
             collection!.notes.push(newNote);
+            
+            //trigger reload
+            collection!.notes = collection!.notes;
 
             //reset
             pageNum = 0;
@@ -66,10 +88,47 @@
         
     }
 
+
+    let deletedNote: Note | null = null;
+
+    function showDeleteNoteConfirmation(note:Note) {
+        deletedNote = note;
+        deletingNote = true;
+        isOverlayOpen.set(true);
+    }
+
+    function cancelDeleteNote() {
+        deletedNote = null;
+        deletingNote = false;
+        isOverlayOpen.set(false);
+    }
+
+    function deleteNote() {
+        
+        if (deletedNote != null) {
+            collection!.notes = collection!.notes.filter(n => n.id !== deletedNote!.id);
+            deletingNote = false;
+            isOverlayOpen.set(false);
+
+            //TODO: remove from database
+
+            deletedNote = null;
+        } 
+        
+    }
+
+    // to update the ui when a note is deleted
+    $: collection?.notes;
+
 </script>
 
-{#if $isOverlayOpen}
-    <Confirmation title="Delete Collection" description="Are you sure you want to delete this collection? <br/>This can not be undone." on:cancel={() => isOverlayOpen.set(false)} on:confirm={deleteCollection} />
+<!-- TODO: 2 different overlays - delete collection or note -->
+<!-- TODO: reload list of collections/notes after deleting -->
+
+{#if $isOverlayOpen && deletingCollection}
+    <Confirmation title="Delete Collection" description="Are you sure you want to delete this collection? <br/>This can not be undone." on:cancel={cancelDeleteCollection} on:confirm={deleteCollection} />
+{:else if $isOverlayOpen && deletingNote}
+    <Confirmation title="Delete Note" description="Are you sure you want to delete this note? <br/>This can not be undone." on:cancel={cancelDeleteNote} on:confirm={deleteNote} />
 {/if}
 
 <div class="flex flex-col">
@@ -90,7 +149,7 @@
             <!-- TODO: replace with toggle -->
             <input type="checkbox" id="publicCheckbox" bind:checked={isPublic} class=" text-accent rounded-sm">
     
-            <button on:click={() => isOverlayOpen.set(true)} class=" ml-3 hover:opacity-70">
+            <button on:click={showDeleteCollectionConfirmation} class=" ml-3 hover:opacity-70">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                 </svg>
@@ -113,10 +172,10 @@
     <hr class=" border-1 border-primary-3 my-3">
 
     <!-- Note Cards -->
-    <div class=" space-y-3 mt-1 mb-5">
+    <div class=" space-y-4 mt-1 mb-5">
         {#if collection != null}
             {#each collection.notes as note}
-                <NoteCard note={note} />
+                <NoteCard note={note} on:click={() => showDeleteNoteConfirmation(note)} />
             {/each}
         {/if}
         

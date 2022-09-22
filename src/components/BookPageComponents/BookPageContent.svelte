@@ -17,10 +17,10 @@
 
 <div class=" flex justify-center">
     {#if selectedTab === Tabs.reviews}
-        <ReviewsTab />
+        <ReviewsTab reviews={book.reviews} />
     {:else if selectedTab === Tabs.notes}
-        <NotesTab collections={book.publicNotes} />
+        <NotesTab collections={book.userNotes} />
     {:else}
-        <PublicNotesTab />
+        <PublicNotesTab collections={book.publicNotes} />
     {/if}
 </div>

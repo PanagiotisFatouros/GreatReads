@@ -1,5 +1,8 @@
 <script lang="ts">
+	import type { Review } from "src/types/book.type";
     import StarRating from "./StarRating.svelte";
+
+    export let review: Review;
 
     const MINUTE = 60;
     const HOUR = MINUTE * 60;
@@ -35,14 +38,6 @@
         const count = Math.floor(secondsAgo / divisor);
         return `${count} ${unit}${count > 1 ? "s" : ""} ago`;
     }
-    
-    let review = {
-        title: "60 Characters Max",
-        date: Date.parse("04 Dec 2021 00:12:00 GMT"),
-        img: "http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.",
-        rating: 4.5
-    }
 
     let diff = getTimeAgo(review.date);
 
@@ -52,26 +47,26 @@
 <div id="review" class="bg-primary-1">
     <div id="cover"><img src={review.img} alt=""></div>
     <div id="text"> 
-        <h1 class="font-heading text-body1">
-            <p id="title">{review.title}</p>
+        <div class="flex items-center text-secondary">
+            <h2 id="title">{review.title}</h2>
             <StarRating rating={review.rating} showRating={false}/>
-        </h1>
+        </div>
         <p class="text-primary-3 text-body2 font-body">{diff}</p>
-        <p class="text-primary-3">{review.text}</p>
-      
+        <p id="comment" class="text-primary-3">{review.comment}</p>
     </div>
 </div>
 
 <style>
+    /* TODO: add button to expand review when clicked */
     #review {
         display: flex;
-        width: 800px;
+
+        width: 98%;
         height: 150px;
+
         border-radius: 10px;
-        margin: 10px;
-        padding: 10px;
-        overflow-y: auto;
-        overflow-x: hidden;
+        margin-bottom: 10px;
+        padding: 8px;
     }
     #title {
         margin-right: 10px;
@@ -84,15 +79,17 @@
         justify-content: space-around;
         width: 90%;
     }
-    h1 {
-        color: #15B097;
-        display: flex;
+
+    #comment {
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     #cover {
-        height: 95%;
+        height: 100%;
         align-self: center;
-        margin-right: 10px;
     }
 
     img {

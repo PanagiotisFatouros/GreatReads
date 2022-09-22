@@ -11,7 +11,7 @@
     }
 </script>
 
-<div id="bookCard" class="bg-primary-1 w-3/12 h-52 m-4 p-2 pr-4 rounded-lg">
+<div id="bookCard" class="bg-primary-1 w-114 h-52 m-4 p-2 pr-4 rounded-lg">
     <a href="null">
         <img src={bookcard.img} alt="Book" class="p-3 pr-4 w-34 max-h-48 float-left align-middle">
         <p class="text-secondary pt-3 font-heading text-xl font-bold truncate">{bookcard.name}</p>
