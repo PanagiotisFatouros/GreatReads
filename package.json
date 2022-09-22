@@ -2,11 +2,11 @@
 	"name": "npm-install",
 	"version": "0.0.1",
 	"scripts": {
-		"dev": "vite dev",
+		"start": "node build",
+		"dev": "node build",
 		"build": "vite build",
-		"start": "vite build && vite dev",
 		"package": "svelte-kit package",
-		"preview": "vite preview",
+		"preview": "node build",
 		"check": "svelte-check --tsconfig ./jsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./jsconfig.json --watch",
 		"test": "playwright test",
@@ -40,6 +40,7 @@
 		"@typescript-eslint/parser": "^5.36.2",
 		"lucia-sveltekit": "^0.8.6",
 		"mysql2": "^2.3.3",
+		"pm2": "^5.2.0",
 		"postcss-load-config": "^4.0.1",
 		"prisma": "^4.3.1"
 	}
