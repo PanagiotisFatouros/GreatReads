@@ -47,7 +47,7 @@
             <p class="ml-1 mr-3">Sort</p>
         </div>
     </div>
-</div>    
+</div>
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
@@ -64,7 +64,7 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-    {#each books as book}
-        <BookCard/>
-    {/each}
+	{#each books as book}
+		<BookCard />
+	{/each}
 </div>
