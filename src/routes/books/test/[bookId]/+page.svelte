@@ -5,18 +5,18 @@
     import { Book } from  "../../../../models/Book"
 
     /** @type {import('./$types').PageData} */
-    export let data;
+    export let data:any;
 
     const session = getSession();
     const googleBooksApiURL = "https://www.googleapis.com/books/v1/volumes/"
     
     let username: String;
-    let user;
+    let user:any;
     let baseURL: String;
     let formattedBook: Book;
     let formattedBookString: String
     let bookCollections: any[]
-    let promise1;
+    let promise1: any;
     
 
     // get book info
