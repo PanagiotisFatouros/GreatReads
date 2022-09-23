@@ -3,7 +3,7 @@ module.exports = {
 	extends: ['eslint:recommended', 'prettier'],
 	rules: {
 		// enable additional rules
-		indent: ['warn', 4],
+		indent: ['warn', 'tab'],
 		semi: ['warn', 'always']
 	},
 	plugins: ['svelte3', '@typescript-eslint'],

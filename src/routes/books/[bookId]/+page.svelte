@@ -15,7 +15,47 @@
 	let formattedBook: Book;
 	let formattedBookString: String;
 	let bookCollections: any[];
+	let bookData: JSON;
 	let promise1;
+
+	// fetch user info
+	async function bindUser(baseURL: String) {
+		await fetch(`${baseURL}/api/read/user-profile/${username}`)
+			.then((response) => response.json())
+			.then((userprofile) => {
+				user = userprofile;
+				return userprofile;
+			});
+	}
+
+	// get book info
+	async function getBookInfo() {
+		await fetch(`${googleBooksApiURL}${data.bookId}`)
+			.then((response) => response.json())
+			.then((data) => {
+				bookData = data;
+			});
+	}
+
+	// getExistingCollections
+	async function getExistingCollections(baseURL: String) {
+		await fetch(`${baseURL}/api/read/collections/${user.ID}/${data.bookId}`)
+			.then((response) => response.json())
+			.then((returnedCollections) => {
+				bookCollections = returnedCollections;
+				return bookCollections;
+			});
+	}
+
+	async function allInOrder(baseURL: String) {
+		await bindUser(baseURL);
+		await getBookInfo();
+		formattedBook = new Book(bookData);
+		// console.log(formattedBook)
+		formattedBookString = JSON.stringify(formattedBook);
+		await getExistingCollections(baseURL);
+		return bookCollections;
+	}
 
 	// If user is logged on
 	if (browser) {
@@ -24,48 +64,7 @@
 		if ($session) {
 			// console.log($session)
 			username = $session.user.username;
-
-			// fetch user info
-			async function bindUser() {
-				await fetch(`${baseURL}/api/read/user-profile/${username}`)
-					.then((response) => response.json())
-					.then((userprofile) => {
-						user = userprofile;
-						return userprofile;
-					});
-			}
-			// console.log(user)
-
-			// get book info
-			let bookData: JSON;
-			async function getBookInfo() {
-				await fetch(`${googleBooksApiURL}${data.bookId}`)
-					.then((response) => response.json())
-					.then((data) => {
-						bookData = data;
-					});
-			}
-
-			// getExistingCollections
-			async function getExistingCollections() {
-				await fetch(`${baseURL}/api/read/collections/${user.ID}/${data.bookId}`)
-					.then((response) => response.json())
-					.then((returnedCollections) => {
-						bookCollections = returnedCollections;
-						return bookCollections;
-					});
-			}
-
-			async function allInOrder() {
-				await bindUser();
-				await getBookInfo();
-				formattedBook = new Book(bookData);
-				// console.log(formattedBook)
-				formattedBookString = JSON.stringify(formattedBook);
-				await getExistingCollections();
-				return bookCollections;
-			}
-			promise1 = allInOrder();
+			promise1 = allInOrder(baseURL);
 		}
 
 		// Not authenticated, redirect back to login page
