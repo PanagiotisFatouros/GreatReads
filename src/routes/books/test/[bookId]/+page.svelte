@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { getSession } from 'lucia-sveltekit/client';
-	import { Book } from '../../../models/Book';
+	import { Book } from '../../../../models/Book';
 
 	/** @type {import('./$types').PageData} */
 	export let data;

@@ -9,10 +9,17 @@ generator client {
 
 model User {
   id               String           @id @unique
-  identifier_token String           @unique
+  identifier_token String           @unique 
   hashed_password  String?
   RefreshToken     RefreshToken[]
-  username         String           @db.VarChar(70)
+  Name             String           @unique @db.VarChar(70)
+  Bio              String           @db.VarChar(300)
+  Profile_Picture  String           @db.VarChar(45)
+  FavAuthor        String           @db.VarChar(70)
+  FavGenre         String           @db.VarChar(30)
+  IsAuthor         Boolean         
+  FavBook          String           @db.Char(12)
+  Collections      Collection[]
   @@map("user")
 }
 
@@ -24,4 +31,35 @@ model RefreshToken {
 
   @@index([user_id])
   @@map("refresh_token")
+}
+model Book{
+  GoogleBooksID String  @id @unique @db.Char(12)
+  Collection    Collection[]
+}
+
+model Collection {
+  ID            Int         @id @unique @default(autoincrement())
+  Title         String      @db.VarChar(100) 
+  CreationDate  DateTime    
+  IsPublic      Boolean     
+  Upvotes       Int
+  Book          Book        @relation(references: [GoogleBooksID], fields: [BookId], onDelete: Cascade)
+  BookId        String      @db.Char(12)
+  User          User        @relation(references: [id], fields: [UserId], onDelete: Cascade)
+  UserId        String
+  Notes         Note[]
+
+  @@map("collection")
+  @@index([BookId])
+}
+
+model Note {
+  ID            Int         @id @unique @default(autoincrement())
+  Title         String      @db.VarChar(100)
+  Content       String      @db.VarChar(100)
+  Collection    Collection  @relation(references: [ID], fields: [CollectionId], onDelete: Cascade)
+  CollectionId  Int
+
+  @@map("note")
+  @@index([CollectionId])
 }
