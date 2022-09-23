@@ -6,33 +6,34 @@ name: CI
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: ['main']
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [16.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm install --save typescript
-    - run: npm install --save-dev eslint-plugin-svelte3
-    - run: npm install --save-dev "@typescript-eslint/eslint-plugin"
-    - run: npm install --save-dev '@typescript-eslint/parser'
-    - run: npm install --save-dev -D '@tailwindcss/line-clamp'
-    - run: npm init @eslint/config
-    - run: npx --fix eslint src
-    - run: npm run build --if-present
-    - run: npx playwright install
-    - run: npm test
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm install --save typescript
+      - run: npm install --save-dev eslint-plugin-svelte3
+      - run: npm install --save-dev "@typescript-eslint/eslint-plugin"
+      - run: npm install --save-dev '@typescript-eslint/parser'
+      - run: npm install --save-dev -D '@tailwindcss/line-clamp'
+      - run: npm init @eslint/config
+      - run: npm run format
+      - run: npx --fix eslint src
+      - run: npm run build_ci --if-present
+      - run: sh ./fix_generated_file.sh
+      - run: npx playwright install
+      - run: npm test

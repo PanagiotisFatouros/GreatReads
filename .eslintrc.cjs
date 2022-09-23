@@ -3,17 +3,11 @@ module.exports = {
 	extends: ['eslint:recommended', 'prettier'],
 	rules: {
 		// enable additional rules
-		indent: ["warn", 4],
-		quotes: ["warn", "single"],
-		semi: ["warn", "always"],
+		indent: ['warn', 'tab'],
+		semi: ['warn', 'always']
 	},
-	plugins: [
-		'svelte3',
-		'@typescript-eslint'
-	],
-	overrides: [
-		{ files: ['*.svelte'], processor: 'svelte3/svelte3' }
-	],
+	plugins: ['svelte3', '@typescript-eslint'],
+	overrides: [{ files: ['*.svelte'], processor: 'svelte3/svelte3' }],
 	parser: '@typescript-eslint/parser',
 	parserOptions: {
 		requireConfigFile: false,
@@ -26,6 +20,6 @@ module.exports = {
 		node: true
 	},
 	settings: {
-		'svelte3/typescript': () => require('typescript'), // pass the TypeScript package to the Svelte plugim
+		'svelte3/typescript': () => require('typescript') // pass the TypeScript package to the Svelte plugim
 	}
 };
