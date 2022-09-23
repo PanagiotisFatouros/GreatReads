@@ -1,4 +1,3 @@
-import { auth } from "$lib/lucia";
-
+import { auth } from '$lib/lucia';
 
 export const load = auth.handleServerSession();

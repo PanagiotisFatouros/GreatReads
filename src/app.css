@@ -8,7 +8,7 @@
 @tailwind utilities;
 
 h1 {
-    font-family: 'Crete Round', serif;
+	font-family: 'Crete Round', serif;
 }
 
 /* may be used if we add multiple themes */
@@ -21,33 +21,33 @@ h1 {
 } */
 
 @layer base {
-    h1 {
-        @apply font-heading text-heading1
-    }
-    h2 {
-        @apply font-heading text-heading2
-    }
+	h1 {
+		@apply font-heading text-heading1;
+	}
+	h2 {
+		@apply font-heading text-heading2;
+	}
 }
 
 /* define custom style to reuse for all buttons */
 @layer components {
-    .btn {
-        @apply hover:bg-opacity-80 shadow-lg active:shadow-none
-    }
+	.btn {
+		@apply hover:bg-opacity-80 shadow-lg active:shadow-none;
+	}
 
-    .std_button {
-        @apply bg-accent w-24 text-white rounded-full btn
-    }
+	.std_button {
+		@apply bg-accent w-24 text-white rounded-full btn;
+	}
 
-    .std_input {
-        @apply bg-primary-1 py-1 px-2 rounded-lg border-none
-    }
+	.std_input {
+		@apply bg-primary-1 py-1 px-2 rounded-lg border-none;
+	}
 
-    .std_text_area {
-        @apply bg-primary-1 py-1 px-2 rounded-lg resize-none border-none
-    }
+	.std_text_area {
+		@apply bg-primary-1 py-1 px-2 rounded-lg resize-none border-none;
+	}
 
-    .profile_pic_small {
-        @apply w-14 h-14 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center
-    }
+	.profile_pic_small {
+		@apply w-14 h-14 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center;
+	}
 }

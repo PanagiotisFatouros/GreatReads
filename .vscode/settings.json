@@ -1,8 +1,5 @@
 {
-    "appService.zipIgnorePattern": [
-        "node_modules{,/**}",
-        ".vscode{,/**}"
-    ],
-    "appService.defaultWebAppToDeploy": "/subscriptions/9bc2aa27-f338-4274-bb93-d7f9ade3e6a5/microsoft.web/sites/subscriptions/9bc2aa27-f338-4274-bb93-d7f9ade3e6a5/resourceGroups/team0/providers/Microsoft.Web/sites/GreatReads",
-    "appService.deploySubpath": "."
+	"appService.zipIgnorePattern": ["node_modules{,/**}", ".vscode{,/**}"],
+	"appService.defaultWebAppToDeploy": "/subscriptions/9bc2aa27-f338-4274-bb93-d7f9ade3e6a5/microsoft.web/sites/subscriptions/9bc2aa27-f338-4274-bb93-d7f9ade3e6a5/resourceGroups/team0/providers/Microsoft.Web/sites/GreatReads",
+	"appService.deploySubpath": "."
 }
