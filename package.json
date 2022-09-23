@@ -4,7 +4,7 @@
 	"scripts": {
 		"start": "node build",
 		"dev": "node build",
-		"build": "vite build",
+		"build": "vite build  && echo ./fix_generated_file.sh",
 		"package": "svelte-kit package",
 		"preview": "node build",
 		"check": "svelte-check --tsconfig ./jsconfig.json",
@@ -31,7 +31,7 @@
 		"svelte-preprocess": "^4.10.7",
 		"tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.17",
 		"typescript": "^4.8.2",
-		"vite": "^3.0.0"
+		"vite": "^3.1.3"
 	},
 	"type": "module",
 	"dependencies": {
