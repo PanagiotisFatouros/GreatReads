@@ -1,9 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 
-
 module.exports = {
-  content: ['./src/**/*.{html,js,svelte,ts}'],
+  content: [
+    './src/**/*.{html,js,svelte,ts}',
+  ],
   theme: {
     extend: {
       colors: {
@@ -22,16 +23,33 @@ module.exports = {
       },
       width: {
         '34': '8.5rem',
+        '114': '28.5rem',
       },
       fontSize: {
         "heading1": '1.85rem',
-        "heading2": '1.5rem',
+        "heading2": '1.3rem',
+        "heading3": '1.1rem',
         "body1": '1.1rem',
         "body2": '0.9rem',
+      },
+      spacing: {
+        'coverHeight': '29.375rem',
+        'coverWidth': '18.359rem',
       },
     },
   },
   plugins: [
     require('@tailwindcss/line-clamp'),
+    
   ],
+  variants: {
+    backgroundColor: ['checked'],
+    border: ['checked'],
+    width: ['checked'],
+    height: ['checked'],
+    ring: ['checked'],
+    extend: {
+      boxShadow: ['active']
+    }
+  }
 }

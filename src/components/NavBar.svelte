@@ -1,5 +1,5 @@
 <script>
-    import SearchBar from "./SearchBar.svelte";
+    import HeaderSearchBar from "./HeaderSearchBar.svelte";
 </script>
 
 <div id="navBar" class="bg-primary-3 w-full h-14 flex justify-between content-center m-0">
@@ -11,7 +11,7 @@
             <a href="null"><li class="list-none p-3 text-primary-1 font-heading text-lg">My Library</li></a>
         </ul>
 
-        <SearchBar/>
+        <HeaderSearchBar/>
 
         <!-- user icon -->
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="0.8" stroke="currentColor" class="w-12 h-12 text-primary-1 self-center mr-2">

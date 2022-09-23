@@ -17,7 +17,8 @@
         }
     }
 
-    let rating:number = 0;
+   let rating:number = 0;
+
 </script>
 
 <StarRating rating={4.3} />
@@ -31,6 +32,10 @@
 
 <RatingInput bind:rating={rating} />
 <p>input rating: {rating}</p>
+
+
+<a href="/books/zyTCAlFPjgYC">Book Link</a>
+
 
 
 
