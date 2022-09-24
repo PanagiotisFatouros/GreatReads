@@ -1,6 +1,6 @@
 //TODO: update to match actual type in database
 export type Book = {
-	id: number;
+	id: string;
 	title: string;
 	authors: string[];
 	pageCount: number;
@@ -29,7 +29,7 @@ export type User = {
 	name: string;
 
 	//id type??
-	id: number;
+	id: string;
 
 	//link to image???
 	profilePic: string;

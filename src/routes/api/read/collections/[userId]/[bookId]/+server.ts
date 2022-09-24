@@ -1,20 +1,33 @@
-import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
+import type { RequestEvent } from '@sveltejs/kit';
+// import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
+import { prismaClient } from '../../../../../../lib/lucia';
 
-/** @type {import('../../../../../.svelte-kit/types/src/routes/api/read/books/$types').RequestHandler} */
+export async function GET({ params }: RequestEvent) {
+	// const table = 'collection';
+	// const conditions = ['BookId', 'UserId'];
+	// const values = [JSON.stringify(params.bookId), JSON.stringify(params.userId)];
+	const bookId = params.bookId || ""
+	const userId = params.userId || ""
 
-export async function GET({ params }) {
-	const table = 'collection';
-	const conditions = ['BookId', 'UserId'];
-	const values = [JSON.stringify(params.bookId), JSON.stringify(params.userId)];
-
-	// console.log(conditions, values)
-	let targetCollections;
-	await getAllRows(table, conditions, values).then(
-		(returnedCollections) => (targetCollections = returnedCollections)
-	);
-
-	if (targetCollections == null) {
-		return new Response(`404 There are no existing collections for ${params.userId} in database`);
+	if (bookId == ""){
+		return new Response("Book not specified/ incorrectly mapped.")
 	}
-	return new Response(JSON.stringify(targetCollections));
+	if (userId == ""){
+		return new Response("User not specified/ incorrectly mapped.")
+	}
+
+	let collections = await prismaClient.collection.findMany({
+		where: {userId: userId, bookId: bookId}
+	})
+
+	// // console.log(conditions, values)
+	// let targetCollections;
+	// await getAllRows(table, conditions, values).then(
+	// 	(returnedCollections) => (targetCollections = returnedCollections)
+	// );
+
+	if (collections.length == 0) {
+		return new Response(`404 There are no existing collections for ${userId} in database`);
+	}
+	return new Response(JSON.stringify(collections));
 }

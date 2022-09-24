@@ -5,9 +5,23 @@
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
 	import type { Book, Review, User, Collection, Note } from '../../../types/book.type';
+	import { getSession } from 'lucia-sveltekit/client'
+
+	// Backend code to fetch user
+	const session = getSession();
+	console.log($session?.user)
+	// let user1: User = {
+	// 	name: $session?.user.Name,
+	// 	id: $session?.user.user_id,
+	// 	profilePic: 'https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450',
+	// 	reviews: ,
+	// 	bio: $session?.user.Bio
+	// }
+
+
 	let user: User = {
 		name: 'James Smith',
-		id: 123,
+		id: "123",
 
 		profilePic:
 			'https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450',
@@ -78,7 +92,7 @@
 	};
 
 	let book: Book = {
-		id: 154769832,
+		id: "154769832",
 		title: 'The Hunger Games',
 		authors: ['Suzanne Collins'],
 		pageCount: 384,

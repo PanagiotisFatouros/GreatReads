@@ -2,40 +2,41 @@
 	import { browser } from "$app/environment";
 	import { goto } from "$app/navigation"
     import { getSession } from "lucia-sveltekit/client"
-    import { Book } from  "../../../../models/Book"
+    import type { Book } from "../../../../types/book.type"
+    import type { Review, Collection } from "@prisma/client"
 
     /** @type {import('./$types').PageData} */
     export let data:any;
 
     const session = getSession();
-    const googleBooksApiURL = "https://www.googleapis.com/books/v1/volumes/"
-    
-    let username: String;
     let user:any;
     let baseURL: String;
-    let formattedBook: Book;
-    let formattedBookString: String
-    let bookCollections: any[]
-    let promise1: any;
+    let getBookPromise: Promise<Book>
+    let getCollectionsPromise: Promise<Collection[]>
+    let getReviewsPromise: Promise<Review[]>
     
 
     // get book info
-    let bookData: JSON;
     async function getBookInfo(){
-        await fetch(`${googleBooksApiURL}${data.bookId}`)
-        .then((response) => response.json())
-        .then((data) => {
-            bookData = data
-        })
+        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}`)
+        const responseJson = response.json()
+        const bookData: Book = await responseJson
+        return bookData
     }
 
     // getExistingCollections
     async function getExistingCollections(){
-        await fetch(`${baseURL}/api/read/collections/${user.user_id}/${data.bookId}`)
-        .then((response) => response.json()).then((returnedCollections) => {
-            bookCollections = returnedCollections
-            return bookCollections
-        })
+        const response = await fetch(`${baseURL}/api/read/collections/${user.user_id}/${data.bookId}`)
+        const responseJson = response.json()
+        const bookCollections: Collection[] = await responseJson
+        return bookCollections
+    }
+
+    async function getExistingReviews(){
+        const response = await fetch(`/api/read/reviews/${data.bookId}`)
+        const responseJson = response.json()
+        const bookReviews: Review[] = await responseJson
+        return bookReviews
     }
 
     async function addNewCollection(){
@@ -44,13 +45,23 @@
         body: JSON.stringify({ title: title, userId: user.user_id }),
         headers: {
             'content-type': 'application/json'
-        }
-        });
-        await response.json();
+        }})
+        await response.json()
     }
 
+    async function addNewReview(){
+        const response = await fetch(`/api/create/review/${data.bookId}`, {
+            method: 'POST',
+            body: JSON.stringify({ title: title, comment: comment, rating: rating, userId: user.user_id}),
+            headers: {
+            'content-type': 'application/json'
+        }})
+        await response.json()
+    }
 
     let title: String;
+    let comment: String;
+    let rating: Number;
     
 
     // get session can only be used when user is on browser and logged on, window.location.origin will fail as window is undefined.
@@ -62,19 +73,10 @@
             user = $session.user
             // console.log(user)               
 
-            async function allInOrder(){
-                await getBookInfo()
-                formattedBook = new Book(bookData)
-                // console.log(formattedBook)
-                formattedBookString  = JSON.stringify(formattedBook)
-                await getExistingCollections()
-                return bookCollections
-            }
-
-            promise1 = allInOrder()
+            getBookPromise = getBookInfo()
+            getCollectionsPromise =  getExistingCollections()
+            getReviewsPromise = getExistingReviews()
         }
-
-
         // Not authenticated, redirect back to login page
         else{
             goto("/authentication")
@@ -85,7 +87,12 @@
 
 {#if user}
     <h1> Book </h1>
-    <h2> {formattedBookString} </h2>
+    {#await getBookPromise}
+        <h2> Book Loading... </h2>
+    {:then bookData} 
+        <h2> {JSON.stringify(bookData)} </h2>
+    {/await}
+    
 
 
     <h3> Create Collection </h3>
@@ -104,16 +111,41 @@
     
 
     <h3> Existing Collections </h3>
-    {#await promise1}
+    {#await getCollectionsPromise}
         <p>Loading Book Collections...</p>
     {:then bookCollections} 
         <ul>
             {#if bookCollections}
                 {#each bookCollections as bookCollection}
-                    <li>{bookCollection.Title}</li>
+                    <li>{bookCollection.title}</li>
+                {/each}
+            {/if}
+        </ul>
+
+        
+    {/await}
+
+
+    <h1> addNewReview </h1>
+    <p>Enter Name for Title:</p> <input bind:value={title}>
+    <p>Enter Comment:</p> <input bind:value={comment}>
+    <p>Enter Rating:</p> <input type="number" bind:value={rating}>
+
+    <button on:click={addNewReview}>addNewCollection</button>
+    
+
+    <h3> Existing reviews </h3>
+    {#await getReviewsPromise}
+        <p>Loading Book Reviews...</p>
+    {:then bookCollections} 
+        <ul>
+            {#if bookCollections}
+                {#each bookCollections as bookCollection}
+                    <li>{bookCollection.title}</li>
                 {/each}
             {/if}
         </ul>
     {/await}
     
+
 {/if}

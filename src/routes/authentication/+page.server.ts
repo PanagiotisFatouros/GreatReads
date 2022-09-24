@@ -16,13 +16,13 @@ export const actions: Actions = {
             const userSession = await auth.createUser("username", username, {
                 password,
                 user_data: {
-                    Name: username,
-                    Bio: "",
-                    Profile_Picture: "",
-                    FavAuthor: "",
-                    FavGenre: "",
-                    IsAuthor: false,
-                    FavBook: ""
+                    name: username,
+                    bio: "",
+                    profilePic: "",
+                    favAuthor: "",
+                    favGenre: "",
+                    isAuthor: false,
+                    favBook: ""
                 },
             });
             setCookie(cookies, ...userSession.cookies);
