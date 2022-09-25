@@ -1,4 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
+import type { Review } from 'src/types/book.type';
 // import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
 import { prismaClient } from '../../../../../lib/lucia';
 
@@ -14,10 +15,36 @@ export async function GET({ params }: RequestEvent) {
 	// 	return new Response("User not specified/ incorrectly mapped.")
 	// }
 
-	let reviews = await prismaClient.review.findMany({
-		where: {bookId: bookId}
+	const prismaReviews = await prismaClient.prismaReview.findMany({
+		where: {bookId: bookId},
+		include: {
+			user: {
+				select:{
+					id: true,
+					name: true,
+					profilePic: true
+				}
+			}
+		}
 	})
-
+	let reviews: Review[] = []
+	prismaReviews.forEach((prismaReview) => {
+		const review: Review = {
+			id: prismaReview.id,
+			title: prismaReview.title,
+			comment: prismaReview.comment,
+			rating: prismaReview.rating,
+			date: prismaReview.creationDate,
+			upvotes: prismaReview.upvotes,
+			isEdited: prismaReview.isEdited,
+			user: {
+				id: prismaReview.user.id,
+				name: prismaReview.user.name,
+				profilePic: prismaReview.user.profilePic
+			}
+		}
+		reviews.push(review)
+	})
 
 	if (reviews.length == 0) {
 		return new Response(`404 There are no existing reviews for ${bookId} in database`);

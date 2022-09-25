@@ -1,4 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
+import type { Collection } from '../../../../../../types/book.type';
 // import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
 import { prismaClient } from '../../../../../../lib/lucia';
 
@@ -16,9 +17,40 @@ export async function GET({ params }: RequestEvent) {
 		return new Response("User not specified/ incorrectly mapped.")
 	}
 
-	let collections = await prismaClient.collection.findMany({
-		where: {userId: userId, bookId: bookId}
+	let collections: Collection[] = []
+	const prismaCollections = await prismaClient.prismaCollection.findMany({
+		where: {userId: userId, bookId: bookId},
+		select:{
+			id: true,
+			title: true,
+			creationDate: true,
+			isPublic: true,
+			upvotes: true,
+			user:{
+				select:{
+					id: true,
+					name: true,
+					profilePic: true
+				}
+			}
+		}
 	})
+	prismaCollections.forEach((prismaCollection) => {
+		const collection: Collection = {
+			id: prismaCollection.id,
+			title: prismaCollection.title,
+			creationDate: prismaCollection.creationDate,
+			isPublic: prismaCollection.isPublic,
+			upvotes: prismaCollection.upvotes,
+			user: {
+				id: prismaCollection.user.id,
+				name: prismaCollection.user.name,
+				profilePic: prismaCollection.user.profilePic
+			}
+		}
+		collections.push(collection)
+	})
+	
 
 	// // console.log(conditions, values)
 	// let targetCollections;

@@ -64,7 +64,7 @@ model PrismaNote {
   collection        PrismaCollection        @relation(references: [id], fields: [collectionId], onDelete: Cascade)
   collectionId      Int
   pageNum           Int
-  
+  creationDate      DateTime
   @@map("note")
   @@index([collectionId])
 }

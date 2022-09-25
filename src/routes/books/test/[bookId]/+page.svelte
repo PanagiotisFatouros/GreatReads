@@ -3,7 +3,7 @@
 	import { goto } from "$app/navigation"
     import { getSession } from "lucia-sveltekit/client"
     import type { Book } from "../../../../types/book.type"
-    import type { Review, Collection } from "@prisma/client"
+
 
     /** @type {import('./$types').PageData} */
     export let data:any;
@@ -12,8 +12,6 @@
     let user:any;
     let baseURL: String;
     let getBookPromise: Promise<Book>
-    let getCollectionsPromise: Promise<Collection[]>
-    let getReviewsPromise: Promise<Review[]>
     
 
     // get book info
@@ -24,20 +22,6 @@
         return bookData
     }
 
-    // getExistingCollections
-    // async function getExistingCollections(){
-    //     const response = await fetch(`${baseURL}/api/read/collections/${user.user_id}/${data.bookId}`)
-    //     const responseJson = response.json()
-    //     const bookCollections: Collection[] = await responseJson
-    //     return bookCollections
-    // }
-
-    // async function getExistingReviews(){
-    //     const response = await fetch(`/api/read/reviews/${data.bookId}`)
-    //     const responseJson = response.json()
-    //     const bookReviews: Review[] = await responseJson
-    //     return bookReviews
-    // }
 
     async function addNewCollection(){
         const response = await fetch(`/api/create/collection/${data.bookId}`, {

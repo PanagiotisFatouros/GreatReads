@@ -18,7 +18,7 @@ export async function POST({ params, request }:RequestEvent){
           title: title,
           comment: comment,
           rating: rating,
-          creationDate:  new Date(),
+          creationDate: new Date(),
           upvotes: 0,
           isEdited: false,
           book: {connect:{googleBooksId: bookId}},

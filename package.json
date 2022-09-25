@@ -6,7 +6,7 @@
 	"scripts": {
 		"start": "node build",
 		"dev": "node build",
-		"build": "vite build && fix_generated_file.sh",
+		"build": "vite build",
 		"build_ci": "vite build",
 		"package": "svelte-kit package",
 		"preview": "node build",

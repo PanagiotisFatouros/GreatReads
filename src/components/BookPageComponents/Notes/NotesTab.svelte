@@ -1,13 +1,19 @@
 <script lang="ts">
 	import NotesCollection from './NotesCollection.svelte';
-	import type { Collection, User } from 'src/types/book.type';
+	import type { Collection, Client } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
 
 	export let collections: Collection[];
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
+	import { browser } from '$app/environment';
 	let newCollectionTitle = '';
 	let isPublic = false;
+	let baseURL: string
+	
+	if (browser){
+		baseURL = window.location.origin
+	}
 
 	function createNewCollection() {
 		//TODO: check string is not empty and add to database
@@ -17,7 +23,7 @@
 		isOverlayOpen.set(false);
 
 		// TODO: get user from session
-		let user: User = {
+		let user: Client = {
 			name: 'James Smith',
 			id: "123",
 			profilePic:
@@ -57,6 +63,14 @@
 			//TODO: remove deletedCollection from database
 		}
 	}
+
+	async function getCollection(collectionId: number){
+        const response = await fetch(`${baseURL}/api/read/collections/${JSON.stringify(collectionId)}`, )
+        const responseJson = response.json()
+        const collectionData: Collection = await responseJson
+        return collectionData
+    }
+
 
 	$: collections;
 </script>
@@ -114,11 +128,11 @@
 				><p class=" text-xl leading-none">+</p></button
 			>
 		</div>
-
+<!-- on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)} -->
 		<div class="flex flex-col mt-1">
 			{#each collections as collection}
 				<div
-					on:click={() => (selectedCollection = collection)}
+					on:click={() => selectedCollection = collection}
 					class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 				>
 					<div>

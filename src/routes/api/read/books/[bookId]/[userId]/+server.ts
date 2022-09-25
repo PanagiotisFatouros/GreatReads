@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
-import type { Book  } from 'src/types/book.type'
-import type { Collection, Review, Prisma } from '@prisma/client'
+import type { Book, Collection, Review  } from 'src/types/book.type'
+import type { Prisma } from '@prisma/client'
 import { prismaClient } from '../../../../../../lib/lucia'
 
 
@@ -9,7 +9,7 @@ export async function GET({ params }: RequestEvent) {
 	const userId = params.userId || ""
 
 	// Checks to see if existing book is in database, 
-	
+
 
 	let targetGoogleBook: Book
 	const restBookInfo: any = await getBookInfo(googleBooksId)
@@ -23,42 +23,107 @@ export async function GET({ params }: RequestEvent) {
 	else {
 
 		// Check if book already in database 
-		let existingBookInDatabase = await prismaClient.book.findUnique({
-			where: { googleBooksId: googleBooksId }
+		let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
+			where: { googleBooksId: googleBooksId },
+	
 		}) 
 	
 		console.log(existingBookInDatabase)
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
-		let reviews: Review[]
-		let collections: Collection[]
+		let reviews: Review[] = []
+		let collections: Collection[] = []
 		let avgRating: number
 		let numRating: number
 		if (existingBookInDatabase == null) {
-			let newBookInput: Prisma.BookCreateInput = {
+			let newBookInput: Prisma.PrismaBookCreateInput = {
 				googleBooksId: googleBooksId
 			}
-			await prismaClient.book.create({data: newBookInput})
-			reviews = []
-			collections = []
+			await prismaClient.prismaBook.create({data: newBookInput})
 			avgRating = restBookInfo.volumeInfo.avgRating
 			numRating = restBookInfo.volumeInfo.ratingsCount
 		}
 		else {
-			reviews = await prismaClient.review.findMany({where: { bookId: googleBooksId }, orderBy: {upvotes: "desc"}})
-			collections = await prismaClient.collection.findMany({where: {userId: userId, bookId: googleBooksId}})
-			if (reviews.length == 0){
+
+			// building reviews
+			const prismaReviews = await prismaClient.prismaReview.findMany({
+				where: { bookId: googleBooksId },
+				orderBy: {upvotes: "desc"},
+				include: {user: {
+					select: {
+						id: true,
+						name: true,
+						profilePic: true
+					}
+				}}
+			})
+
+			if (prismaReviews.length == 0){
 				avgRating = restBookInfo.volumeInfo.avgRating
 				numRating = restBookInfo.volumeInfo.ratingsCount
 			}
 			else {
 				avgRating = 0
-				reviews.forEach((review) => {
+				prismaReviews.forEach((prismaReview) => {
+
+					const review: Review = {
+						id: prismaReview.id,
+						title: prismaReview.title,
+						comment: prismaReview.comment,
+						rating: prismaReview.rating,
+						date: prismaReview.creationDate,
+						upvotes: prismaReview.upvotes,
+						isEdited: prismaReview.isEdited,
+						user: {
+							id: prismaReview.user.id,
+							name: prismaReview.user.name,
+							profilePic: prismaReview.user.profilePic
+						}
+					}
 					avgRating += review.rating
+					reviews.push(review)
 				})
+				
 				numRating = reviews.length
 				avgRating /= numRating
 			}
+			
+
+			// building collections
+			const prismaCollections = await prismaClient.prismaCollection.findMany({
+				where: {userId: userId, bookId: googleBooksId},
+				select:{
+					id: true,
+					title: true,
+					creationDate: true,
+					isPublic: true,
+					upvotes: true,
+					user: {
+						select: {
+							id: true,
+							name: true,
+							profilePic: true,
+						}
+					}
+				}
+			})
+			prismaCollections.forEach((prismaCollection) => {
+				const collection: Collection = {
+					id: prismaCollection.id,
+					title: prismaCollection.title,
+					creationDate: prismaCollection.creationDate,
+					isPublic: prismaCollection.isPublic,
+					upvotes: prismaCollection.upvotes,
+					user: {
+						id: prismaCollection.user.id,
+						name: prismaCollection.user.name,
+						profilePic: prismaCollection.user.profilePic
+					}
+				}
+				collections.push(collection)
+			})
+
+			
 		}
 
 		// creating google book object
@@ -69,7 +134,7 @@ export async function GET({ params }: RequestEvent) {
 			pageCount: restBookInfo.volumeInfo.pageCount,
 			description: restBookInfo.volumeInfo.description,
 			genres: restBookInfo.volumeInfo.categories,
-			isbn: restBookInfo.volumeInfo.industryIdentifiers[1],
+			isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
 			datePublished: restBookInfo.volumeInfo.publishedDate,
 			imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
 		
@@ -78,7 +143,7 @@ export async function GET({ params }: RequestEvent) {
 			numRatings: numRating,
 			reviews: reviews,
 			userNotes: collections,
-			publicNotes: collections,
+			publicNotes: collections.filter((collection) => collection.isPublic == true),
 		}
 		return new Response(JSON.stringify(targetGoogleBook));
 	}
