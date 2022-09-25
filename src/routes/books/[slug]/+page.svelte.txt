@@ -4,8 +4,14 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book, Review, User, Collection, Note } from '../../../types/book.type';
+	import type { Book, User,  Note } from '../../../types/book.type';
+	// import type { ReviewWithUser, UserWithReviews, CollectionWithUserNotes, Note } from '../../../types/book.type';
+	import type { Collection, Review } from "@prisma/client"
 	import { getSession } from 'lucia-sveltekit/client'
+	import { prismaClient } from '../../../lib/lucia'
+
+	 /** @type {import('./$types').PageData} */
+	 export let data:any;
 
 	// Backend code to fetch user
 	const session = getSession();
@@ -17,7 +23,21 @@
 	// 	reviews: ,
 	// 	bio: $session?.user.Bio
 	// }
+	// async function getUser() {
+	// 	const user = await prismaClient.user.findUnique({
+	// 	where: {id: $session?.user.user_id},
+	// 	include: {reviews: true}
+	// 	})
+	// 	return user
+	// }
 
+
+	// let user: UserWithReviews
+	// getUser().then((user) => {
+	// 	console.log(user)
+	// 	user = user
+	// 	return user
+	// })
 
 	let user: User = {
 		name: 'James Smith',
@@ -30,28 +50,70 @@
 		bio: ''
 	};
 
+	// let review1: ReviewWithUser; let review2: ReviewWithUser
+	// async function getReviews(){
+	// 	const reviews: ReviewWithUser[] = await prismaClient.review.findMany({
+	// 	where: {bookId: data.bookId},
+	// 	include: {user: true},
+	// 	orderBy: {
+	// 		upvotes: "desc"
+	// 	}
+	// 	})
+	// 	return reviews
+	// }
+	// getReviews().then((reviews) => {
+	// 	if (reviews.length > 0){
+	// 		review1 = reviews[0]
+	// 		if (reviews.length > 1){
+	// 			review2 = reviews[1]
+	// 		}
+	// 	}
+	// })
+	
 	let review1: Review = {
 		id: 5413,
 		title: 'Terrible',
 		comment: 'Lorem Ipsum',
 		rating: 3,
-		date: new Date(),
+		creationDate: new Date(),
 		upvotes: 5,
-		user: user,
-		img: ''
+		isEdited: false,
+		bookId: "154769832",
+		userId: ""
 	};
-
+	// let review1: Review = {
+	// 	id: 5413,
+	// 	title: 'Terrible',
+	// 	comment: 'Lorem Ipsum',
+	// 	rating: 3,
+	// 	date: new Date(),
+	// 	upvotes: 5,
+	// 	user: user,
+	// 	img: ''
+	// };
+	
 	let review2: Review = {
-		id: 32451,
-		title: '60 Characters Max',
-		date: new Date('04 Dec 2021 00:12:00 GMT'),
-		comment:
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.',
-		rating: 4.5,
-		user: user,
-		upvotes: -3,
-		img: 'https://goshenpl.lib.in.us/wp-content/uploads/2020/07/hunger-games.jpg'
+		id: 5413,
+		title: 'Terrible',
+		comment: 'Lorem Ipsum',
+		rating: 3,
+		creationDate: new Date(),
+		upvotes: 5,
+		isEdited: false,
+		bookId: "154769832",
+		userId: ""
 	};
+	// let review2: Review = {
+	// 	id: 32451,
+	// 	title: '60 Characters Max',
+	// 	date: new Date('04 Dec 2021 00:12:00 GMT'),
+	// 	comment:
+	// 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.',
+	// 	rating: 4.5,
+	// 	user: user,
+	// 	upvotes: -3,
+	// 	img: 'https://goshenpl.lib.in.us/wp-content/uploads/2020/07/hunger-games.jpg'
+	// };
 
 	let note1: Note = {
 		id: 9078,
@@ -71,13 +133,31 @@
 		pageNum: 254
 	};
 
+
+	// let collections: Collection
+	// let collection1: Collection; let collection2: Collection
+	// async function getCollections(){
+	// 	const collections = prismaClient.collection.findMany({
+	// 		where:{id: $session?.user.user_id},
+	// 	})
+	// 	return collections
+	// }
+	
+	// getCollections().then((collections) => {
+	// 	if (collections.length > 0){
+	// 		collection1 = collections[0]
+	// 		if (collections.length > 1){
+	// 			collection2 = collections[1]
+	// 		}
+	// 	}
+	// })
+
 	let collection1: Collection = {
 		id: 2345,
 		title: 'Summary',
 		creationDate: new Date(),
 		isPublic: true,
 		upvotes: 4,
-		user: user,
 		notes: [note1, note2]
 	};
 
@@ -87,7 +167,6 @@
 		creationDate: new Date(),
 		isPublic: true,
 		upvotes: -3,
-		user: user,
 		notes: [note1, note2]
 	};
 

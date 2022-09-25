@@ -18,26 +18,26 @@
 
     // get book info
     async function getBookInfo(){
-        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}`)
+        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}/${user.user_id}`, )
         const responseJson = response.json()
         const bookData: Book = await responseJson
         return bookData
     }
 
     // getExistingCollections
-    async function getExistingCollections(){
-        const response = await fetch(`${baseURL}/api/read/collections/${user.user_id}/${data.bookId}`)
-        const responseJson = response.json()
-        const bookCollections: Collection[] = await responseJson
-        return bookCollections
-    }
+    // async function getExistingCollections(){
+    //     const response = await fetch(`${baseURL}/api/read/collections/${user.user_id}/${data.bookId}`)
+    //     const responseJson = response.json()
+    //     const bookCollections: Collection[] = await responseJson
+    //     return bookCollections
+    // }
 
-    async function getExistingReviews(){
-        const response = await fetch(`/api/read/reviews/${data.bookId}`)
-        const responseJson = response.json()
-        const bookReviews: Review[] = await responseJson
-        return bookReviews
-    }
+    // async function getExistingReviews(){
+    //     const response = await fetch(`/api/read/reviews/${data.bookId}`)
+    //     const responseJson = response.json()
+    //     const bookReviews: Review[] = await responseJson
+    //     return bookReviews
+    // }
 
     async function addNewCollection(){
         const response = await fetch(`/api/create/collection/${data.bookId}`, {
@@ -74,8 +74,6 @@
             // console.log(user)               
 
             getBookPromise = getBookInfo()
-            getCollectionsPromise =  getExistingCollections()
-            getReviewsPromise = getExistingReviews()
         }
         // Not authenticated, redirect back to login page
         else{
@@ -89,62 +87,49 @@
     <h1> Book </h1>
     {#await getBookPromise}
         <h2> Book Loading... </h2>
-    {:then bookData} 
-        <h2> {JSON.stringify(bookData)} </h2>
-    {/await}
-    
+    {:then book} 
+        <h2> {JSON.stringify(book)} </h2>
+
+        <h3> Create Collection </h3>
+        <form method="POST" action="?/createNewCollection">
+            <input name="title" type="text" placeholder="Title...">
+            <input name="userId" value="{user?.user_id}" hidden>
+            <input name="bookId" value="{data?.bookId}" hidden>
+            <input name="_lucia" value="{$session?.access_token}" hidden />
+            <button>Save</button>
+        </form>
+
+        <h1> newVersionOfCreateCollection </h1>
+        <p>Enter Name for Title:</p> <input bind:value={title}>
+        <button on:click={addNewCollection}>addNewCollection</button>
 
 
-    <h3> Create Collection </h3>
-    <form method="POST" action="?/createNewCollection">
-        <input name="title" type="text" placeholder="Title...">
-        <input name="userId" value="{user?.user_id}" hidden>
-        <input name="bookId" value="{data?.bookId}" hidden>
-        <input name="_lucia" value="{$session?.access_token}" hidden />
-        <button>Save</button>
-    </form>
-
-
-    <h1> newVersionOfCreateCollection </h1>
-    <p>Enter Name for Title:</p> <input bind:value={title}>
-    <button on:click={addNewCollection}>addNewCollection</button>
-    
-
-    <h3> Existing Collections </h3>
-    {#await getCollectionsPromise}
-        <p>Loading Book Collections...</p>
-    {:then bookCollections} 
+        <h3> Existing Collections </h3>
         <ul>
-            {#if bookCollections}
-                {#each bookCollections as bookCollection}
+            {#if book.userNotes.length > 0}
+                {#each book.userNotes as bookCollection}
                     <li>{bookCollection.title}</li>
                 {/each}
             {/if}
         </ul>
 
-        
-    {/await}
+        <h1> addNewReview </h1>
+        <p>Enter Name for Title:</p> <input bind:value={title}>
+        <p>Enter Comment:</p> <input bind:value={comment}>
+        <p>Enter Rating:</p> <input type="number" bind:value={rating}>
 
+        <button on:click={addNewReview}>addNewCollection</button>
+        <h3> Existing reviews </h3>
 
-    <h1> addNewReview </h1>
-    <p>Enter Name for Title:</p> <input bind:value={title}>
-    <p>Enter Comment:</p> <input bind:value={comment}>
-    <p>Enter Rating:</p> <input type="number" bind:value={rating}>
-
-    <button on:click={addNewReview}>addNewCollection</button>
-    
-
-    <h3> Existing reviews </h3>
-    {#await getReviewsPromise}
-        <p>Loading Book Reviews...</p>
-    {:then bookCollections} 
         <ul>
-            {#if bookCollections}
-                {#each bookCollections as bookCollection}
-                    <li>{bookCollection.title}</li>
+            {#if book.reviews.length > 0}
+                {#each book.reviews as bookReview}
+                    <li>{bookReview.title}</li>
                 {/each}
             {/if}
         </ul>
+
+
     {/await}
     
 

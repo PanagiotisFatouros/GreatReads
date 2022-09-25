@@ -1,11 +1,12 @@
 import type { RequestEvent } from '@sveltejs/kit'
-import type { Book, Review,  } from 'src/types/book.type'
-import type { Prisma } from '@prisma/client'
-import { prismaClient } from '../../../../../lib/lucia'
+import type { Book  } from 'src/types/book.type'
+import type { Collection, Review, Prisma } from '@prisma/client'
+import { prismaClient } from '../../../../../../lib/lucia'
 
 
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || ""
+	const userId = params.userId || ""
 
 	// Checks to see if existing book is in database, 
 	
@@ -22,20 +23,42 @@ export async function GET({ params }: RequestEvent) {
 	else {
 
 		// Check if book already in database 
-		let bookInDatabase = await prismaClient.book.findUnique({
-			where: {
-				googleBooksId: googleBooksId
-			}
-		})
+		let existingBookInDatabase = await prismaClient.book.findUnique({
+			where: { googleBooksId: googleBooksId }
+		}) 
 	
-		console.log(bookInDatabase)
+		console.log(existingBookInDatabase)
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
-		if (bookInDatabase == null){
+		let reviews: Review[]
+		let collections: Collection[]
+		let avgRating: number
+		let numRating: number
+		if (existingBookInDatabase == null) {
 			let newBookInput: Prisma.BookCreateInput = {
 				googleBooksId: googleBooksId
 			}
-			bookInDatabase = await prismaClient.book.create({data: newBookInput})
+			await prismaClient.book.create({data: newBookInput})
+			reviews = []
+			collections = []
+			avgRating = restBookInfo.volumeInfo.avgRating
+			numRating = restBookInfo.volumeInfo.ratingsCount
+		}
+		else {
+			reviews = await prismaClient.review.findMany({where: { bookId: googleBooksId }, orderBy: {upvotes: "desc"}})
+			collections = await prismaClient.collection.findMany({where: {userId: userId, bookId: googleBooksId}})
+			if (reviews.length == 0){
+				avgRating = restBookInfo.volumeInfo.avgRating
+				numRating = restBookInfo.volumeInfo.ratingsCount
+			}
+			else {
+				avgRating = 0
+				reviews.forEach((review) => {
+					avgRating += review.rating
+				})
+				numRating = reviews.length
+				avgRating /= numRating
+			}
 		}
 
 		// creating google book object
@@ -51,11 +74,11 @@ export async function GET({ params }: RequestEvent) {
 			imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
 		
 			// hardcoded fields in api
-			avgRating: 6,
-			numRatings: 6,
-			reviews: [],
-			userNotes: [],
-			publicNotes: [],
+			avgRating: avgRating,
+			numRatings: numRating,
+			reviews: reviews,
+			userNotes: collections,
+			publicNotes: collections,
 		}
 		return new Response(JSON.stringify(targetGoogleBook));
 	}

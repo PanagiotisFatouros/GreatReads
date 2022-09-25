@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client'
+import type { Collection, Review } from '@prisma/client';
 //TODO: update to match actual type in database
 export type Book = {
 	id: string;
@@ -39,31 +41,31 @@ export type User = {
 	bio: string;
 };
 
-export type Review = {
-	id: number;
-	title: string;
-	comment: string;
-	rating: number;
-	date: Date;
-	upvotes: number;
-	img?: string;
-	// could save time by not loading entire user object - only need name, profile pic and id
-	user?: User;
-};
+// export type Review = {
+// 	id: number;
+// 	title: string;
+// 	comment: string;
+// 	rating: number;
+// 	date: Date;
+// 	upvotes: number;
+// 	img?: string;
+// 	// could save time by not loading entire user object - only need name, profile pic and id
+// 	user?: User;
+// };
 
-export type Collection = {
-	id: number;
-	title: string;
-	creationDate: Date;
-	isPublic: boolean;
+// export type Collection = {
+// 	id: number;
+// 	title: string;
+// 	creationDate: Date;
+// 	isPublic: boolean;
 
-	//only required if public collection
-	upvotes: number;
-	user: User;
+// 	//only required if public collection
+// 	upvotes: number;
+// 	user: User;
 
-	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
-	notes: Note[];
-};
+// 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
+// 	notes: Note[];
+// };
 
 export type Note = {
 	id: number;
@@ -72,3 +74,22 @@ export type Note = {
 	creationDate: Date;
 	pageNum: number;
 };
+
+
+// New types for frontend which is related to backend
+
+
+const userWithReviews = Prisma.validator<Prisma.UserArgs>()({
+	include: {reviews: true}
+})
+export type UserWithReviews = Prisma.UserGetPayload<typeof userWithReviews>
+
+const reviewWithUser = Prisma.validator<Prisma.ReviewArgs>()({
+	include: {user: true}
+})
+export type ReviewWithUser = Prisma.ReviewGetPayload<typeof reviewWithUser>
+
+const collectionWithUserNotes = Prisma.validator<Prisma.CollectionArgs>()({
+	include: {user: true}
+})
+export type CollectionWithUserNotes = Prisma.CollectionGetPayload<typeof collectionWithUserNotes>
