@@ -128,11 +128,11 @@
 				><p class=" text-xl leading-none">+</p></button
 			>
 		</div>
-<!-- on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)} -->
+
 		<div class="flex flex-col mt-1">
 			{#each collections as collection}
 				<div
-					on:click={() => selectedCollection = collection}
+				on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)}
 					class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 				>
 					<div>

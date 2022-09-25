@@ -39,6 +39,7 @@ model PrismaBook{
   collections       PrismaCollection[]
   bookshelves       PrismaBookshelf[]
   reviews           PrismaReview[]
+  @@map("book")
 }
 
 model PrismaCollection {

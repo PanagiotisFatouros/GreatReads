@@ -40,8 +40,8 @@ export async function GET({ params }: RequestEvent) {
 				googleBooksId: googleBooksId
 			}
 			await prismaClient.prismaBook.create({data: newBookInput})
-			avgRating = restBookInfo.volumeInfo.avgRating
-			numRating = restBookInfo.volumeInfo.ratingsCount
+			avgRating = restBookInfo.volumeInfo.averageRating == null ? 0 : Number(restBookInfo.volumeInfo.averageRating)
+			numRating = restBookInfo.volumeInfo.ratingsCount == null ? 0 : Number(restBookInfo.volumeInfo.ratingsCount)
 		}
 		else {
 
@@ -59,8 +59,8 @@ export async function GET({ params }: RequestEvent) {
 			})
 
 			if (prismaReviews.length == 0){
-				avgRating = restBookInfo.volumeInfo.avgRating
-				numRating = restBookInfo.volumeInfo.ratingsCount
+				avgRating = restBookInfo.volumeInfo.averageRating == null ? 0 : Number(restBookInfo.volumeInfo.averageRating)
+				numRating = restBookInfo.volumeInfo.ratingsCount == null ? 0 : Number(restBookInfo.volumeInfo.ratingsCount)
 			}
 			else {
 				avgRating = 0
