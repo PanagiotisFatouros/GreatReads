@@ -1,19 +1,19 @@
 // import { createNewEntity } from '../../../../../database/mysql';
 import type { RequestEvent } from '@sveltejs/kit'
 import { prismaClient } from '../../../../../lib/lucia'
-import type { Collection, Prisma } from '@prisma/client'
+import type { PrismaCollection, Prisma } from '@prisma/client'
  
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ params, request }:RequestEvent){
     const bookId = params.bookId || ""
     const { title, userId } = await request.json()
-    let createdCollection: Collection
+    let createdCollection: PrismaCollection
     
     try {
         // Create user profile, which has username as the user's name in database
         // createdCollectionId = await createCollection(userId, bookId, title)
         // console.log(createdCollectionId)
-        const newCollectionInput: Prisma.CollectionCreateInput = {
+        const newCollectionInput: Prisma.PrismaCollectionCreateInput = {
           title: title,
           creationDate: new Date(),
           isPublic: false,
@@ -21,7 +21,7 @@ export async function POST({ params, request }:RequestEvent){
           book: {connect: {googleBooksId: bookId}},
           user: {connect: {id: userId}}
         }
-        createdCollection = await prismaClient.collection.create({data: newCollectionInput})
+        createdCollection = await prismaClient.prismaCollection.create({data: newCollectionInput})
         
     }
     catch(err){

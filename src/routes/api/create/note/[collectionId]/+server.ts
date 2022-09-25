@@ -1,7 +1,7 @@
 // import { createNewEntity } from '../../../../../database/mysql'
 import type { RequestEvent } from '@sveltejs/kit'
 import { prismaClient } from '../../../../../lib/lucia'
-import type { Note, Prisma } from '@prisma/client'
+import type { PrismaNote, Prisma } from '@prisma/client'
  
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ params, request }:RequestEvent){
@@ -11,17 +11,17 @@ export async function POST({ params, request }:RequestEvent){
     }
     const { title, content, pageNum } = await request.json()
     
-    let createdNote: Note
+    let createdNote: PrismaNote
     
     try {
-        const newNoteInput: Prisma.NoteCreateInput = {
+        const newNoteInput: Prisma.PrismaNoteCreateInput = {
           title: title,
           content: content,
           collection: {connect: {id: collectionId}},
           pageNum: pageNum
         }
 
-        createdNote = await prismaClient.note.create({data: newNoteInput})
+        createdNote = await prismaClient.prismaNote.create({data: newNoteInput})
       }
     catch(err){
       console.log(err)

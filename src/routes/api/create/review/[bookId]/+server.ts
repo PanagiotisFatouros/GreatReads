@@ -1,6 +1,6 @@
 import type { RequestEvent } from '@sveltejs/kit'
 import { prismaClient } from '../../../../../lib/lucia'
-import type { Prisma, Review } from '@prisma/client'
+import type { Prisma, PrismaReview } from '@prisma/client'
  
 
 /** @type {import('./$types').RequestHandler} */
@@ -12,9 +12,9 @@ export async function POST({ params, request }:RequestEvent){
     }
 
     const { title, comment, rating, userId } = await request.json()
-    let createdReview: Review    
+    let createdReview: PrismaReview    
     try {
-        const newReviewInput: Prisma.ReviewCreateInput = {
+        const newReviewInput: Prisma.PrismaReviewCreateInput = {
           title: title,
           comment: comment,
           rating: rating,
@@ -25,7 +25,7 @@ export async function POST({ params, request }:RequestEvent){
           user: {connect:{id: userId}}
         }
 
-        createdReview = await prismaClient.review.create({data: newReviewInput})
+        createdReview = await prismaClient.prismaReview.create({data: newReviewInput})
       }
     catch(err){
       console.log(err)
