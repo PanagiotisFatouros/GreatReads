@@ -6,7 +6,7 @@ export async function GET() {
 	// const table = 'book';
 	// let targetGoogleBooks;
 	// await getAllRows(table).then((returnedBooks) => (targetGoogleBooks = returnedBooks));
-	const allBooksInDatabase = await prismaClient.book.findMany()
+	const allBooksInDatabase = await prismaClient.prismaBook.findMany()
 
 
 	if (allBooksInDatabase.length == 0) {
