@@ -15,8 +15,8 @@
     
 
     // get book info
-    async function getBookInfo(){
-        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}/${user.user_id}`, )
+    export async function getBookInfo(){
+        const response = await fetch(`/api/read/books/${data.bookId}/${user.user_id}`, )
         const responseJson = response.json()
         const bookData: Book = await responseJson
         return bookData

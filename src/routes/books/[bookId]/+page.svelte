@@ -15,18 +15,17 @@
 
 	// Backend code to fetch user
 	const session = getSession();
-	console.log($session?.user)
 	const client = $session?.user
 
 	let baseURL: string
-	if ($session){
-		if (browser){
-			baseURL = window.location.origin
+	if (browser){
+		baseURL = window.location.origin
+		if (!$session){
+			goto('/authentication')
 		}
 	}
-	else{
-		goto('/authentication')
-	}
+
+	
 
 	
 	console.log(data)
