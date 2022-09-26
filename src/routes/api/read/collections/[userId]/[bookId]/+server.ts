@@ -1,20 +1,54 @@
-import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { Collection } from '../../../../../../types/book.type';
+import { prismaClient } from '../../../../../../lib/lucia';
 
-/** @type {import('../../../../../.svelte-kit/types/src/routes/api/read/books/$types').RequestHandler} */
+export async function GET({ params }: RequestEvent) {
+	const bookId = params.bookId || ""
+	const userId = params.userId || ""
 
-export async function GET({ params }) {
-	const table = 'collection';
-	const conditions = ['BookId', 'UserId'];
-	const values = [JSON.stringify(params.bookId), JSON.stringify(params.userId)];
-
-	// console.log(conditions, values)
-	let targetCollections;
-	await getAllRows(table, conditions, values).then(
-		(returnedCollections) => (targetCollections = returnedCollections)
-	);
-
-	if (targetCollections == null) {
-		return new Response(`404 There are no existing collections for ${params.userId} in database`);
+	if (bookId == ""){
+		return new Response("Book not specified/ incorrectly mapped.")
 	}
-	return new Response(JSON.stringify(targetCollections));
+	if (userId == ""){
+		return new Response("User not specified/ incorrectly mapped.")
+	}
+
+	let collections: Collection[] = []
+	const prismaCollections = await prismaClient.prismaCollection.findMany({
+		where: {userId: userId, bookId: bookId},
+		select:{
+			id: true,
+			title: true,
+			creationDate: true,
+			isPublic: true,
+			upvotes: true,
+			user:{
+				select:{
+					id: true,
+					name: true,
+					profilePic: true
+				}
+			}
+		}
+	})
+	prismaCollections.forEach((prismaCollection) => {
+		const collection: Collection = {
+			id: prismaCollection.id,
+			title: prismaCollection.title,
+			creationDate: prismaCollection.creationDate,
+			isPublic: prismaCollection.isPublic,
+			upvotes: prismaCollection.upvotes,
+			user: {
+				id: prismaCollection.user.id,
+				name: prismaCollection.user.name,
+				profilePic: prismaCollection.user.profilePic
+			}
+		}
+		collections.push(collection)
+	})
+	
+	if (collections.length == 0) {
+		return new Response(`404 There are no existing collections for ${userId} in database`);
+	}
+	return new Response(JSON.stringify(collections));
 }

@@ -4,10 +4,10 @@
 	"license": "MIT",
 	"type": "module",
 	"scripts": {
-		"start": "node build",
-		"dev": "node build",
-		"build": "vite build && fix_generated_file.sh",
-		"build_ci": "vite build",
+		"start": "node --trace-warnings build",
+		"dev": "node --trace-warnings build",
+		"build": "npm run generate_prisma && vite build",
+		"generate_prisma": "npx prisma generate",
 		"package": "svelte-kit package",
 		"preview": "node build",
 		"check": "svelte-check --tsconfig ./jsconfig.json",
@@ -38,12 +38,12 @@
 	},
 	"dependencies": {
 		"@lucia-sveltekit/adapter-prisma": "^0.3.3",
+		"@prisma/client": "^4.3.1",
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
+		"esbuild": "^0.15.7",
 		"lucia-sveltekit": "^0.8.6",
-		"mysql2": "^2.3.3",
 		"postcss-load-config": "^3.1.0",
-		"prisma": "^4.3.1",
-		"esbuild": "^0.15.7"
+		"prisma": "^4.3.1"
 	}
 }

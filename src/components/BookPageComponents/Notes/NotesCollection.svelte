@@ -67,8 +67,10 @@
 			//TODO: save note to collection in database
 
 			//add note to local collection object so it doesn't have to be reloaded
-			collection!.notes.push(newNote);
-
+			if (collection!.notes){
+				collection!.notes.push(newNote);
+			}
+			
 			//trigger reload
 			collection!.notes = collection!.notes;
 
@@ -97,7 +99,9 @@
 
 	function deleteNote() {
 		if (deletedNote != null) {
-			collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
+			if (collection!.notes){
+				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
+			}
 			deletingNote = false;
 			isOverlayOpen.set(false);
 
@@ -209,9 +213,11 @@
 	<!-- Note Cards -->
 	<div class=" space-y-4 mt-1 mb-5">
 		{#if collection != null}
-			{#each collection.notes as note}
-				<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} />
-			{/each}
+			{#if collection.notes}
+				{#each collection.notes as note}
+					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} />
+				{/each}
+			{/if}
 		{/if}
 	</div>
 </div>

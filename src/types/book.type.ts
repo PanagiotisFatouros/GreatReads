@@ -1,6 +1,7 @@
+
 //TODO: update to match actual type in database
 export type Book = {
-	id: number;
+	id: string;
 	title: string;
 	authors: string[];
 	pageCount: number;
@@ -25,18 +26,18 @@ export type Book = {
 	publicNotes: Collection[];
 };
 
-export type User = {
+export type Client = {
 	name: string;
 
 	//id type??
-	id: number;
+	id: string;
 
 	//link to image???
 	profilePic: string;
 
 	// all other details in user collection
 	reviews?: Review[];
-	bio: string;
+	bio?: string;
 };
 
 export type Review = {
@@ -46,9 +47,10 @@ export type Review = {
 	rating: number;
 	date: Date;
 	upvotes: number;
+	isEdited: boolean;
 	img?: string;
 	// could save time by not loading entire user object - only need name, profile pic and id
-	user?: User;
+	user?: Client;
 };
 
 export type Collection = {
@@ -59,10 +61,10 @@ export type Collection = {
 
 	//only required if public collection
 	upvotes: number;
-	user: User;
+	user: Client;
 
 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
-	notes: Note[];
+	notes?: Note[];
 };
 
 export type Note = {
@@ -72,3 +74,6 @@ export type Note = {
 	creationDate: Date;
 	pageNum: number;
 };
+
+
+

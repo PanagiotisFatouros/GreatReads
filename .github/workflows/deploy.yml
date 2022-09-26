@@ -25,17 +25,13 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
       - run: npm ci
-      - run: npm install --save typescript
-      - run: npm install --save-dev eslint-plugin-svelte3
-      - run: npm install --save-dev "@typescript-eslint/eslint-plugin"
-      - run: npm install --save-dev '@typescript-eslint/parser'
       - run: npm init @eslint/config
       - run: npm run format
-      - run: npx --fix eslint src
-      - run: npm run build_ci --if-present
-      - run: sh ./fix_generated_file.sh
+      - run: npm run lint
+      - run: npm run build --if-present
       - run: npx playwright install
       - run: npm test
+
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2

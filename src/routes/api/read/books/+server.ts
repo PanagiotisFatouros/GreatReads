@@ -1,13 +1,12 @@
-import { mysqlconn, getAllRows } from '../../../../database/mysql';
+import { prismaClient } from "../../../../lib/lucia";
 
-/** @type {import('../../../../../.svelte-kit/types/src/routes/api/read/books/$types').RequestHandler} */
 export async function GET() {
-	const table = 'book';
-	let targetGoogleBooks;
-	await getAllRows(table).then((returnedBooks) => (targetGoogleBooks = returnedBooks));
+	
+	const allBooksInDatabase = await prismaClient.prismaBook.findMany()
 
-	if (targetGoogleBooks == null) {
+
+	if (allBooksInDatabase.length == 0) {
 		return new Response('404 There are no Google Books in database');
 	}
-	return new Response(JSON.stringify(targetGoogleBooks));
+	return new Response(JSON.stringify(allBooksInDatabase));
 }
