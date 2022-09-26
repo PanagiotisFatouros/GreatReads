@@ -7,7 +7,7 @@
 		"start": "node --trace-warnings build",
 		"dev": "node --trace-warnings build",
 		"build": "vite build && npm run fix_generated_file && npm run generate_prisma",
-		"build_local": "vite build && fix_generated_file.sh",
+		"build_local": "vite build && fix_generated_file.sh && npm run generate_prisma",
 		"generate_prisma": "npx prisma generate",
 		"fix_generated_file": "sed -i '1s/^/'\"import path from 'path';import { fileURLToPath } from 'url';const __filename = fileURLToPath(import.meta.url);const __dirname = path.dirname(__filename);\"'/' build/server/chunks/lucia-*.js",
 		"package": "svelte-kit package",
