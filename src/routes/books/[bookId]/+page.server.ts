@@ -1,6 +1,4 @@
-import { redirect } from "@sveltejs/kit"
 import type { RequestEvent } from "@sveltejs/kit"
-import type { Actions } from "@sveltejs/kit"
 // import { createNewEntity } from "../../../../database/mysql"
 
 

@@ -18,7 +18,8 @@ export async function POST({ params, request }:RequestEvent){
           title: title,
           content: content,
           collection: {connect: {id: collectionId}},
-          pageNum: pageNum
+          pageNum: pageNum,
+          creationDate: new Date()
         }
 
         createdNote = await prismaClient.prismaNote.create({data: newNoteInput})

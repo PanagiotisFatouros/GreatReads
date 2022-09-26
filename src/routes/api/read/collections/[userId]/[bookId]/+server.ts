@@ -1,12 +1,8 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Collection } from '../../../../../../types/book.type';
-// import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
 import { prismaClient } from '../../../../../../lib/lucia';
 
 export async function GET({ params }: RequestEvent) {
-	// const table = 'collection';
-	// const conditions = ['BookId', 'UserId'];
-	// const values = [JSON.stringify(params.bookId), JSON.stringify(params.userId)];
 	const bookId = params.bookId || ""
 	const userId = params.userId || ""
 
@@ -51,13 +47,6 @@ export async function GET({ params }: RequestEvent) {
 		collections.push(collection)
 	})
 	
-
-	// // console.log(conditions, values)
-	// let targetCollections;
-	// await getAllRows(table, conditions, values).then(
-	// 	(returnedCollections) => (targetCollections = returnedCollections)
-	// );
-
 	if (collections.length == 0) {
 		return new Response(`404 There are no existing collections for ${userId} in database`);
 	}

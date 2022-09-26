@@ -4,9 +4,10 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book, Client, Note, Collection, Review } from '../../../types/book.type';
+	import type { Book } from '../../../types/book.type';
 	import { getSession } from 'lucia-sveltekit/client'
 	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
 
 	/** @type {import('./$types').PageData} */
     export let data:any;
@@ -18,32 +19,17 @@
 	const client = $session?.user
 
 	let baseURL: string
-	if (browser){
-		baseURL = window.location.origin
+	if ($session){
+		if (browser){
+			baseURL = window.location.origin
+		}
 	}
+	else{
+		goto('/authentication')
+	}
+
+	
 	console.log(data)
-
-	// let reviews: Review[]
-	// let collections: Collection[]
-
-
-	// async function getClientWithoutReviews(){
-    //     const response = await fetch(`${baseURL}/api/read/books/user/${client.user_id}`, )
-    //     const responseJson = response.json()
-    //     const clientData: Client = await responseJson
-    //     return clientData
-    // }
-
-	// let user: Client = {
-	// 	name: 'James Smith',
-	// 	id: "123",
-
-	// 	profilePic:
-	// 		'https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450',
-
-	// 	reviews: [],
-	// 	bio: ''
-	// };
 
 	async function getBookInfo(){
         const response = await fetch(`${baseURL}/api/read/books/${data.bookId}/${client.user_id}`, )
@@ -52,15 +38,6 @@
 		console.log(bookData)
         return bookData
     }
-
-	// async function getReviews(){
-	// 	const response = await fetch(`${baseURL}/api/read/reviews/${data.bookId}`, )
-	// 	const responseJson = response.json()
-	// 	const reviewsData: Review[] = await responseJson
-	// 	return reviewsData
-	// }
-
-
 
 	
 	// let review1: Review = {
@@ -117,24 +94,6 @@
 	// 	pageNum: 254
 	// };
 
-
-	// // let collections: Collection
-	// // let collection1: Collection; let collection2: Collection
-	// // async function getCollections(){
-	// // 	const collections = prismaClient.collection.findMany({
-	// // 		where:{id: $session?.user.user_id},
-	// // 	})
-	// // 	return collections
-	// // }
-	
-	// // getCollections().then((collections) => {
-	// // 	if (collections.length > 0){
-	// // 		collection1 = collections[0]
-	// // 		if (collections.length > 1){
-	// // 			collection2 = collections[1]
-	// // 		}
-	// // 	}
-	// // })
 
 	// let collection1: Collection = {
 	// 	id: 2345,

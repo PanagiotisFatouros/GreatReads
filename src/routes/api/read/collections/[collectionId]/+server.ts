@@ -1,7 +1,5 @@
-import { prisma } from '@prisma/client';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Collection, Note } from 'src/types/book.type';
-// import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
 import { prismaClient } from '../../../../../lib/lucia';
 
 export async function GET({ params }: RequestEvent) {

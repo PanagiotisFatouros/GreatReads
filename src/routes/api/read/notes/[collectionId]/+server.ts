@@ -1,6 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Note } from 'src/types/book.type';
-// import { getAllRows, mysqlconn } from '../../../../../../database/mysql';
 import { prismaClient } from '../../../../../lib/lucia';
 
 export async function GET({ params }: RequestEvent) {
@@ -11,9 +10,6 @@ export async function GET({ params }: RequestEvent) {
 	if (collectionId == -1){
 		return new Response("Collection not specified/ incorrectly mapped.")
 	}
-	// if (userId == ""){
-	// 	return new Response("User not specified/ incorrectly mapped.")
-	// }
 
 	const prismaNotes = await prismaClient.prismaNote.findMany({
 		where: {collectionId: collectionId},
