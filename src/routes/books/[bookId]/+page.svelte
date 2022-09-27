@@ -4,13 +4,19 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book } from '../../../types/book.type';
+	import type { Book, Client } from '../../../types/book.type';
 	import { getSession } from 'lucia-sveltekit/client'
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
+	import { page } from '$app/stores';
+
+	const bookId = $page.params.bookId;
+	// console.log(bookId);
+
+	//TODO: remove +page.server.ts for this route
 	/** @type {import('./$types').PageData} */
-    export let data:any;
+    // export let data:any;
 
 
 	// Backend code to fetch user
@@ -29,10 +35,10 @@
 	}
 
 	
-	console.log(data)
+	// console.log(data)
 
 	async function getBookInfo(){
-        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}/${client.user_id}`, )
+        const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
         const responseJson = response.json()
         const bookData: Book = await responseJson
 		console.log(bookData)
@@ -134,6 +140,8 @@
 	// };
 
 	const bookPromise = getBookInfo()
+
+	// bookPromise.then(book => console.log(book));
 
 	function saveBook() {
 		//TODO: save book to user's bookshelf

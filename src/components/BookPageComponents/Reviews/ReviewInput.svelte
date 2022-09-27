@@ -1,23 +1,41 @@
 <script lang="ts">
 	//import type { Review } from 'src/types/book.type';
 	import RatingInput from './../../RatingInput.svelte';
+	import { page } from '$app/stores';
+	import { getSession } from 'lucia-sveltekit/client'
+
+	const session = getSession();
+	const user_id = $session?.user.user_id;
+
+	const bookId = $page.params.bookId;
+	//console.log(bookId);
+	const baseURL = $page.url.origin;
 
 	let rating: number = 0;
 	let title: string = '';
 	let comment: string = '';
 
-	function postReview() {
+	// async function getBookInfo(){
+    //     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
+    //     const responseJson = response.json()
+    //     const bookData: Book = await responseJson
+	// 	console.log(bookData)
+    //     return bookData
+    // }
+
+	async function postReview() {
 		if (rating != 0 && title != '' && comment != '') {
-			//TODO: save to db
-			//alert(`rating: ${rating} \ntitle: ${title} \ncomment: ${comment}`)
-			// let review:Review = {
-			//     rating: rating,
-			//     title: title,
-			//     id: Math.floor(Math.random() * 1000),
-			//     comment: comment,
-			//     date: new Date(),
-			//     upvotes: 0
-			// }
+			
+			const response = await fetch(`${baseURL}/api/create/review/${bookId}`, {
+				method: 'POST',
+				body: JSON.stringify({
+					title: title,
+					comment: comment,
+					rating: rating,
+					userId: user_id
+				})
+			})
+			console.log(response.body);
 
 			//reset input
 			rating = 0;
