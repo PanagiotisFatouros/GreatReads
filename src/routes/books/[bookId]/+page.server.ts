@@ -13,7 +13,7 @@ export async function load({ request, url, params }:RequestEvent) {
         // authenticated
 
         const baseURL = url.origin;
-        console.log(baseURL);
+        // console.log(baseURL);
 
         const bookID = params.bookId;
 
@@ -21,7 +21,7 @@ export async function load({ request, url, params }:RequestEvent) {
         // console.log(params);
         let book:Book = await (await fetch(`${baseURL}/api/read/books/${bookID}/${session.user.user_id}`)).json()
 
-        console.log(book)
+        // console.log(book)
 
         return {
           book: book

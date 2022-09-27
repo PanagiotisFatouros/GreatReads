@@ -14,7 +14,9 @@
 	<div class="flex justify-between items-center py-2">
 		<div class="flex items-center space-x-3">
 			<div class=" profile_pic_small">
-				<img src={review.user.profilePic} alt="user profile pic" />
+				{#if review.user != undefined && review.user.profilePic != ''}
+					<img src={review.user.profilePic} alt="user profile pic" />
+				{/if}
 			</div>
 
 			<div class="flex flex-col justify-start">
@@ -23,7 +25,9 @@
 					<StarRating rating={review.rating} showRating={false} />
 				</div>
 				<div class="flex items-center space-x-1">
+					{#if review.user != undefined}
 					<p class=" text-primary-2">{review.user.name}</p>
+					{/if}
 					<p class="text-primary-3 text-body2 font-body">- {diff}</p>
 				</div>
 			</div>

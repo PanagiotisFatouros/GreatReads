@@ -7,16 +7,13 @@
 	import type { Book, Client, Review } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
 	// import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-
-	import { page } from '$app/stores';
 
 	/** @type {import('./$types').PageData} */
     export let data;
 
 	let book:Book = data.book;
 
-	console.log(book);
+	// console.log(book);
 
 	// console.log(data)
 
