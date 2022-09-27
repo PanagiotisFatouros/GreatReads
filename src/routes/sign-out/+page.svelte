@@ -1,6 +1,7 @@
 <script>
 	import { signOut, getSession } from 'lucia-sveltekit/client';
 	import { browser } from '$app/environment';
+	import { authenticated } from '../../stores/OverlayStore';
 	const session = getSession();
 
 	if (browser) {

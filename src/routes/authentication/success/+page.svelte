@@ -2,6 +2,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { getSession } from 'lucia-sveltekit/client';
+
 	const session = getSession();
 	if ($session) {
 		if (browser) {

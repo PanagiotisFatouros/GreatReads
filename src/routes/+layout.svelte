@@ -1,5 +1,6 @@
 <script>
 	import { isOverlayOpen } from '../stores/OverlayStore';
+	import { authenticated } from '../stores/OverlayStore';
 	import '../app.css';
 	import NavBar from '../components/NavBar.svelte';
 	import Overlay from '../components/Overlay.svelte';
@@ -12,6 +13,6 @@
 	<Overlay />
 {/if}
 
-<NavBar />
+<NavBar loggedIn={$authenticated}/>
 
 <slot />
