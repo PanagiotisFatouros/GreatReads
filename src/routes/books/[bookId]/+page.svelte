@@ -4,48 +4,37 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book, Client } from '../../../types/book.type';
-	import { getSession } from 'lucia-sveltekit/client'
-	import { browser } from '$app/environment';
+	import type { Book, Client, Review } from '../../../types/book.type';
+	// import { getSession } from 'lucia-sveltekit/client'
+	// import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
 	import { page } from '$app/stores';
 
-	const bookId = $page.params.bookId;
-	// console.log(bookId);
-
-	//TODO: remove +page.server.ts for this route
 	/** @type {import('./$types').PageData} */
-    // export let data:any;
+    export let data;
 
+	let book:Book = data.book;
 
-	// Backend code to fetch user
-	const session = getSession();
-	console.log($session?.user)
-	const client = $session?.user
+	console.log(book);
 
-	let baseURL: string
-	if ($session){
-		if (browser){
-			baseURL = window.location.origin
-		}
-	}
-	else{
-		goto('/authentication')
-	}
-
-	
 	// console.log(data)
 
-	async function getBookInfo(){
-        const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
-        const responseJson = response.json()
-        const bookData: Book = await responseJson
-		console.log(bookData)
-        return bookData
-    }
+	// async function getBookInfo(){
+    //     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`)
+    //     const responseJson = response.json()
+    //     const bookData: Book = await responseJson
+	// 	console.log(bookData)
+    //     return bookData
+    // }
 
-	
+	// let user:Client = {
+	// 	name: "Lucas",
+	// 	id: "123",
+	// 	profilePic: "",
+	// 	reviews: undefined,
+	// 	bio: undefined
+	// }
 	// let review1: Review = {
 	// 	id: 5413,
 	// 	title: 'Terrible',
@@ -139,7 +128,7 @@
 	// 	publicNotes: [collection1, collection2]
 	// };
 
-	const bookPromise = getBookInfo()
+	
 
 	// bookPromise.then(book => console.log(book));
 
@@ -156,9 +145,9 @@
 </script>
 
 
-{#await bookPromise}
-	<h1>Loading Book</h1> 
-{:then book} 
+<!-- {#await bookPromise} -->
+	<!-- <h1>Loading Book</h1>  -->
+<!-- {:then book}  -->
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
 	<!-- left column - cover image and info -->
 	<div class=" col-span-3 flex justify-center items-center flex-col self-start">
@@ -208,4 +197,4 @@
 	</div>
 </div>
 
-{/await}
+<!-- {/await} -->
