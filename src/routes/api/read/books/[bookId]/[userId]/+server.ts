@@ -17,7 +17,7 @@ export async function GET({ params }: RequestEvent) {
 	// console.log(restBookInfo)
 
 	if (restBookInfo.error){
-		throw error(400, '404 Google Book Does not Exist');
+		return new Response("404 Google Book Does not Exist")
 	}
 	else {
 

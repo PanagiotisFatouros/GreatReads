@@ -15,17 +15,19 @@
 
 	// Backend code to fetch user
 	const session = getSession();
+
+	console.log($session?.user)
 	const client = $session?.user
 
 	let baseURL: string
-	if (browser){
-		baseURL = window.location.origin
-		if (!$session){
-			goto('/authentication')
+	if ($session){
+		if (browser){
+			baseURL = window.location.origin
 		}
 	}
-
-	
+	else{
+		goto('/authentication')
+	}
 
 	
 	console.log(data)
@@ -181,7 +183,8 @@
 		</div>
 
 		<h2 class=" text-heading2 font-heading">{convertToString(book.authors)}</h2>
-		<p class="mt-3 mb-5">{book.description}</p>
+
+		<p class="mt-3 mb-5">{@html book.description}</p>
 
 		<BookPageContent {book} />
 	</div>
