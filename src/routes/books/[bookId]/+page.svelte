@@ -4,7 +4,7 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book, Client, Review } from '../../../types/book.type';
+	import type { Book } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
 	// import { browser } from '$app/environment';
 

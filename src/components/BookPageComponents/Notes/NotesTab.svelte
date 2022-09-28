@@ -1,6 +1,6 @@
 <script lang="ts">
 	import NotesCollection from './NotesCollection.svelte';
-	import type { Collection, Client } from 'src/types/book.type';
+	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
 
 	export let collections: Collection[];
