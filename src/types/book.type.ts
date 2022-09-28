@@ -1,4 +1,3 @@
-
 //TODO: update to match actual type in database
 export type Book = {
 	id: string;
@@ -74,6 +73,3 @@ export type Note = {
 	creationDate: Date;
 	pageNum: number;
 };
-
-
-
