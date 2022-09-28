@@ -182,7 +182,7 @@
 		</div>
 
 		<h2 class=" text-heading2 font-heading">{convertToString(book.authors)}</h2>
-		<p class="mt-3 mb-5">{book.description}</p>
+		<p class="mt-3 mb-5">{@html book.description}</p>
 
 		<BookPageContent {book} />
 	</div>
