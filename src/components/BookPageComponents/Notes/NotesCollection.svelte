@@ -5,6 +5,10 @@
 	import Confirmation from '../../Confirmation.svelte';
 	import NoteCard from './NoteCard.svelte';
 
+	import { page } from '$app/stores';
+
+	const baseURL = $page.url.origin;
+
 	onMount(() => {
 		if (collection != null) {
 			isPublic = collection.isPublic;
@@ -53,24 +57,22 @@
 	let title: string = '';
 	let noteContent: string = '';
 
-	function saveNote() {
-		if (title != '' && noteContent != '') {
-			let newNote: Note = {
-				//TODO: get actual id from database
-				id: Math.floor(Math.random() * 1000),
-				pageNum: pageNum,
-				title: title,
-				content: noteContent,
-				creationDate: new Date()
-			};
+	async function saveNote() {
+		if (title != '' && noteContent != '' && collection !== null) {
+			const response = await fetch(`${baseURL}/api/create/note/${collection.id}`, {
+				method: 'POST',
+				body: JSON.stringify({
+					title: title,
+					content: noteContent,
+					pageNum: pageNum
+				})
+			});
+			const newNote: Note = await response.json();
 
-			//TODO: save note to collection in database
-
-			//add note to local collection object so it doesn't have to be reloaded
-			if (collection!.notes){
-				collection!.notes.push(newNote);
+			if (newNote !== undefined && collection!.notes) {
+				collection.notes?.push(newNote);
 			}
-			
+
 			//trigger reload
 			collection!.notes = collection!.notes;
 
@@ -99,7 +101,7 @@
 
 	function deleteNote() {
 		if (deletedNote != null) {
-			if (collection!.notes){
+			if (collection!.notes) {
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
 			deletingNote = false;
@@ -112,7 +114,7 @@
 	}
 
 	// to update the ui when a note is deleted
-	$: collection?.notes;
+	$: collection?.notes?.sort((note1, note2) => note1.pageNum - note2.pageNum);
 </script>
 
 <!-- TODO: 2 different overlays - delete collection or note -->

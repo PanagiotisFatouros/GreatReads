@@ -5,135 +5,13 @@
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
 	import type { Book } from '../../../types/book.type';
-	import { getSession } from 'lucia-sveltekit/client'
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
+	// import { getSession } from 'lucia-sveltekit/client'
+	// import { browser } from '$app/environment';
 
 	/** @type {import('./$types').PageData} */
-    export let data:any;
+	export let data;
 
-
-	// Backend code to fetch user
-	const session = getSession();
-	console.log($session?.user)
-	const client = $session?.user
-
-	let baseURL: string
-	if ($session){
-		if (browser){
-			baseURL = window.location.origin
-		}
-	}
-	else{
-		goto('/authentication')
-	}
-
-	
-	console.log(data)
-
-	async function getBookInfo(){
-        const response = await fetch(`${baseURL}/api/read/books/${data.bookId}/${client.user_id}`, )
-        const responseJson = response.json()
-        const bookData: Book = await responseJson
-		console.log(bookData)
-        return bookData
-    }
-
-	
-	// let review1: Review = {
-	// 	id: 5413,
-	// 	title: 'Terrible',
-	// 	comment: 'Lorem Ipsum',
-	// 	rating: 3,
-	// 	date: new Date(),
-	// 	upvotes: 5,
-	// 	isEdited: false, 
-	// 	user: user,
-	// 	img: ''
-	// };
-	
-	// // let review2: Review = {
-	// // 	id: 5413,
-	// // 	title: 'Terrible',
-	// // 	comment: 'Lorem Ipsum',
-	// // 	rating: 3,
-	// // 	date: new Date(),
-	// // 	upvotes: 5,
-	// // 	isEdited: false,
-	// // 	bookId: "154769832",
-	// // 	userId: ""
-	// // };
-	// let review2: Review = {
-	// 	id: 32451,
-	// 	title: '60 Characters Max',
-	// 	date: new Date('04 Dec 2021 00:12:00 GMT'),
-	// 	comment:
-	// 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque lacinia lacus eget rutrum egestas. Maecenas vitae volutpat neque. Suspendisse sit amet velit lacinia, tempor ante nec, bibendum leo. Phasellus luctus, dolor et consectetur suscipit, velit leo accumsan ipsum, at fermentum purus purus at nibh. Sed ultricies purus ante, non blandit leo congue a. Aenean fringilla risus eget dui hendrerit, ac condimentum diam dapibus. Duis nisl massa, feugiat iaculis nulla a, cursus consectetur quam. Aenean in ligula eget mauris vehicula consectetur vitae et sem. Sed condimentum quam et elit aliquet, vel elementum elit placerat. Duis mauris nunc, pellentesque eu diam a, ultrices faucibus sapien. Quisque tristique metus ut ipsum gravida consectetur.',
-	// 	rating: 4.5,
-	// 	user: user,
-	// 	isEdited: false,
-	// 	upvotes: -3,
-	// 	img: 'https://goshenpl.lib.in.us/wp-content/uploads/2020/07/hunger-games.jpg'
-	// };
-
-	// let note1: Note = {
-	// 	id: 9078,
-	// 	title: 'Testing',
-	// 	content:
-	// 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet sodales risus et pulvinar. Vivamus vitae lectus varius, tempus turpis id, hendrerit elit. Donec gravida finibus aliquam. Integer enim diam, interdum non finibus nec, blandit vitae tortor. Donec vitae mattis quam, ac pellentesque neque. Integer sit amet tortor odio. Integer sit amet lobortis magna, eu egestas lectus. Nam in convallis nisi. Suspendisse facilisis mollis sapien, a viverra sem pellentesque eget. Quisque quis interdum enim, et commodo est.',
-	// 	creationDate: new Date(),
-	// 	pageNum: 124
-	// };
-
-	// let note2: Note = {
-	// 	id: 45078,
-	// 	title: 'Testing 2',
-	// 	content:
-	// 		'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis imperdiet sodales risus et pulvinar. Vivamus vitae lectus varius, tempus turpis id, hendrerit elit. Donec gravida finibus aliquam.',
-	// 	creationDate: new Date(),
-	// 	pageNum: 254
-	// };
-
-
-	// let collection1: Collection = {
-	// 	id: 2345,
-	// 	title: 'Summary',
-	// 	creationDate: new Date(),
-	// 	isPublic: true,
-	// 	upvotes: 4,
-	// 	user,
-	// 	notes: [note1, note2]
-	// };
-
-	// let collection2: Collection = {
-	// 	id: 2343545,
-	// 	title: 'Chapter Analysis',
-	// 	creationDate: new Date(),
-	// 	isPublic: true,
-	// 	upvotes: -3,
-	// 	user: user,
-	// 	notes: [note1, note2]
-	// };
-
-	// let book: Book = {
-	// 	id: "154769832",
-	// 	title: 'The Hunger Games',
-	// 	authors: ['Suzanne Collins'],
-	// 	pageCount: 384,
-	// 	avgRating: 4.3,
-	// 	numRatings: 35,
-	// 	description:
-	// 		'The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.',
-	// 	reviews: [review1, review2],
-	// 	genres: ['Dystopian', 'science fiction', 'drama', 'action'],
-	// 	isbn: '9780440335702',
-	// 	datePublished: '1st December 2011',
-	// 	imageURL: 'https://goshenpl.lib.in.us/wp-content/uploads/2020/07/hunger-games.jpg',
-	// 	userNotes: [collection1, collection2],
-	// 	publicNotes: [collection1, collection2]
-	// };
-
-	const bookPromise = getBookInfo()
+	let book: Book = data.book;
 
 	function saveBook() {
 		//TODO: save book to user's bookshelf
@@ -147,10 +25,9 @@
 	}
 </script>
 
-
-{#await bookPromise}
-	<h1>Loading Book</h1> 
-{:then book} 
+<!-- {#await bookPromise} -->
+<!-- <h1>Loading Book</h1>  -->
+<!-- {:then book}  -->
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
 	<!-- left column - cover image and info -->
 	<div class=" col-span-3 flex justify-center items-center flex-col self-start">
@@ -200,4 +77,4 @@
 	</div>
 </div>
 
-{/await}
+<!-- {/await} -->
