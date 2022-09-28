@@ -34,6 +34,7 @@
 		"postcss": "^8.4.16",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
+		"prisma": "^4.4.0",
 		"svelte": "^3.44.0",
 		"svelte-check": "^2.7.1",
 		"svelte-preprocess": "^4.10.7",
@@ -43,12 +44,11 @@
 	},
 	"dependencies": {
 		"@lucia-sveltekit/adapter-prisma": "^0.3.3",
-		"@prisma/client": "^4.3.1",
+		"@prisma/client": "^4.4.0",
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
 		"esbuild": "^0.15.7",
 		"lucia-sveltekit": "^0.8.6",
-		"postcss-load-config": "^3.1.0",
-		"prisma": "^4.3.1"
+		"postcss-load-config": "^3.1.0"
 	}
 }
