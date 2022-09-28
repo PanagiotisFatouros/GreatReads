@@ -1,7 +1,7 @@
 {
 	"name": "great-reads",
-	"version": "0.0.1",
-	"license": "MIT",
+	"version": "1.0",
+	"license": "team0-unimelb-ITProject-2022",
 	"type": "module",
 	"scripts": {
 		"start": "node --trace-warnings build",
