@@ -20,6 +20,7 @@ module.exports = {
 			},
 			width: {
 				34: '8.5rem',
+				84: '21rem',
 				114: '28.5rem'
 			},
 			fontSize: {
