@@ -27,7 +27,7 @@ test('Valid Book Page (Logged In)', async({ page, baseURL}) => {
 	await page.waitForURL("**/success")
 	await page.goto(`${baseURL}/books/${validBookId}`)
 	await page.waitForURL(`**/${validBookId}`)
-	expect(await page.innerText(`h1.text-heading1.font-heading.text-secondary.mr-5`)).toBe(bookName)
+	expect(await page.innerText(h1ClassName)).toBe(bookName)
 	
 })
 
