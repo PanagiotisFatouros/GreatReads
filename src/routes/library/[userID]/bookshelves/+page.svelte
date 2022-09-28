@@ -3,7 +3,6 @@
     import BookshelfCard from "../../../../components/BookshelfCard.svelte";
     import AddBookshelfPanel from "../../../../components/AddBookshelfPanel.svelte";
     import {isOverlayOpen} from '../../../../stores/OverlayStore.js';
-    import type {Book} from '../../../../types/book.type';
 
     let addBookshelf = false;
     let bookshelves = ['', '', ''];
