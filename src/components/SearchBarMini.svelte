@@ -1,5 +1,5 @@
 <script lang="ts">
-	export let searchText: string = '';
+	export let searchText:string = '';
 </script>
 
 <div class="flex rounded-full w-1/3 border-solid border-primary-3 border-2 font-body text-body1">

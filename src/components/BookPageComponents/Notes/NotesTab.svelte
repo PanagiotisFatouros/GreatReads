@@ -9,10 +9,10 @@
 	import { browser } from '$app/environment';
 	let newCollectionTitle = '';
 	let isPublic = false;
-	let baseURL: string;
-
-	if (browser) {
-		baseURL = window.location.origin;
+	let baseURL: string
+	
+	if (browser){
+		baseURL = window.location.origin
 	}
 
 	function createNewCollection() {
@@ -25,7 +25,7 @@
 		// TODO: get user from session
 		let user: Client = {
 			name: 'James Smith',
-			id: '123',
+			id: "123",
 			profilePic:
 				'https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450',
 			bio: ''
@@ -64,12 +64,13 @@
 		}
 	}
 
-	async function getCollection(collectionId: number) {
-		const response = await fetch(`${baseURL}/api/read/collections/${JSON.stringify(collectionId)}`);
-		const responseJson = response.json();
-		const collectionData: Collection = await responseJson;
-		return collectionData;
-	}
+	async function getCollection(collectionId: number){
+        const response = await fetch(`${baseURL}/api/read/collections/${JSON.stringify(collectionId)}`, )
+        const responseJson = response.json()
+        const collectionData: Collection = await responseJson
+        return collectionData
+    }
+
 
 	$: collections;
 </script>
@@ -131,10 +132,7 @@
 		<div class="flex flex-col mt-1">
 			{#each collections as collection}
 				<div
-					on:click={() =>
-						getCollection(collection.id).then(
-							(returnedCollection) => (selectedCollection = returnedCollection)
-						)}
+				on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)}
 					class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 				>
 					<div>

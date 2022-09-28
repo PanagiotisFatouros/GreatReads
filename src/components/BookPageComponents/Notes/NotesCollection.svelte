@@ -67,10 +67,10 @@
 			//TODO: save note to collection in database
 
 			//add note to local collection object so it doesn't have to be reloaded
-			if (collection!.notes) {
+			if (collection!.notes){
 				collection!.notes.push(newNote);
 			}
-
+			
 			//trigger reload
 			collection!.notes = collection!.notes;
 
@@ -99,7 +99,7 @@
 
 	function deleteNote() {
 		if (deletedNote != null) {
-			if (collection!.notes) {
+			if (collection!.notes){
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
 			deletingNote = false;
