@@ -1,13 +1,15 @@
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
 	testDir: 'tests',
-	timeout: 6000,
+	timeout: 15000,
 	webServer: {
 		command: 'npm run preview',
 		port: 3000,
 		reuseExistingServer: !process.env.CI,
 	},
-	baseURL: "http://127.0.0.1:3000/"
+	use:{
+		baseURL: "http://127.0.0.1:3000"
+	}
 };
 
 export default config;

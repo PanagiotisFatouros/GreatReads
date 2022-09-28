@@ -9,40 +9,15 @@ const testUser= {
 	bio: ""
 }
 
+const invalidBookId = "nosuchbook12"
+const validBookId = "zyTCAlFPjgYC"
 
-// test.beforeAll(async ({ request }) => {
-// 	// Create a new repository
-// 	const response = await request.post('/user/repos', {
-// 	  data: {
-// 		name: REPO
-// 	  }
-// 	});
-// 	expect(response.ok()).toBeTruthy();
-//   });
-
-// test('Empty Test', async ({ page }) => {
-// 	await page.goto('https://playwright.dev/');
-// 	const name = await page.innerText('.navbar__title');
-// 	expect(name).toBe('Playwright');
-// });
-
-
-
-test('Valid= Book - Book Landing Page', async({ request }) => {
-	const validBookId = "zyTCAlFPjgYC"
-	const response = await request.get(`https://greatreads.azurewebsites.net/api/read/books/${validBookId}/${testUser.id}`)
-	console.log(response?.status())
-})
-
-
-test('Books Landing Page - Not Logged In', async({ page, baseURL }) => {
-	const validBookId = "zyTCAlFPjgYC"
+test('Valid Book Page (Not Logged In)', async({ page, baseURL }) => {
 	await page.goto(`${baseURL}/books/${validBookId}`)
 	await page.waitForURL("**/authentication")
 })
 
-test('Books Landing page - Logged In', async({ page, baseURL}) => {
-	const validBookId = "zyTCAlFPjgYC"
+test('Valid Book Page (Logged In)', async({ page, baseURL}) => {
 	const bookName = "The Google Story (2018 Updated Edition)"
 	const h1ClassName = "text-heading1 font-heading text-secondary mr-5"
 	await page.goto(`${baseURL}/authentication`)
@@ -54,4 +29,9 @@ test('Books Landing page - Logged In', async({ page, baseURL}) => {
 	await page.waitForURL(`**/${validBookId}`)
 	expect(await page.innerText(`h1.text-heading1.font-heading.text-secondary.mr-5`)).toBe(bookName)
 	
+})
+
+test('Invalid Book Page', async({ page, baseURL }) => {
+	const response = await page.goto(`${baseURL}/api/read/books/${invalidBookId}}/${testUser.id}`);
+	await expect(response?.ok()).toBeFalsy()
 })
