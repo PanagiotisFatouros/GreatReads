@@ -22,7 +22,7 @@
         userNotes: [],
         publicNotes: [],
     }
-    let books = [book, book, book, book, book, book, book]
+    let books = [book, book, book, book, book, book, book];
     let filter = false;
     let sort = false;
     $: isOverlayOpen.set(filter || sort)

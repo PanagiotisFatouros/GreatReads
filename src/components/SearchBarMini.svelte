@@ -1,17 +1,17 @@
 <script lang="ts">
-	export let searchText:string = 'Search';
+	export let searchText:string = '';
 </script>
 
 <div class="flex rounded-full w-1/3 border-solid border-primary-3 border-2">
 	<input
 		type="text"
 		bind:value={searchText}
+		placeholder="Search"
 		class=" bg-transparent w-full focus:outline-none px-2 text-body2"
-		
 	/>
 
 	<!-- pass on:click handling to parent component-->
-	<button on:click class=" hover:opacity-70">
+	<button on:click class="hover:opacity-70">
 		<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
