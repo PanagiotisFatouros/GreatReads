@@ -8,8 +8,6 @@ export async function POST({ params, request }: RequestEvent) {
 	if (bookId == '') {
 		return new Response('Book for Review not found/specified');
 	}
-
-	
     const { title, comment, rating, userId } = await request.json()
     let createdReview: PrismaReview    
     try {
