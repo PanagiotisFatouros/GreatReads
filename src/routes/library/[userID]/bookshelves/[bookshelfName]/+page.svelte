@@ -1,9 +1,9 @@
 <script lang="ts">
-    import BookCard from '../../../../components/BookCard.svelte';
-    import FilterPanel from '../../../../components/FilterPanel.svelte';
-    import SortPanel from '../../../../components/SortPanel.svelte';
-    import {isOverlayOpen} from '../../../../stores/OverlayStore.js';
-    import type {Book} from '../../../../types/book.type';
+    import BookCard from '../../../../../components/BookCard.svelte';
+    import FilterPanel from '../../../../../components/FilterPanel.svelte';
+    import SortPanel from '../../../../../components/SortPanel.svelte';
+    import {isOverlayOpen} from '../../../../../stores/OverlayStore.js';
+    import type {Book} from '../../../../../types/book.type';
 
     export let bookshelfName = 'Favourites';
     let book:Book = {
