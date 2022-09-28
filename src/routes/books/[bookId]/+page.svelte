@@ -9,9 +9,9 @@
 	// import { browser } from '$app/environment';
 
 	/** @type {import('./$types').PageData} */
-    export let data;
+	export let data;
 
-	let book:Book = data.book;
+	let book: Book = data.book;
 
 	function saveBook() {
 		//TODO: save book to user's bookshelf
@@ -25,9 +25,8 @@
 	}
 </script>
 
-
 <!-- {#await bookPromise} -->
-	<!-- <h1>Loading Book</h1>  -->
+<!-- <h1>Loading Book</h1>  -->
 <!-- {:then book}  -->
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
 	<!-- left column - cover image and info -->

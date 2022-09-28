@@ -7,7 +7,6 @@
 
 	import { page } from '$app/stores';
 
-
 	const baseURL = $page.url.origin;
 
 	onMount(() => {
@@ -60,7 +59,6 @@
 
 	async function saveNote() {
 		if (title != '' && noteContent != '' && collection !== null) {
-
 			const response = await fetch(`${baseURL}/api/create/note/${collection.id}`, {
 				method: 'POST',
 				body: JSON.stringify({
@@ -68,13 +66,13 @@
 					content: noteContent,
 					pageNum: pageNum
 				})
-			})
-			const newNote:Note = await response.json();
+			});
+			const newNote: Note = await response.json();
 
 			if (newNote !== undefined && collection!.notes) {
 				collection.notes?.push(newNote);
 			}
-			
+
 			//trigger reload
 			collection!.notes = collection!.notes;
 
@@ -103,7 +101,7 @@
 
 	function deleteNote() {
 		if (deletedNote != null) {
-			if (collection!.notes){
+			if (collection!.notes) {
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
 			deletingNote = false;

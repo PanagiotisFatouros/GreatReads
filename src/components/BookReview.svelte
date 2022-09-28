@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Review } from 'src/types/book.type';
 	import StarRating from './StarRating.svelte';
-	import { getTimeAgo } from '../scripts'
+	import { getTimeAgo } from '../scripts';
 
 	export let review: Review;
 
