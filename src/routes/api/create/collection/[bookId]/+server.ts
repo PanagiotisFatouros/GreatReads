@@ -6,7 +6,7 @@ import type { PrismaCollection, Prisma } from '@prisma/client'
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ params, request }:RequestEvent){
     const bookId = params.bookId || ""
-    const { title, userId } = await request.json()
+    const { title, userId, isPublic } = await request.json()
     let createdCollection: PrismaCollection
     
     try {
@@ -16,7 +16,7 @@ export async function POST({ params, request }:RequestEvent){
         const newCollectionInput: Prisma.PrismaCollectionCreateInput = {
           title: title,
           creationDate: new Date(),
-          isPublic: false,
+          isPublic: isPublic,
           upvotes: 0,
           book: {connect: {googleBooksId: bookId}},
           user: {connect: {id: userId}}
@@ -28,5 +28,5 @@ export async function POST({ params, request }:RequestEvent){
       console.log(err)
       return new Response("Collection not successfully created")
     }
-    return new Response(`Collection successfully created! New collection: ${JSON.stringify(createdCollection)}`)
+    return new Response(JSON.stringify(createdCollection));
 }

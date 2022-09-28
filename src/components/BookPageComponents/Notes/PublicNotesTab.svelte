@@ -5,6 +5,10 @@
 	import VoteButtons from '../../VoteButtons.svelte';
 	import PublicCollection from './PublicCollection.svelte';
 
+	import { page } from '$app/stores';
+
+	const baseURL: string = $page.url.origin;
+
 	export let collections: Collection[];
 
 	let filteredCollections: Collection[] = collections;
@@ -23,6 +27,22 @@
 	});
 
 	let selectedCollection: Collection | null = null;
+
+	async function getCollectionNotes(collection: Collection){
+        // TODO: maybe activate check
+		//if (collection.notes === undefined) {
+		const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
+		console.log(response.body);
+		const returnedCollection: Collection = await response.json();
+		console.log(returnedCollection);
+		
+		//replace collection with one that has its notes loaded
+		collection.notes = returnedCollection.notes;
+		//}
+		
+
+		selectedCollection = collection;
+    }
 </script>
 
 <div class="flex flex-col w-full mt-4">
@@ -58,14 +78,16 @@
 		<div>
 			{#each filteredCollections as collection}
 				<div
-					on:click={() => (selectedCollection = collection)}
+					on:click={() => getCollectionNotes(collection)}
 					class=" bg-primary-1 my-4 rounded-3xl pl-2 pr-1 py-2 flex items-center cursor-pointer hover:bg-opacity-70"
 				>
 					<VoteButtons />
 
 					<div class="flex ml-3 space-x-3 items-center">
 						<div class="profile_pic_small">
+							{#if collection.user.profilePic != ''}
 							<img src={collection.user.profilePic} alt="profile pic" />
+							{/if}
 						</div>
 						<div>
 							<p class="text-secondary">{collection.title}</p>

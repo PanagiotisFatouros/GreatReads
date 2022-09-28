@@ -31,5 +31,5 @@ export async function POST({ params, request }:RequestEvent){
       console.log(err)
       return new Response("Review not successfully created")
     }
-    return new Response(`Review successfully created! New Review has ID ${JSON.stringify(createdReview)}`)
+    return new Response(JSON.stringify(createdReview));
 }
