@@ -6,6 +6,10 @@ const MONTH = DAY * 30;
 const YEAR = DAY * 365;
 
 export function getTimeAgo(date: Date) {
+	if (typeof date === 'string') {
+		date = new Date(date);
+	}
+
 	const secondsAgo = Math.round((Date.now() - Number(date)) / 1000);
 
 	if (secondsAgo < MINUTE) {
@@ -30,5 +34,6 @@ export function getTimeAgo(date: Date) {
 	}
 
 	const count = Math.floor(secondsAgo / divisor);
+
 	return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
 }

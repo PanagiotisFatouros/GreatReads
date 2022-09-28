@@ -1,10 +1,10 @@
 <script lang="ts">
-	import type { User } from '../../../types/book.type';
+	import type { Client } from '../../../types/book.type';
 	import BooksDisplay from '../../../components/BooksDisplay.svelte';
 	import ProfileStatistics from '../../../components/ProfileStatistics.svelte';
 	import ReviewsDisplay from '../../../components/ReviewsDisplay.svelte';
-	let user1: User = {
-		id: 1,
+	let user1: Client = {
+		id: '1',
 		reviews: [
 			{
 				id: 123,
@@ -14,7 +14,8 @@
 				date: new Date(),
 				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
 				rating: 3,
-				upvotes: 10
+				upvotes: 10,
+				isEdited: false
 			}
 		],
 		profilePic:

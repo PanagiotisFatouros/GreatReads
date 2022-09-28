@@ -4,11 +4,11 @@ To ensure our team remains organised, we self enforce the following process:
 
 First create a new JiraTicket in the active sprint describing what you would like to do.
 
-This ticket will have an id of “IT-*”. Create a branch on the repository with the same id.
+This ticket will have an id of “IT-\*”. Create a branch on the repository with the same id.
 
 All code relevant to this issue should be written in this branch.
 
-Create a PR with the naming syntax: “IT-*: [Name of JiraTicket]” and request the review of an appropriate team member.
+Create a PR with the naming syntax: “IT-\*: [Name of JiraTicket]” and request the review of an appropriate team member.
 
 Ensure that there are no code-style warnings and all checks are passed.
 
@@ -34,7 +34,7 @@ To connect directly to the database (eg in the terminal or MySQL workbench), fir
 
 Note team members will not add you as an owner and will only grant the permission you require.
 
-Following this you can either click “connect” on the overview page to be granted a terminal session once you enter the password or following instructions here to connect another way. 
+Following this you can either click “connect” on the overview page to be granted a terminal session once you enter the password or following instructions here to connect another way.
 
 # Running tests
 
