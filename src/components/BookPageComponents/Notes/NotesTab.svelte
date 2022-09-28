@@ -34,7 +34,7 @@
 				isPublic: isPublic
 			})
 		})
-		
+
 		//reset
 		newCollectionTitle = '';
 		isPublic = false;
@@ -62,11 +62,19 @@
 		}
 	}
 
-	async function getCollection(collectionId: number){
-        const response = await fetch(`${baseURL}/api/read/collections/${JSON.stringify(collectionId)}`, )
-        const responseJson = response.json()
-        const collectionData: Collection = await responseJson
-        return collectionData
+	async function getCollectionNotes(collection: Collection){
+        if (collection.notes === undefined) {
+			const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
+			console.log(response.body);
+			const returnedCollection: Collection = await response.json();
+			console.log(returnedCollection);
+			
+			//replace collection with one that has its notes loaded
+			collection.notes = returnedCollection.notes;
+		}
+		
+
+		selectedCollection = collection;
     }
 
 
@@ -130,7 +138,7 @@
 			{:else}
 				{#each collections as collection}
 					<div
-					on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)}
+					on:click={() => getCollectionNotes(collection)}
 						class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 					>
 						<div>
