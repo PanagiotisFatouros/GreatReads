@@ -7,7 +7,7 @@
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import { page } from '$app/stores';
-	import { getSession } from 'lucia-sveltekit/client'
+	import { getSession } from 'lucia-sveltekit/client';
 
 	const session = getSession();
 	const user_id = $session?.user.user_id;
@@ -17,7 +17,6 @@
 
 	let newCollectionTitle = '';
 	let isPublic = false;
-	
 
 	async function createNewCollection() {
 		//TODO: check string is not empty and add to database
@@ -33,20 +32,18 @@
 				userId: user_id,
 				isPublic: isPublic
 			})
-		})
+		});
 
 		//reset
 		newCollectionTitle = '';
 		isPublic = false;
 
-		const newCollection:Collection = await response.json();
+		const newCollection: Collection = await response.json();
 		console.log(newCollection);
 
 		collections.push(newCollection);
 		//trigger refresh
 		collections = collections;
-
-		
 	}
 
 	let selectedCollection: Collection | null = null;
@@ -62,21 +59,19 @@
 		}
 	}
 
-	async function getCollectionNotes(collection: Collection){
-        if (collection.notes === undefined) {
+	async function getCollectionNotes(collection: Collection) {
+		if (collection.notes === undefined) {
 			const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
 			console.log(response.body);
 			const returnedCollection: Collection = await response.json();
 			console.log(returnedCollection);
-			
+
 			//replace collection with one that has its notes loaded
 			collection.notes = returnedCollection.notes;
 		}
-		
 
 		selectedCollection = collection;
-    }
-
+	}
 
 	$: collections;
 </script>
@@ -85,7 +80,11 @@
 	<!-- TODO: maybe move to new component -->
 	<!-- show form to create new collection -->
 	{#if $isOverlayOpen && selectedCollection == null}
-		<form on:submit={createNewCollection} class=" bg-white fixed z-10 top-1/2 left-1/2 w-96 flex flex-col p-3 rounded-2xl" id="collectionForm">
+		<form
+			on:submit={createNewCollection}
+			class=" bg-white fixed z-10 top-1/2 left-1/2 w-96 flex flex-col p-3 rounded-2xl"
+			id="collectionForm"
+		>
 			<h2 class=" text-secondary">New Notes Collection</h2>
 
 			<input
@@ -134,11 +133,11 @@
 
 		<div class="flex flex-col mt-1">
 			{#if collections.length == 0}
-			<p class="mt-3">No Collections Found</p>
+				<p class="mt-3">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
 					<div
-					on:click={() => getCollectionNotes(collection)}
+						on:click={() => getCollectionNotes(collection)}
 						class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 					>
 						<div>

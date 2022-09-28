@@ -37,7 +37,7 @@
 			<div class="flex space-x-2 items-center">
 				<div class="profile_pic_small">
 					{#if collection?.user.profilePic != ''}
-					<img src={collection?.user.profilePic} alt="profile pic" />
+						<img src={collection?.user.profilePic} alt="profile pic" />
 					{/if}
 				</div>
 

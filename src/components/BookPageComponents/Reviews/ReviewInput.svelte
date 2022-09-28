@@ -2,8 +2,8 @@
 	//import type { Review } from 'src/types/book.type';
 	import RatingInput from './../../RatingInput.svelte';
 	import { page } from '$app/stores';
-	import { getSession } from 'lucia-sveltekit/client'
-	import type { Review } from '../../../types/book.type'
+	import { getSession } from 'lucia-sveltekit/client';
+	import type { Review } from '../../../types/book.type';
 
 	const session = getSession();
 	const user_id = $session?.user.user_id;
@@ -19,16 +19,15 @@
 	export let review: Review | undefined;
 
 	// async function getBookInfo(){
-    //     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
-    //     const responseJson = response.json()
-    //     const bookData: Book = await responseJson
+	//     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
+	//     const responseJson = response.json()
+	//     const bookData: Book = await responseJson
 	// 	console.log(bookData)
-    //     return bookData
-    // }
+	//     return bookData
+	// }
 
 	async function postReview() {
 		if (rating != 0 && title != '' && comment != '') {
-			
 			const response = await fetch(`${baseURL}/api/create/review/${bookId}`, {
 				method: 'POST',
 				body: JSON.stringify({
@@ -37,9 +36,8 @@
 					rating: rating,
 					userId: user_id
 				})
-			})
+			});
 			review = await response.json();
-			
 
 			//reset input
 			rating = 0;

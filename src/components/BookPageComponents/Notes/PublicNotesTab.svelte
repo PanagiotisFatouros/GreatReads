@@ -28,21 +28,20 @@
 
 	let selectedCollection: Collection | null = null;
 
-	async function getCollectionNotes(collection: Collection){
-        // TODO: maybe activate check
+	async function getCollectionNotes(collection: Collection) {
+		// TODO: maybe activate check
 		//if (collection.notes === undefined) {
 		const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
 		console.log(response.body);
 		const returnedCollection: Collection = await response.json();
 		console.log(returnedCollection);
-		
+
 		//replace collection with one that has its notes loaded
 		collection.notes = returnedCollection.notes;
 		//}
-		
 
 		selectedCollection = collection;
-    }
+	}
 </script>
 
 <div class="flex flex-col w-full mt-4">
@@ -86,7 +85,7 @@
 					<div class="flex ml-3 space-x-3 items-center">
 						<div class="profile_pic_small">
 							{#if collection.user.profilePic != ''}
-							<img src={collection.user.profilePic} alt="profile pic" />
+								<img src={collection.user.profilePic} alt="profile pic" />
 							{/if}
 						</div>
 						<div>
