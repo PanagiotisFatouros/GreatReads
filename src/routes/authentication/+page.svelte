@@ -11,8 +11,8 @@
 </script>
 
 <form method="POST" action="?/login">
-	<input name="username" type="username" />
-	<input name="password" type="password" />
-	<button>Login</button>
-	<button formaction="?/register">Register</button>
+    Enter Username:<input name="username" type="username">
+    Enter Password:<input name="password" type="password">
+    <button>Login</button>
+    <button formaction="?/register">Register</button>
 </form>
