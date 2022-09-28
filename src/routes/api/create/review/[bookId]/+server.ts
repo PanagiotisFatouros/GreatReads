@@ -9,24 +9,26 @@ export async function POST({ params, request }: RequestEvent) {
 		return new Response('Book for Review not found/specified');
 	}
 
-	const { title, comment, rating, userId } = await request.json();
-	let createdReview: PrismaReview;
-	try {
-		const newReviewInput: Prisma.PrismaReviewCreateInput = {
-			title: title,
-			comment: comment,
-			rating: rating,
-			creationDate: new Date(),
-			upvotes: 0,
-			isEdited: false,
-			book: { connect: { googleBooksId: bookId } },
-			user: { connect: { id: userId } }
-		};
+	
+    const { title, comment, rating, userId } = await request.json()
+    let createdReview: PrismaReview    
+    try {
+        const newReviewInput: Prisma.PrismaReviewCreateInput = {
+          title: title,
+          comment: comment,
+          rating: rating,
+          creationDate: new Date(),
+          upvotes: 0,
+          isEdited: false,
+          book: {connect:{googleBooksId: bookId}},
+          user: {connect:{id: userId}}
+        }
 
-		createdReview = await prismaClient.prismaReview.create({ data: newReviewInput });
-	} catch (err) {
-		console.log(err);
-		return new Response('Review not successfully created');
-	}
-	return new Response(JSON.stringify(createdReview));
+        createdReview = await prismaClient.prismaReview.create({data: newReviewInput})
+      }
+    catch(err){
+      console.log(err)
+      return new Response(`Review not successfully created, unknown error: ${err}`)
+    }
+    return new Response(JSON.stringify(createdReview));
 }
