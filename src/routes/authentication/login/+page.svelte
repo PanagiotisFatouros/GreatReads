@@ -8,6 +8,7 @@
     if ($session) {
         if (browser){
             goto('/authentication/success')
+            authenticated.set(true)
         } 
     }
 </script>
