@@ -1,4 +1,4 @@
-import { expect, test, webkit } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 // import { getBookInfo } from '../src/lib/functions';
 
 const testUser= {
@@ -19,7 +19,7 @@ test('Valid Book Page (Not Logged In)', async({ page, baseURL }) => {
 
 test('Valid Book Page (Logged In)', async({ page, baseURL}) => {
 	const bookName = "The Google Story (2018 Updated Edition)"
-	const h1ClassName = "text-heading1 font-heading text-secondary mr-5"
+	const h1ClassName = `h1.text-heading1.font-heading.text-secondary.mr-5`
 	await page.goto(`${baseURL}/authentication`)
 	await page.fill('input[name="username"]', "test")
 	await page.fill('input[name="password"]', "test")
