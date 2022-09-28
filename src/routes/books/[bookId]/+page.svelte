@@ -13,7 +13,6 @@
 
 	let book:Book = data.book;
 
-
 	function saveBook() {
 		//TODO: save book to user's bookshelf
 	}

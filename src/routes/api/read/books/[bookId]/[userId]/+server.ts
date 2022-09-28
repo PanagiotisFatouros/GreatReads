@@ -1,4 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit'
+import { error } from '@sveltejs/kit'
 import type { Book, Collection, Review  } from 'src/types/book.type'
 import type { Prisma } from '@prisma/client'
 import { prismaClient } from '../../../../../../lib/lucia'
@@ -16,9 +17,7 @@ export async function GET({ params }: RequestEvent) {
 	// console.log(restBookInfo)
 
 	if (restBookInfo.error){
-
-		return new Response("404 Google Book Does not Exist")
-		
+		throw error(400, '404 Google Book Does not Exist');
 	}
 	else {
 

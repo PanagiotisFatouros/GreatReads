@@ -1,11 +1,11 @@
 <script lang="ts">
-    import BookCard from '../../components/BookCard.svelte';
-    import FilterPanel from '../../components/FilterPanel.svelte';
-    import SortPanel from '../../components/SortPanel.svelte';
-    import {isOverlayOpen} from '../../stores/OverlayStore.js';
-    import type {Book} from '../../types/book.type';
+    import BookCard from '../../../../../components/BookCard.svelte';
+    import FilterPanel from '../../../../../components/FilterPanel.svelte';
+    import SortPanel from '../../../../../components/SortPanel.svelte';
+    import {isOverlayOpen} from '../../../../../stores/OverlayStore.js';
+    import type {Book} from '../../../../../types/book.type';
 
-    let searchTerm:string = ""
+    export let bookshelfName = 'Favourites';
     let book:Book = {
         id: Math.floor(Math.random() * 1000),
         title: "The Hunger Games",
@@ -22,14 +22,19 @@
         userNotes: [],
         publicNotes: [],
     }
-    let books = [book, book, book, book, book, book, book];
+    let books = [book, book, book, book, book, book, book]
     let filter = false;
     let sort = false;
     $: isOverlayOpen.set(filter || sort)
 </script>
 
 <div class="mt-6 mx-8">
-    <div class="text-primary-3 text-heading2 font-heading">Search Results for "{searchTerm}"</div>
+    <div class="text-primary-3 text-heading2 font-heading flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-1 cursor-pointer">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+          </svg>          
+        {bookshelfName}
+    </div>
     <hr class=" border-1 border-primary-3 my-3">
     <div class="text-primary-3 text-heading3 font-heading flex">
         <!-- filter button -->
