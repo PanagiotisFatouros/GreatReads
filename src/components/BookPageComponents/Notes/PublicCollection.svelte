@@ -53,7 +53,7 @@
 
 	<!-- Note Cards -->
 	<div class=" space-y-4 mt-3 mb-5">
-		{#if collection != null}
+		{#if collection != null && collection.notes != undefined}
 			{#each collection.notes as note}
 				<NoteCard {note} canDelete={false} />
 			{/each}

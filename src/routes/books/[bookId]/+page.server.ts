@@ -1,19 +1,20 @@
-import type { RequestEvent } from "@sveltejs/kit"
+import type { ServerLoadEvent } from "@sveltejs/kit"
 // import { createNewEntity } from "../../../../database/mysql"
 import { auth } from "$lib/lucia";
 import type { Book } from "src/types/book.type";
 import { error, redirect } from '@sveltejs/kit';
 
 
-/** @type {import('./$types').PageLoad} */
-export async function load({ request, url, params }:RequestEvent) {
+/** @type {import('./$types').PageServerLoad} */
+export async function load ({ request, url, params }:ServerLoadEvent) {
   try {
     const session = await auth.validateRequestByCookie(request);
     if (session) {
         // authenticated
 
         const baseURL = url.origin;
-        // console.log(baseURL);
+        console.log(baseURL);
+        console.log(url);
 
         const bookID = params.bookId;
 
@@ -21,7 +22,7 @@ export async function load({ request, url, params }:RequestEvent) {
         // console.log(params);
         let book:Book = await (await fetch(`${baseURL}/api/read/books/${bookID}/${session.user.user_id}`)).json()
 
-        // console.log(book)
+        console.log(book)
 
         return {
           book: book
@@ -32,7 +33,8 @@ export async function load({ request, url, params }:RequestEvent) {
       throw redirect(307, '/authentication')
     }
   }
-  catch {
+  catch (err) {
+    console.log(err);
     //not authenticated
     throw redirect(307, '/authentication')
   }
