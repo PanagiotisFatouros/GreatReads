@@ -6,6 +6,7 @@
 	"scripts": {
 		"start": "node --trace-warnings build",
 		"dev": "node --trace-warnings build",
+		"test_dev": "vite dev",
 		"build": "npm run generate_prisma && vite build",
 		"generate_prisma": "npx prisma generate",
 		"package": "svelte-kit package",
