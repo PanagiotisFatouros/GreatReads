@@ -12,15 +12,15 @@ export async function load ({ request, url, params }:ServerLoadEvent) {
     if (session) {
         // authenticated
 
-        const baseURL = url.origin;
-        console.log(baseURL);
-        console.log(url);
+        const host = url.host;
+        // console.log(baseURL);
+        // console.log(url);
 
         const bookID = params.bookId;
 
         // console.log(request);
         // console.log(params);
-        let book:Book = await (await fetch(`${baseURL}/api/read/books/${bookID}/${session.user.user_id}`)).json()
+        let book:Book = await (await fetch(`http://${host}/api/read/books/${bookID}/${session.user.user_id}`)).json()
 
         console.log(book)
 

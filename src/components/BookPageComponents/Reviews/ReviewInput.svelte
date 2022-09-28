@@ -3,6 +3,7 @@
 	import RatingInput from './../../RatingInput.svelte';
 	import { page } from '$app/stores';
 	import { getSession } from 'lucia-sveltekit/client'
+	import type { Review } from '../../../types/book.type'
 
 	const session = getSession();
 	const user_id = $session?.user.user_id;
@@ -14,6 +15,8 @@
 	let rating: number = 0;
 	let title: string = '';
 	let comment: string = '';
+
+	export let review: Review | undefined;
 
 	// async function getBookInfo(){
     //     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
@@ -35,7 +38,8 @@
 					userId: user_id
 				})
 			})
-			console.log(response.body);
+			review = await response.json();
+			
 
 			//reset input
 			rating = 0;
