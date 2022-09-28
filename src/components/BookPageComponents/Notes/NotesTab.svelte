@@ -1,54 +1,52 @@
 <script lang="ts">
 	import NotesCollection from './NotesCollection.svelte';
-	import type { Collection, Client } from 'src/types/book.type';
+	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
 
 	export let collections: Collection[];
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
-	import { browser } from '$app/environment';
+	import { page } from '$app/stores';
+	import { getSession } from 'lucia-sveltekit/client'
+
+	const session = getSession();
+	const user_id = $session?.user.user_id;
+
+	const bookId = $page.params.bookId;
+	const baseURL: string = $page.url.origin;
+
 	let newCollectionTitle = '';
 	let isPublic = false;
-	let baseURL: string
 	
-	if (browser){
-		baseURL = window.location.origin
-	}
 
-	function createNewCollection() {
+	async function createNewCollection() {
 		//TODO: check string is not empty and add to database
 		// alert(`Title: ${newCollectionTitle}, isPublic: ${isPublic}`);
 
 		//remove overlay
 		isOverlayOpen.set(false);
 
-		// TODO: get user from session
-		let user: Client = {
-			name: 'James Smith',
-			id: "123",
-			profilePic:
-				'https://images.unsplash.com/photo-1546961329-78bef0414d7c?crop=entropy&cs=tinysrgb&fm=jpg&ixid=Mnw3MjAxN3wwfDF8c2VhcmNofDEwfHx1c2VyfGVufDB8fHx8MTY2MzYzMjU2NQ&ixlib=rb-1.2.1&q=80&q=85&fmt=jpg&crop=entropy&cs=tinysrgb&w=450',
-			bio: ''
-		};
+		const response = await fetch(`${baseURL}/api/create/collection/${bookId}`, {
+			method: 'POST',
+			body: JSON.stringify({
+				title: newCollectionTitle,
+				userId: user_id,
+				isPublic: isPublic
+			})
+		})
 
-		let newCollection: Collection = {
-			//TODO: get actual id from database
-			id: Math.floor(Math.random() * 1000),
-			title: newCollectionTitle,
-			creationDate: new Date(),
-			isPublic: isPublic,
-			upvotes: 0,
-			user: user,
-			notes: []
-		};
+		//reset
+		newCollectionTitle = '';
+		isPublic = false;
+
+		const newCollection:Collection = await response.json();
+		console.log(newCollection);
 
 		collections.push(newCollection);
 		//trigger refresh
 		collections = collections;
 
-		//reset
-		newCollectionTitle = '';
-		isPublic = false;
+		
 	}
 
 	let selectedCollection: Collection | null = null;
@@ -64,25 +62,30 @@
 		}
 	}
 
-	async function getCollection(collectionId: number){
-        const response = await fetch(`${baseURL}/api/read/collections/${JSON.stringify(collectionId)}`, )
-        const responseJson = response.json()
-        const collectionData: Collection = await responseJson
-        return collectionData
+	async function getCollectionNotes(collection: Collection){
+        if (collection.notes === undefined) {
+			const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
+			console.log(response.body);
+			const returnedCollection: Collection = await response.json();
+			console.log(returnedCollection);
+			
+			//replace collection with one that has its notes loaded
+			collection.notes = returnedCollection.notes;
+		}
+		
+
+		selectedCollection = collection;
     }
 
 
 	$: collections;
 </script>
 
-<div class="flex flex-col justify-start w-full">
+<div class="flex flex-col justify-start w-full mb-5">
 	<!-- TODO: maybe move to new component -->
 	<!-- show form to create new collection -->
 	{#if $isOverlayOpen && selectedCollection == null}
-		<form
-			on:submit={createNewCollection}
-			class=" bg-white fixed z-10 self-center w-96 flex flex-col p-3 rounded-2xl"
-		>
+		<form on:submit={createNewCollection} class=" bg-white fixed z-10 top-1/2 left-1/2 w-96 flex flex-col p-3 rounded-2xl" id="collectionForm">
 			<h2 class=" text-secondary">New Notes Collection</h2>
 
 			<input
@@ -130,29 +133,39 @@
 		</div>
 
 		<div class="flex flex-col mt-1">
-			{#each collections as collection}
-				<div
-				on:click={() => getCollection(collection.id).then((returnedCollection) => selectedCollection = returnedCollection)}
-					class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
-				>
-					<div>
-						<p class="text-secondary">{collection.title}</p>
-						<!-- TODO: maybe change to last edited -->
-						<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
-					</div>
-
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-6 h-6 text-secondary"
+			{#if collections.length == 0}
+			<p class="mt-3">No Collections Found</p>
+			{:else}
+				{#each collections as collection}
+					<div
+					on:click={() => getCollectionNotes(collection)}
+						class=" bg-primary-1 my-2 rounded-2xl pl-2 pr-1 py-1 flex justify-between items-center cursor-pointer hover:opacity-70"
 					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-					</svg>
-				</div>
-			{/each}
+						<div>
+							<p class="text-secondary">{collection.title}</p>
+							<!-- TODO: maybe change to last edited -->
+							<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+						</div>
+
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6 text-secondary"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+						</svg>
+					</div>
+				{/each}
+			{/if}
 		</div>
 	{/if}
 </div>
+
+<style>
+	#collectionForm {
+		transform: translate(-50%, -50%);
+	}
+</style>

@@ -28,7 +28,7 @@ export async function POST({ params, request }:RequestEvent){
       console.log(err)
       return new Response("Note not successfully created")
     }
-    return new Response(`Note successfully created! New Note has ID ${JSON.stringify(createdNote)}`)
+    return new Response(JSON.stringify(createdNote));
 }
 
 // async function createNote(title: String, content: String, collectionId: String){

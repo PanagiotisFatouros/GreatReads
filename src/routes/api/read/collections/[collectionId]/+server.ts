@@ -3,7 +3,7 @@ import type { Collection, Note } from 'src/types/book.type';
 import { prismaClient } from '../../../../../lib/lucia';
 
 export async function GET({ params }: RequestEvent) {
-
+	
 	const collectionId: number = params.collectionId == null? -1 : parseInt(params.collectionId)
 
 
@@ -31,6 +31,7 @@ export async function GET({ params }: RequestEvent) {
 			notes: true
 		}
 	})
+	// console.log(prismaCollection);
 
 	if (prismaCollection == null){
 		return new Response(`Collection with id ${collectionId} does not exist.`)
@@ -47,7 +48,7 @@ export async function GET({ params }: RequestEvent) {
 			}
 			notes.push(note)
 		})
-
+		// console.log(notes);
 
 		let collection: Collection = {
 			id: collectionId,
@@ -62,10 +63,12 @@ export async function GET({ params }: RequestEvent) {
 			},
 			notes: notes
 		}
+		// console.log(collection);
 	
-		if (notes.length == 0) {
-			return new Response(`404 There are no existing notes for collection ${collectionId} in database`);
-		}
+		// if (notes.length == 0) {
+		// 	return new Response(`404 There are no existing notes for collection ${collectionId} in database`);
+		// }
+		
 		return new Response(JSON.stringify(collection));
 	}
 }

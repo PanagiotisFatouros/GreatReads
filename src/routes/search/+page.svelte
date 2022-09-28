@@ -7,7 +7,7 @@
 
     let searchTerm:string = ""
     let book:Book = {
-        id: Math.floor(Math.random() * 1000),
+        id: '123',
         title: "The Hunger Games",
         authors: ["Suzanne Collins"],
         pageCount: 384,
