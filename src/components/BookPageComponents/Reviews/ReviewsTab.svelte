@@ -31,7 +31,7 @@
 			});
 			let deletedReview = await response.json();
 			if (deletedReview != undefined) {
-				//succesful
+				//successful
 				userReview = undefined;
 			}
 			else {

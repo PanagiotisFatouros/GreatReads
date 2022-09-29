@@ -14,6 +14,12 @@ export async function DELETE ({ params }:RequestEvent){
     let deletedCollection: PrismaCollection
     try {
 
+        await prismaClient.prismaNote.deleteMany({
+            where:{
+                collectionId: collectionId
+            }
+        })
+
         deletedCollection = await prismaClient.prismaCollection.delete({
             where:{
                 id: collectionId
@@ -24,5 +30,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `Collection not deleted, unknown error: ${err}`)
     }
-    return new Response(`Collection successfully deleted! Deleted collection: ${JSON.stringify(deletedCollection)}`)
+    return new Response(JSON.stringify(deletedCollection))
 }

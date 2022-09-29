@@ -48,14 +48,23 @@
 
 	let selectedCollection: Collection | null = null;
 
-	function deleteCollection() {
+	async function deleteCollection() {
 		if (selectedCollection != null) {
-			let deletedCollection: Collection = selectedCollection;
 
-			collections = collections.filter((c) => c.id !== deletedCollection!.id);
-			selectedCollection = null;
-
-			//TODO: remove deletedCollection from database
+			const response = await fetch(`${baseURL}/api/delete/collection/${selectedCollection.id}`, {
+					method: 'DELETE'
+			});
+			
+			let deletedReview = await response.json();
+			
+			if (deletedReview != undefined) {
+				//successful
+				collections = collections.filter((c) => c.id !== selectedCollection!.id);
+				selectedCollection = null;
+			}
+			else {
+				alert("Something went wrong. Collection not deleted");
+			}
 		}
 	}
 
