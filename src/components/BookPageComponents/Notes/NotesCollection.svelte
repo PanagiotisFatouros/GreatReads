@@ -85,31 +85,42 @@
 		}
 	}
 
-	let deletedNote: Note | null = null;
+	let selectedNote: Note | null = null;
 
 	function showDeleteNoteConfirmation(note: Note) {
-		deletedNote = note;
+		selectedNote = note;
 		deletingNote = true;
 		isOverlayOpen.set(true);
 	}
 
 	function cancelDeleteNote() {
-		deletedNote = null;
+		selectedNote = null;
 		deletingNote = false;
 		isOverlayOpen.set(false);
 	}
 
-	function deleteNote() {
-		if (deletedNote != null) {
-			if (collection!.notes) {
+	async function deleteNote() {
+		if (selectedNote != null && collection!.notes) {
+			const response = await fetch(`${baseURL}/api/delete/note/${selectedNote.id}`, {
+					method: 'DELETE'
+			});
+			
+			let deletedNote:Note = await response.json();
+			
+			if (deletedNote != undefined) {
+				//successful - remove note from local collection
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
+			else {
+				alert("Something went wrong. Collection not deleted");
+			}
+			
 			deletingNote = false;
 			isOverlayOpen.set(false);
 
 			//TODO: remove from database
 
-			deletedNote = null;
+			selectedNote = null;
 		}
 	}
 

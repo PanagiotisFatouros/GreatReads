@@ -55,9 +55,9 @@
 					method: 'DELETE'
 			});
 			
-			let deletedReview = await response.json();
+			let deletedCollection:Collection = await response.json();
 			
-			if (deletedReview != undefined) {
+			if (deletedCollection != undefined) {
 				//successful
 				collections = collections.filter((c) => c.id !== selectedCollection!.id);
 				selectedCollection = null;

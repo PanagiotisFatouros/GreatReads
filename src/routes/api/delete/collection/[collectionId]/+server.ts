@@ -14,12 +14,6 @@ export async function DELETE ({ params }:RequestEvent){
     let deletedCollection: PrismaCollection
     try {
 
-        await prismaClient.prismaNote.deleteMany({
-            where:{
-                collectionId: collectionId
-            }
-        })
-
         deletedCollection = await prismaClient.prismaCollection.delete({
             where:{
                 id: collectionId

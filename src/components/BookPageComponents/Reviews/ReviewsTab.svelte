@@ -29,7 +29,7 @@
 			const response = await fetch(`${baseURL}/api/delete/review/${userReview.id}`, {
 					method: 'DELETE'
 			});
-			let deletedReview = await response.json();
+			let deletedReview: Review = await response.json();
 			if (deletedReview != undefined) {
 				//successful
 				userReview = undefined;
