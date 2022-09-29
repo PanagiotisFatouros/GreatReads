@@ -37,6 +37,7 @@
 					userId: user_id
 				})
 			});
+			//bind response to userReview in ReviewsTab
 			review = await response.json();
 
 			//reset input
