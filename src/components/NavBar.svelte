@@ -1,7 +1,13 @@
 <script lang="ts">
 	import HeaderSearchBar from './HeaderSearchBar.svelte';
+    import { isOverlayOpen } from '../stores/OverlayStore';
 
     export let loggedIn: Boolean;
+
+    function openOverlay() {
+        isOverlayOpen.set(true)
+    }
+
 </script>
 
 <div id="navBar" class="{loggedIn === true ? 'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14 flex justify-between content-center m-0">
@@ -34,7 +40,7 @@
         </div>
     {:else}
         <div id="rightNav" class="flex justify-around content-center">
-            <a href="/authentication/login"><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Log In</p></a>
+            <button on:click={openOverlay}><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Log In</p></button>
             <p class="list-none p-3 text-primary-1 font-heading text-lg font-300">|</p>
             <a href="/authentication/register"><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Register</p></a>
         </div>
