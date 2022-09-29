@@ -1,4 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
+
 import { error } from '@sveltejs/kit';
 import { prismaClient } from '$lib/lucia';
 import type { Prisma, PrismaBookshelf, User } from '@prisma/client';
@@ -8,8 +9,9 @@ import type { Bookshelf } from 'src/types/book.type';
 export async function POST({ request }: RequestEvent) {
 	
     const { name, isDeletable, userId } = await request.json()
+
     let createdPrismaBookshelf: PrismaBookshelf
-	let createdBookshelf: Bookshelf
+	  let createdBookshelf: Bookshelf
 
     try {
         const newBookshelfInput: Prisma.PrismaBookshelfCreateInput = {
