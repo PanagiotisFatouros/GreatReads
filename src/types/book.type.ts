@@ -6,10 +6,9 @@ export type Book = {
 	pageCount: number;
 
 	//will be computed from stored ratings not saved with book, I believe google api also has an avg rating that we could use if we don't have any reviews for a book
-	avgRating: number;
-
-	numRatings: number;
-	description: string;
+	avgRating?: number;
+	numRatings?: number;
+	description?: string;
 	genres: string[];
 	isbn: string;
 
@@ -19,10 +18,10 @@ export type Book = {
 	imageURL: string;
 	//TODO: maybe add language
 
-	reviews: Review[];
+	reviews?: Review[];
 
-	userNotes: Collection[];
-	publicNotes: Collection[];
+	userNotes?: Collection[];
+	publicNotes?: Collection[];
 };
 
 export type Client = {
@@ -73,3 +72,12 @@ export type Note = {
 	creationDate: Date;
 	pageNum: number;
 };
+
+export type Bookshelf = {
+	id: number;
+	name: string;
+	isDeletable: boolean;
+	creationDate: Date;
+	user: Client;
+	books: Book[]
+}
