@@ -4,6 +4,7 @@
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import Confirmation from '../../Confirmation.svelte';
 	import NoteCard from './NoteCard.svelte';
+	import NoteInput from './NoteInput.svelte';
 
 	import { page } from '$app/stores';
 
@@ -29,7 +30,6 @@
 		// TODO: save change
 		collection!.isPublic = isPublic;
 
-		//alert(isPublic);
 	}
 
 	// keep track of which confirmation message to show
@@ -53,35 +53,15 @@
 		dispatch('delete');
 	}
 
-	let pageNum: number = 0;
-	let title: string = '';
-	let noteContent: string = '';
+	let savedNote: Note | undefined = undefined;
 
-	async function saveNote() {
-		if (title != '' && noteContent != '' && collection !== null) {
-			const response = await fetch(`${baseURL}/api/create/note/${collection.id}`, {
-				method: 'POST',
-				body: JSON.stringify({
-					title: title,
-					content: noteContent,
-					pageNum: pageNum
-				})
-			});
-			const newNote: Note = await response.json();
+	function addSavedNote() {
+		if (savedNote != undefined && collection != null && collection!.notes) {
+			collection.notes?.push(savedNote);
 
-			if (newNote !== undefined && collection!.notes) {
-				collection.notes?.push(newNote);
-			}
+			triggerRefresh();
 
-			//trigger reload
-			collection!.notes = collection!.notes;
-
-			//reset
-			pageNum = 0;
-			title = '';
-			noteContent = '';
-		} else {
-			alert("Title and Note can't be empty");
+			savedNote = undefined;
 		}
 	}
 
@@ -119,6 +99,13 @@
 			isOverlayOpen.set(false);
 
 			selectedNote = null;
+		}
+	}
+
+	function triggerRefresh() {
+		console.log("triggering refresh");
+		if (collection != null && collection.notes != undefined) {
+			collection.notes = collection.notes;
 		}
 	}
 
@@ -164,17 +151,25 @@
 			<h2 class=" ml-4 text-accent">{collection?.title}</h2>
 		</div>
 
-		<div class="flex items-center">
-			<label for="publicCheckbox" class="text-body1 font-body mr-2">Make Public</label>
-			<!-- TODO: replace with toggle -->
-			<input
-				type="checkbox"
-				id="publicCheckbox"
-				bind:checked={isPublic}
-				class=" text-accent rounded-sm"
-			/>
+		<div class="flex items-center space-x-3">
+			<div class="mr-2">
+				<label for="publicCheckbox" class="text-body1 font-body mr-1">Make Public</label>
+				<!-- TODO: replace with toggle -->
+				<input
+					type="checkbox"
+					id="publicCheckbox"
+					bind:checked={isPublic}
+					class=" text-accent rounded-sm"
+				/>
+			</div>
+			<button on:click={() => dispatch('edit')} class='hover:opacity-70'>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+				  </svg>
+				  
+			</button>
 
-			<button on:click={showDeleteCollectionConfirmation} class=" ml-3 hover:opacity-70">
+			<button on:click={showDeleteCollectionConfirmation} class=" hover:opacity-70">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -194,27 +189,9 @@
 	</div>
 
 	<!-- Note input -->
-	<div class="flex flex-col mt-3 space-y-2">
-		<div class="flex">
-			<p>Page Number (optional):</p>
-			<!-- TODO: replace with custom number input - see figma -->
-			<input
-				type="number"
-				bind:value={pageNum}
-				min="0"
-				class="bg-primary-1 w-16 ml-3 text-center rounded-full"
-			/>
-		</div>
-		<input type="text" bind:value={title} class="std_input" placeholder="Title..." />
-		<textarea
-			bind:value={noteContent}
-			cols="30"
-			rows="5"
-			class="std_text_area"
-			placeholder="Note..."
-		/>
-		<button on:click={saveNote} class="std_button self-end">Save</button>
-	</div>
+	{#if collection != null}
+		<NoteInput bind:note={savedNote} collectionId={collection.id} on:newNote={addSavedNote} />
+	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />
 
@@ -223,7 +200,7 @@
 		{#if collection != null}
 			{#if collection.notes}
 				{#each collection.notes as note}
-					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} />
+					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} on:update={triggerRefresh}/>
 				{/each}
 			{/if}
 		{/if}
