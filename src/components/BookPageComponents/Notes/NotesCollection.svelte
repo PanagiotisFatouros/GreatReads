@@ -118,18 +118,13 @@
 			deletingNote = false;
 			isOverlayOpen.set(false);
 
-			//TODO: remove from database
-
 			selectedNote = null;
 		}
 	}
 
-	// to update the ui when a note is deleted
+	// to update the ui when a note is added
 	$: collection?.notes?.sort((note1, note2) => note1.pageNum - note2.pageNum);
 </script>
-
-<!-- TODO: 2 different overlays - delete collection or note -->
-<!-- TODO: reload list of collections/notes after deleting -->
 
 {#if $isOverlayOpen && deletingCollection}
 	<Confirmation
