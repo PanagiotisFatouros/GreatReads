@@ -36,9 +36,12 @@
     }
 
     input {
-        padding-left: 15px;
-        width: 80%;
-        border-radius: 10px;
+        padding-left: 40px;
+        width: 100%;
+        border-radius: 20px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+
     }
 
     #body {
@@ -65,16 +68,15 @@
 
     .input {
         border-radius: 20px;
-        padding-left: 10px;
-        padding-top: 5px;
-        padding-bottom: 5px;
         white-space: nowrap;
         width: 60%;
         margin-top: 15px;
     }
      
     svg {
-        float: left;
+        position: absolute;
+        transform: translateY(20%);
+        margin-left: 10px;
     }
 
     ::placeholder {
