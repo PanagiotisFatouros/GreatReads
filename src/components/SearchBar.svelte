@@ -7,7 +7,7 @@
 	<input
 		type="text"
 		bind:value={searchText}
-		class=" bg-transparent w-full focus:outline-none px-2"
+		class="font-heading bg-transparent w-full focus:outline-none px-2"
 		{placeholder}
 	/>
 

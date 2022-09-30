@@ -21,7 +21,7 @@
     <LoginForm/>
 {/if}
 
-<h1 class="text-heading1 text-primary-1">Welcome to GreatReads</h1>
+<h1 class="text-heading1 font-heading text-primary-1">Welcome to GreatReads</h1>
 <div id="container">
     <SearchBar placeholder="Find a book"/>
 </div>
@@ -34,6 +34,7 @@
         left: 50%;
         transform: translate(-50%, -40%);
         font-weight: 100;
+        white-space: nowrap;
     }
     #container {
         position: absolute;

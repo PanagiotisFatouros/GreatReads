@@ -1,18 +1,18 @@
 <script>
-    // let background = "src/routes/authentication/login.jpeg";
+    let background = "images/login.jpeg";
 </script>
 
 <!-- svelte-ignore a11y-img-redundant-alt -->
-<!-- <img src={background} alt="background image"/> -->
+<img src={background} alt="background image"/>
 
 <style>
-    /* img {
+    img {
         position: absolute;
         top: 0;
         z-index: -1;
         height: 100vh;
         width: 100vw;
-    } */
+    }
 </style>
 
 <slot><!-- optional fallback --></slot>
