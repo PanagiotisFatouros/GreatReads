@@ -24,5 +24,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `Review not deleted, unknown error: ${err}`)
     }
-    return new Response(`Review successfully deleted! Deleted review: ${JSON.stringify(deletedReview)}`)
+    return new Response(JSON.stringify(deletedReview));
 }

@@ -24,5 +24,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `Note not deleted, unknown error: ${err}`)
     }
-    return new Response(`Note successfully deleted! Deleted note: ${JSON.stringify(deletedNote)}`)
+    return new Response(JSON.stringify(deletedNote));
 }

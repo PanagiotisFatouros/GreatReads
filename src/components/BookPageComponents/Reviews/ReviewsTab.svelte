@@ -3,9 +3,12 @@
 	import ReviewCard from './ReviewCard.svelte';
 	import type { Review } from '../../../types/book.type';
 	import { getSession } from 'lucia-sveltekit/client';
+	import { page } from '$app/stores';
 
 	const session = getSession();
 	const user_id = $session?.user.user_id;
+
+	const baseURL = $page.url.origin;
 
 	export let reviews: Review[];
 
@@ -20,11 +23,21 @@
 		}
 	});
 
-	function deleteUserReview() {
-		//TODO: call deleteReview route
-		console.log('deleting');
-
-		userReview = undefined;
+	async function deleteUserReview() {
+		if (userReview != undefined) {
+			//TODO: call deleteReview route
+			const response = await fetch(`${baseURL}/api/delete/review/${userReview.id}`, {
+					method: 'DELETE'
+			});
+			let deletedReview: Review = await response.json();
+			if (deletedReview != undefined) {
+				//successful
+				userReview = undefined;
+			}
+			else {
+				alert("Something went wrong. Review not deleted");
+			}
+		}
 	}
 
 	$: userReview;

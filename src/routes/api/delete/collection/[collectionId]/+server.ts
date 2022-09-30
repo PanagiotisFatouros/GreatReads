@@ -24,5 +24,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `Collection not deleted, unknown error: ${err}`)
     }
-    return new Response(`Collection successfully deleted! Deleted collection: ${JSON.stringify(deletedCollection)}`)
+    return new Response(JSON.stringify(deletedCollection))
 }
