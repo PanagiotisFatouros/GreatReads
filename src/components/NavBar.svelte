@@ -10,7 +10,7 @@
 
 </script>
 
-<div id="navBar" class="{loggedIn === true ? 'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14 flex justify-between content-center m-0">
+<div id="navBar" class="{loggedIn === true ? 'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14  flex justify-between content-center m-0">
 	<a id="logo" href="/authentication" class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
     {#if loggedIn}
