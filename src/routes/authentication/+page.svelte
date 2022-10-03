@@ -23,7 +23,7 @@
 
 <h1 class="text-heading1 font-heading text-primary-1">Welcome to GreatReads</h1>
 <div id="container">
-    <SearchBar placeholder="Find a book"/>
+    <SearchBar searchText="" placeholder="Find a book"/>
 </div>
 
 
