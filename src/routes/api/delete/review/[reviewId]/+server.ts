@@ -8,14 +8,12 @@ import type { PrismaReview } from '@prisma/client'
 export async function DELETE ({ params }:RequestEvent){
     const reviewId: number = params.reviewId? parseInt(params.reviewId) : -1
     if (reviewId == -1){
-        throw error(400, `Review with ID not specified, delte review failed`)
+        throw error(400, `Review ID not specified/valid, delete review failed`)
     }
     
     let deletedReview: PrismaReview
     try {
-        // Create user profile, which has username as the user's name in database
-        // createdCollectionId = await createCollection(userId, bookId, title)
-        // console.log(createdCollectionId)
+
         deletedReview = await prismaClient.prismaReview.delete({
             where:{
                 id: reviewId
@@ -26,5 +24,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `Review not deleted, unknown error: ${err}`)
     }
-    return new Response(`Review successfully deleted! Deleted review: ${JSON.stringify(deletedReview)}`)
+    return new Response(JSON.stringify(deletedReview));
 }
