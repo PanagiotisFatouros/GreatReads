@@ -36,7 +36,7 @@
 		<BooksDisplay />
 		<!-- "ignore error: will fix itself when using type 'review' instead of placeholder values" -->
 		{#if user1.reviews}
-			<ReviewsDisplay name={user1.name} reviews={user1.reviews} />
+			<ReviewsDisplay name={user1.name} reviews={user1.reviews} clientID={user1.id}/>
 		{/if}
 	</div>
 </div>
