@@ -90,6 +90,7 @@ Go to view a book as in the above dot-point and all the entering a review functi
 
 ../profile/userID
 Not currently connected to database, can type anything and it will work.
+
 ## Viewing Library and Bookshelf (not connected to database)
 Not currently connected to database, can type anything and it will work.
 
@@ -98,6 +99,6 @@ Not currently connected to database, can type anything and it will work.
 …/library/123/bookshelves/bookshelf1
 
 ## Search results page (not connected to database)
-Not currently connected to database, can type anything and it will work.
 
+Not currently connected to database, can type anything and it will work.
 …/search
