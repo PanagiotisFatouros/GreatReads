@@ -1,10 +1,13 @@
 <script lang="ts">
 	import BookCard from '../../components/BookCard.svelte';
+	import FilterPanel from '../../components/FilterPanel.svelte';
+	import SortPanel from '../../components/SortPanel.svelte';
+	import { isOverlayOpen } from '../../stores/OverlayStore.js';
 	import type { Book } from '../../types/book.type';
 
 	let searchTerm: string = '';
 	let book: Book = {
-		id: String(Math.floor(Math.random() * 1000)),
+		id: '123',
 		title: 'The Hunger Games',
 		authors: ['Suzanne Collins'],
 		pageCount: 384,
@@ -21,7 +24,10 @@
 		userNotes: [],
 		publicNotes: []
 	};
-	let books = [book, book, book, book, book];
+	let books = [book, book, book, book, book, book, book];
+	let filter = false;
+	let sort = false;
+	$: isOverlayOpen.set(filter || sort);
 </script>
 
 <div class="mt-6 mx-8">
@@ -29,7 +35,7 @@
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
 		<!-- filter button -->
-		<div style="cursor:pointer" class="flex">
+		<div style="cursor:pointer" on:click={() => (filter = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -47,7 +53,7 @@
 			<p class="ml-1 mr-3">Filter</p>
 		</div>
 		<!-- sort button -->
-		<div style="cursor:pointer" class="flex">
+		<div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -65,6 +71,20 @@
 			<p class="ml-1 mr-3">Sort</p>
 		</div>
 	</div>
+</div>
+
+<!-- filter and sort panels -->
+<div class="flex flex-col justify-start w-full">
+	{#if filter}
+		<div class="z-10 fixed self-center">
+			<FilterPanel bind:show={filter} />
+		</div>
+	{/if}
+	{#if sort}
+		<div class="z-10 fixed self-center">
+			<SortPanel bind:show={sort} />
+		</div>
+	{/if}
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">

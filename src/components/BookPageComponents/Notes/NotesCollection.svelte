@@ -5,6 +5,10 @@
 	import Confirmation from '../../Confirmation.svelte';
 	import NoteCard from './NoteCard.svelte';
 
+	import { page } from '$app/stores';
+
+	const baseURL = $page.url.origin;
+
 	onMount(() => {
 		if (collection != null) {
 			isPublic = collection.isPublic;
@@ -53,24 +57,22 @@
 	let title: string = '';
 	let noteContent: string = '';
 
-	function saveNote() {
-		if (title != '' && noteContent != '') {
-			let newNote: Note = {
-				//TODO: get actual id from database
-				id: Math.floor(Math.random() * 1000),
-				pageNum: pageNum,
-				title: title,
-				content: noteContent,
-				creationDate: new Date()
-			};
+	async function saveNote() {
+		if (title != '' && noteContent != '' && collection !== null) {
+			const response = await fetch(`${baseURL}/api/create/note/${collection.id}`, {
+				method: 'POST',
+				body: JSON.stringify({
+					title: title,
+					content: noteContent,
+					pageNum: pageNum
+				})
+			});
+			const newNote: Note = await response.json();
 
-			//TODO: save note to collection in database
-
-			//add note to local collection object so it doesn't have to be reloaded
-			if (collection!.notes){
-				collection!.notes.push(newNote);
+			if (newNote !== undefined && collection!.notes) {
+				collection.notes?.push(newNote);
 			}
-			
+
 			//trigger reload
 			collection!.notes = collection!.notes;
 
@@ -83,40 +85,46 @@
 		}
 	}
 
-	let deletedNote: Note | null = null;
+	let selectedNote: Note | null = null;
 
 	function showDeleteNoteConfirmation(note: Note) {
-		deletedNote = note;
+		selectedNote = note;
 		deletingNote = true;
 		isOverlayOpen.set(true);
 	}
 
 	function cancelDeleteNote() {
-		deletedNote = null;
+		selectedNote = null;
 		deletingNote = false;
 		isOverlayOpen.set(false);
 	}
 
-	function deleteNote() {
-		if (deletedNote != null) {
-			if (collection!.notes){
+	async function deleteNote() {
+		if (selectedNote != null && collection!.notes) {
+			const response = await fetch(`${baseURL}/api/delete/note/${selectedNote.id}`, {
+					method: 'DELETE'
+			});
+			
+			let deletedNote:Note = await response.json();
+			
+			if (deletedNote != undefined) {
+				//successful - remove note from local collection
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
+			else {
+				alert("Something went wrong. Collection not deleted");
+			}
+			
 			deletingNote = false;
 			isOverlayOpen.set(false);
 
-			//TODO: remove from database
-
-			deletedNote = null;
+			selectedNote = null;
 		}
 	}
 
-	// to update the ui when a note is deleted
-	$: collection?.notes;
+	// to update the ui when a note is added
+	$: collection?.notes?.sort((note1, note2) => note1.pageNum - note2.pageNum);
 </script>
-
-<!-- TODO: 2 different overlays - delete collection or note -->
-<!-- TODO: reload list of collections/notes after deleting -->
 
 {#if $isOverlayOpen && deletingCollection}
 	<Confirmation
