@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Collection, Note } from 'src/types/book.type';
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import Confirmation from '../../Confirmation.svelte';
 	import NoteCard from './NoteCard.svelte';

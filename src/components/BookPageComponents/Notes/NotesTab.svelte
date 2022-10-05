@@ -9,7 +9,6 @@
 	import { page } from '$app/stores';
 	import CollectionInput from './CollectionInput.svelte';
 
-	const bookId = $page.params.bookId;
 	const baseURL: string = $page.url.origin;
 
 
