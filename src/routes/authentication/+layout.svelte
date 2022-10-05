@@ -1,5 +1,5 @@
 <script>
-    let background = "images/login.jpeg";
+    let background = "../../../../images/login.jpeg";
 </script>
 
 <!-- svelte-ignore a11y-img-redundant-alt -->

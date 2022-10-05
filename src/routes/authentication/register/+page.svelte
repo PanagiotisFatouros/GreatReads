@@ -35,7 +35,7 @@
             </svg>
             <input class="bg-primary-1 font-heading" name="confirmPassword" type="password" placeholder="Confirm Password">
         </div>
-        <button class="font-heading bg-accent text-white">Submit</button>
+        <button class="btn font-heading bg-accent text-white">Submit</button>
     </form>
 </div>
 

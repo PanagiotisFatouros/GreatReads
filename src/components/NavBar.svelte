@@ -40,7 +40,7 @@
         </div>
     {:else}
         <div id="rightNav" class="flex justify-around content-center">
-            <button on:click={openOverlay}><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Log In</p></button>
+            <a href="/authentication/login" on:click={openOverlay}><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Log In</p></a>
             <p class="list-none p-3 text-primary-1 font-heading text-lg font-300">|</p>
             <a href="/authentication/register"><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Register</p></a>
         </div>

@@ -7,7 +7,7 @@
 
 </script>
 
-<form method="POST" action="?/login">
+<form method="POST" action="/">
     <p id="heading" class="text-secondary font-heading text-heading1">Log In</p>
     <div id="body">
         <div class="input bg-primary-1">
@@ -23,8 +23,8 @@
             <input class="bg-primary-1 font-heading" name="password" type="password" placeholder="Password">
         </div>
         <div id="buttons">
-            <button on:click={closeOverlay} class="bg-primary-3 text-primary-1">Cancel</button>
-            <button class="bg-accent text-primary-1">Submit</button>
+            <a id="cancel" href="/authentication" on:click={closeOverlay} class="btn bg-primary-3 text-primary-1">Cancel</a>
+            <button class="btn bg-accent text-primary-1">Submit</button>
         </div>
     </div>
     <!-- <button formaction="?/register">Register</button> -->
@@ -58,7 +58,8 @@
         margin-top: 10px;
     }
 
-    button {
+    button, #cancel {
+        text-align: center;
         border-radius: 20px;
         box-shadow: 0px 3px 4px gray;
         width: 30%;
