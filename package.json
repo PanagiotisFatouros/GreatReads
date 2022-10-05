@@ -21,7 +21,7 @@
 	},
 	"devDependencies": {
 		"@babel/eslint-parser": "^7.18.9",
-		"@playwright/test": "^1.27.0-alpha-oct-5-2022",
+		"@playwright/test": "next",
 		"@sveltejs/adapter-node": "next",
 		"@sveltejs/kit": "^1.0.0-next.484",
 		"@tailwindcss/line-clamp": "^0.4.2",
@@ -31,7 +31,7 @@
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-svelte3": "^4.0.0",
 		"nyc": "^15.1.0",
-		"playwright-test-coverage": "^1.1.0",
+		"playwright-test-coverage": "1.2.0",
 		"postcss": "^8.4.16",
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
