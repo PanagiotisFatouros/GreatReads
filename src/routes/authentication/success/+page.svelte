@@ -13,4 +13,5 @@
 	}
 </script>
 
+
 <h1>Authentication Success! Redirecting to homepage...</h1>

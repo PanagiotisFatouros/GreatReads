@@ -5,7 +5,8 @@
     import { browser } from "$app/environment";
 	import { goto } from "$app/navigation";
     import {getSession} from "lucia-sveltekit/client"
-    import { authenticated } from "../../../stores/OverlayStore.js"
+    import { authenticated } from "../../../stores/AuthenticatedStore"
+
 
     const session = getSession()
     if ($session) {
@@ -15,6 +16,7 @@
         } 
     }
     isOverlayOpen.set(true)
+
 </script>
 
 {#if $isOverlayOpen}
