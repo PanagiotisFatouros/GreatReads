@@ -5,7 +5,7 @@
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
 
 	let addBookshelf = false;
-	let bookshelves = ['', '', ''];
+	let bookshelves = ['', '', '', '', '', ''];
 	$: isOverlayOpen.set(addBookshelf);
 </script>
 
@@ -44,10 +44,10 @@
 	</div>
 </div>
 
-<!-- TODO: fix overlay -->
+<!-- TODO: close panel when click outside -->
 {#if addBookshelf}
 	<div class="flex flex-col justify-start w-full">
-		<div class="z-50 fixed self-center">
+		<div class="z-20 fixed self-center">
 			<AddBookshelfPanel bind:show={addBookshelf} />
 		</div>
 	</div>
