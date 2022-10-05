@@ -14,7 +14,6 @@
             authenticated.set(true)
         } 
     }
-
     isOverlayOpen.set(true)
 </script>
 

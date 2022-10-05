@@ -1,13 +1,6 @@
 <script>
-    import LoginForm from "../../../components/LoginForm.svelte";
-    import { isOverlayOpen } from "../../../stores/OverlayStore";
 
 </script>
-
-{#if $isOverlayOpen}
-    <LoginForm/>
-{/if}
-
 
 <div id="panel">
     <form method="POST">
