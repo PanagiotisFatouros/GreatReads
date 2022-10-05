@@ -10,9 +10,8 @@ export type Book = {
 	numRatings?: number;
 	description?: string;
 	genres: string[];
-	isbn: string;
+	isbn: string; // ISBN-13 is being used
 
-	//could be Date
 	datePublished: string;
 
 	imageURL: string;
