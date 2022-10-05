@@ -83,6 +83,7 @@
 			isOverlayOpen.set(false);
 
 			selectedNote = null;
+
 		}
 	}
 
@@ -98,6 +99,7 @@
 		if (collection != null && collection.notes != undefined) {
 			//collection.notes = collection.notes;
 			collection = collection;
+
 		}
 	}
 
