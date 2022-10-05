@@ -14,6 +14,8 @@
             authenticated.set(true)
         } 
     }
+
+    isOverlayOpen.set(true)
 </script>
 
 {#if $isOverlayOpen}
