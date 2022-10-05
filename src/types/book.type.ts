@@ -35,6 +35,8 @@ export type Client = {
 	// all other details in user collection
 	reviews?: Review[];
 	bio?: string;
+	favAuthor?: String;
+	favGenre?: String;
 };
 
 export type Review = {
