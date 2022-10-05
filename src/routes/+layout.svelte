@@ -6,6 +6,14 @@
 	import Overlay from '../components/Overlay.svelte';
 	import { handleSilentRefresh } from 'lucia-sveltekit/client';
 
+	import {getSession} from "lucia-sveltekit/client"
+
+	const session = getSession()
+	
+	if ($session) {
+		authenticated.set(true);
+	}
+
 	handleSilentRefresh();
 </script>
 
