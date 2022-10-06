@@ -34,8 +34,8 @@
 			
 
 			<div class=" absolute right-0 hidden group-hover:block font-body bg-primary-3 shadow-lg text-white self-start" id="dropdown-content">
-				<a href="/sign-out" class='block px-3 py-1 hover:bg-hover-primary-3'>Sign Out</a>
-				<a href="/settings" class='block px-3 py-1 hover:bg-hover-primary-3'>Settings</a>	
+				<a href="/sign-out" class='block px-5 py-1 hover:bg-hover-primary-3'>Sign Out</a>
+				<a href="/settings" class='block px-5 py-1 hover:bg-hover-primary-3'>Settings</a>	
 			</div>
 		</div>
 		
@@ -45,6 +45,5 @@
 <style>
 	#dropdown-content {
 		z-index: 5;
-		min-width: 120px;
 	}
 </style>
