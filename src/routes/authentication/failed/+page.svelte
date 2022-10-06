@@ -2,6 +2,8 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { getSession } from 'lucia-sveltekit/client';
+	import { isOverlayOpen } from '../../../stores/OverlayStore';
+
 	const session = getSession();
 
 	if (!$session) {
@@ -11,6 +13,9 @@
 			}, 2000);
 		}
 	}
+
+	isOverlayOpen.set(false);
+	
 </script>
 
 <h1>Login/Register Failed! Redirecting back to login/registration page...</h1>

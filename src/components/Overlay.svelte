@@ -1,5 +1,4 @@
 <script>
-	import { isOverlayOpen } from '../stores/OverlayStore.js';
 </script>
 
 <div
