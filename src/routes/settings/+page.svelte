@@ -107,7 +107,7 @@ import type { Client } from "src/types/book.type";
 
                 if (result && typeof result === 'string') {
                     uploadedPic = result;
-                    console.log(uploadedPic);
+                    //console.log(uploadedPic);
 
                     //TODO: save to database
                 }

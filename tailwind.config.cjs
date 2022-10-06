@@ -11,7 +11,12 @@ module.exports = {
 					3: `rgb(66, 76, 85)`
 				},
 				secondary: `rgb(21, 176, 151)`,
-				accent: `rgb(255, 102, 99)`
+				accent: `rgb(255, 102, 99)`,
+				hover: {
+					primary: {
+						3: `rgb(51, 59, 67)`,
+					},
+				},
 			},
 			fontFamily: {
 				logo: ['Crete Round', 'serif'],
@@ -38,14 +43,15 @@ module.exports = {
 	},
 	plugins: [require('@tailwindcss/line-clamp')],
 	variants: {
-		backgroundColor: ['checked'],
-		border: ['checked'],
-		width: ['checked'],
-		height: ['checked'],
-		ring: ['checked'],
 		extend: {
 			boxShadow: ['active'],
 			opacity: ['disabled'],
+			backgroundColor: ['checked'],
+			border: ['checked'],
+			width: ['checked'],
+			height: ['checked'],
+			ring: ['checked'],
+			display: ["group-hover"],
 		}
 	}
 };
