@@ -1,5 +1,5 @@
 <script lang="ts">
-	let searchText: string;
+	export let searchText: string;
 	export let placeholder: string = '';
 </script>
 

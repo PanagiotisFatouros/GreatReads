@@ -1,9 +1,10 @@
 <script lang="ts">
-	import BookCard from '../../../../../components/BookCard.svelte';
-	import FilterPanel from '../../../../../components/FilterPanel.svelte';
-	import SortPanel from '../../../../../components/SortPanel.svelte';
-	import { isOverlayOpen } from '../../../../../stores/OverlayStore.js';
-	import type { Book } from '../../../../../types/book.type';
+	import BookCard from '../../../../components/BookCard.svelte';
+	import FilterPanel from '../../../../components/FilterPanel.svelte';
+	import SortPanel from '../../../../components/SortPanel.svelte';
+	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
+	import type { Book } from '../../../../types/book.type';
+	import { goto } from '$app/navigation'
 
 	export let bookshelfName = 'Favourites';
 	let book: Book = {
@@ -32,7 +33,8 @@
 
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading flex items-center">
-		<svg
+		<button on:click={() => goto('/library/bookshelves')}>
+			<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
@@ -42,6 +44,8 @@
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
 		</svg>
+		</button>
+		
 		{bookshelfName}
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />
@@ -101,6 +105,6 @@
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
 	{#each books as book}
-		<BookCard />
+		<BookCard book={book} />
 	{/each}
 </div>
