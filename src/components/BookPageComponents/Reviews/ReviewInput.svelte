@@ -4,6 +4,10 @@
 	import { page } from '$app/stores';
 	import { getSession } from 'lucia-sveltekit/client';
 	import type { Review } from '../../../types/book.type';
+	import { onMount } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
+
+	const dispatch = createEventDispatcher();
 
 	const session = getSession();
 	const user_id = $session?.user.user_id;
@@ -17,6 +21,14 @@
 	let comment: string = '';
 
 	export let review: Review | undefined;
+
+	onMount(() => {
+		if (review !== undefined) {
+			rating = review.rating;
+			title = review.title;
+			comment = review.comment;
+		}
+	})
 
 	// async function getBookInfo(){
 	//     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
@@ -37,6 +49,7 @@
 					userId: user_id
 				})
 			});
+			//bind response to userReview in ReviewsTab
 			review = await response.json();
 
 			//reset input
@@ -45,6 +58,22 @@
 			comment = '';
 		} else {
 			alert(`missing required value`);
+		}
+	}
+
+	async function updateReview() {
+		if (review != undefined && rating != 0 && title != '' && comment != '') {
+			
+			//TODO: update review in database
+
+
+			review.rating = rating;
+			review.title = title;
+			review.comment = comment;
+			review.isEdited = true;
+
+			//tell Reviews Tab to go back to displaying ReviewCard
+			dispatch('cancel')
 		}
 	}
 </script>
@@ -59,6 +88,15 @@
 		class=" std_text_area"
 		placeholder="Write a review..."
 	/>
-
-	<button on:click={postReview} class=" std_button self-end">Post</button>
+	{#if review == undefined}
+		<!-- new review -->
+		<button on:click={postReview} class=" std_button self-end">Post</button>
+	{:else}
+		<!-- editting review -->
+		<div class="self-end">
+			<button on:click={() => dispatch('cancel')} class=" std_button bg-primary-1 text-primary-3">Cancel</button>
+			<button on:click={updateReview} class=" std_button">Update</button>
+		</div>
+		
+	{/if}
 </div>

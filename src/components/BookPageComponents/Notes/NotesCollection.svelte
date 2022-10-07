@@ -1,36 +1,20 @@
 <script lang="ts">
 	import type { Collection, Note } from 'src/types/book.type';
-	import { onMount, createEventDispatcher } from 'svelte';
+	import { createEventDispatcher } from 'svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import Confirmation from '../../Confirmation.svelte';
 	import NoteCard from './NoteCard.svelte';
+	import NoteInput from './NoteInput.svelte';
 
 	import { page } from '$app/stores';
+	import CollectionInput from './CollectionInput.svelte';
 
 	const baseURL = $page.url.origin;
-
-	onMount(() => {
-		if (collection != null) {
-			isPublic = collection.isPublic;
-		} else {
-			isPublic = false;
-		}
-	});
 
 	const dispatch = createEventDispatcher();
 
 	//selected collection
 	export let collection: Collection | null;
-
-	let isPublic: boolean;
-
-	//runs everytime isPublic value changes
-	$: if (isPublic != undefined) {
-		// TODO: save change
-		collection!.isPublic = isPublic;
-
-		//alert(isPublic);
-	}
 
 	// keep track of which confirmation message to show
 	let deletingCollection: boolean = false;
@@ -53,72 +37,75 @@
 		dispatch('delete');
 	}
 
-	let pageNum: number = 0;
-	let title: string = '';
-	let noteContent: string = '';
+	let savedNote: Note | undefined = undefined;
 
-	async function saveNote() {
-		if (title != '' && noteContent != '' && collection !== null) {
-			const response = await fetch(`${baseURL}/api/create/note/${collection.id}`, {
-				method: 'POST',
-				body: JSON.stringify({
-					title: title,
-					content: noteContent,
-					pageNum: pageNum
-				})
-			});
-			const newNote: Note = await response.json();
+	function addSavedNote() {
+		if (savedNote != undefined && collection != null && collection!.notes) {
+			collection.notes?.push(savedNote);
 
-			if (newNote !== undefined && collection!.notes) {
-				collection.notes?.push(newNote);
-			}
+			triggerRefresh();
 
-			//trigger reload
-			collection!.notes = collection!.notes;
-
-			//reset
-			pageNum = 0;
-			title = '';
-			noteContent = '';
-		} else {
-			alert("Title and Note can't be empty");
+			savedNote = undefined;
 		}
 	}
 
-	let deletedNote: Note | null = null;
+	let selectedNote: Note | null = null;
 
 	function showDeleteNoteConfirmation(note: Note) {
-		deletedNote = note;
+		selectedNote = note;
 		deletingNote = true;
 		isOverlayOpen.set(true);
 	}
 
 	function cancelDeleteNote() {
-		deletedNote = null;
+		selectedNote = null;
 		deletingNote = false;
 		isOverlayOpen.set(false);
 	}
 
-	function deleteNote() {
-		if (deletedNote != null) {
-			if (collection!.notes) {
+	async function deleteNote() {
+		if (selectedNote != null && collection!.notes) {
+			const response = await fetch(`${baseURL}/api/delete/note/${selectedNote.id}`, {
+					method: 'DELETE'
+			});
+			
+			let deletedNote:Note = await response.json();
+			
+			if (deletedNote != undefined) {
+				//successful - remove note from local collection
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
 			}
+			else {
+				alert("Something went wrong. Collection not deleted");
+			}
+			
 			deletingNote = false;
 			isOverlayOpen.set(false);
 
-			//TODO: remove from database
+			selectedNote = null;
 
-			deletedNote = null;
 		}
 	}
 
-	// to update the ui when a note is deleted
+	let editingCollection: boolean = false;
+
+	function showEditInput() {
+		editingCollection = true;
+		isOverlayOpen.set(true);
+	}
+
+	function triggerRefresh() {
+		console.log("triggering refresh");
+		if (collection != null && collection.notes != undefined) {
+			//collection.notes = collection.notes;
+			collection = collection;
+
+		}
+	}
+
+	// to update the ui when a note is added
 	$: collection?.notes?.sort((note1, note2) => note1.pageNum - note2.pageNum);
 </script>
-
-<!-- TODO: 2 different overlays - delete collection or note -->
-<!-- TODO: reload list of collections/notes after deleting -->
 
 {#if $isOverlayOpen && deletingCollection}
 	<Confirmation
@@ -134,6 +121,8 @@
 		on:cancel={cancelDeleteNote}
 		on:confirm={deleteNote}
 	/>
+{:else if $isOverlayOpen && editingCollection && collection != null}
+	<CollectionInput collection={collection} on:cancel={() => editingCollection = false} on:update={triggerRefresh}/>
 {/if}
 
 <div class="flex flex-col">
@@ -158,17 +147,36 @@
 			<h2 class=" ml-4 text-accent">{collection?.title}</h2>
 		</div>
 
-		<div class="flex items-center">
-			<label for="publicCheckbox" class="text-body1 font-body mr-2">Make Public</label>
-			<!-- TODO: replace with toggle -->
-			<input
-				type="checkbox"
-				id="publicCheckbox"
-				bind:checked={isPublic}
-				class=" text-accent rounded-sm"
-			/>
+		<div class="flex items-center space-x-3">
+			<!-- isPublic display -->
+			<div class="mr-2 flex space-x-1">
+				{#if collection?.isPublic}
+				<p>Public Collection</p>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+					<path d="M12 15a3 3 0 100-6 3 3 0 000 6z" />
+					<path fill-rule="evenodd" d="M1.323 11.447C2.811 6.976 7.028 3.75 12.001 3.75c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113-1.487 4.471-5.705 7.697-10.677 7.697-4.97 0-9.186-3.223-10.675-7.69a1.762 1.762 0 010-1.113zM17.25 12a5.25 5.25 0 11-10.5 0 5.25 5.25 0 0110.5 0z" clip-rule="evenodd" />
+				</svg>
+				
+				{:else}
+				<p>Private Collection</p>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+					<path d="M3.53 2.47a.75.75 0 00-1.06 1.06l18 18a.75.75 0 101.06-1.06l-18-18zM22.676 12.553a11.249 11.249 0 01-2.631 4.31l-3.099-3.099a5.25 5.25 0 00-6.71-6.71L7.759 4.577a11.217 11.217 0 014.242-.827c4.97 0 9.185 3.223 10.675 7.69.12.362.12.752 0 1.113z" />
+					<path d="M15.75 12c0 .18-.013.357-.037.53l-4.244-4.243A3.75 3.75 0 0115.75 12zM12.53 15.713l-4.243-4.244a3.75 3.75 0 004.243 4.243z" />
+					<path d="M6.75 12c0-.619.107-1.213.304-1.764l-3.1-3.1a11.25 11.25 0 00-2.63 4.31c-.12.362-.12.752 0 1.114 1.489 4.467 5.704 7.69 10.675 7.69 1.5 0 2.933-.294 4.242-.827l-2.477-2.477A5.25 5.25 0 016.75 12z" />
+				</svg>
+				{/if}
+			</div>
 
-			<button on:click={showDeleteCollectionConfirmation} class=" ml-3 hover:opacity-70">
+			<!-- edit button -->
+			<button on:click={showEditInput} class='hover:opacity-70'>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+				  </svg>
+				  
+			</button>
+
+			<!-- delete button -->
+			<button on:click={showDeleteCollectionConfirmation} class=" hover:opacity-70">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
 					fill="none"
@@ -188,27 +196,9 @@
 	</div>
 
 	<!-- Note input -->
-	<div class="flex flex-col mt-3 space-y-2">
-		<div class="flex">
-			<p>Page Number (optional):</p>
-			<!-- TODO: replace with custom number input - see figma -->
-			<input
-				type="number"
-				bind:value={pageNum}
-				min="0"
-				class="bg-primary-1 w-16 ml-3 text-center rounded-full"
-			/>
-		</div>
-		<input type="text" bind:value={title} class="std_input" placeholder="Title..." />
-		<textarea
-			bind:value={noteContent}
-			cols="30"
-			rows="5"
-			class="std_text_area"
-			placeholder="Note..."
-		/>
-		<button on:click={saveNote} class="std_button self-end">Save</button>
-	</div>
+	{#if collection != null}
+		<NoteInput bind:note={savedNote} collectionId={collection.id} on:newNote={addSavedNote} />
+	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />
 
@@ -217,7 +207,7 @@
 		{#if collection != null}
 			{#if collection.notes}
 				{#each collection.notes as note}
-					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} />
+					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} on:update={triggerRefresh}/>
 				{/each}
 			{/if}
 		{/if}
