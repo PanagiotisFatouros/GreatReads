@@ -1,0 +1,13 @@
+name: 'nightly cleanup artifacts'
+on:
+  schedule:
+    - cron: '0 1 * * *' # Every night at 1am do the cleanup
+
+jobs:
+  delete-artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: kolpav/purge-artifacts-actions@v1
+        with:
+          token: $
+          expire-in: 0 # This will delete all artifacts
