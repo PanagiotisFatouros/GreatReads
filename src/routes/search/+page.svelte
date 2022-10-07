@@ -3,21 +3,33 @@
 	import FilterPanel from '../../components/FilterPanel.svelte';
 	import SortPanel from '../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../stores/OverlayStore.js';
-	import type { Book } from '../../types/book.type';
+	import type { Book, Client } from '../../types/book.type';
 	import {page} from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
     
     //let searchText = $page.params.searched ? $page.params.searched : ""
     //let searchText = decodeURI($page.url.pathname.substring(1))
-	console.log($page.url.search)
+	//$: console.log($page.url.search)
 
-	//TODO: not reloading when search text changes
+	
 
 	/** @type {import('./$types').PageData} */
 	export let data;
+
 	console.log(data);
 
+	//TODO: not reloading when search text changes
+	$: $page.url.search, reloadPage();
 
+	function reloadPage() {
+		console.log($page.url.search);
+		//let result = invalidateAll();
+		//console.log(result);
+	}
+
+	//let books: Book[];
+
+	//$: books = data.books
 
 	let searchTerm: string = '';
 	let book: Book = {
