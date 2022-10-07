@@ -1,16 +1,5 @@
 <script>
     import SearchBar from "../../components/SearchBar.svelte";
-
-    import { browser } from "$app/environment";
-    import {getSession} from "lucia-sveltekit/client"
-	import { goto } from "$app/navigation";
-
-    const session = getSession()
-    if ($session) {
-        if (browser) {
-            goto('/')
-        }
-    }
 </script>
 
 <h1 class="text-heading1 font-heading text-primary-1">Welcome to GreatReads</h1>

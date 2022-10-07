@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     let background = "../../../../images/login.jpeg";
 </script>
 
