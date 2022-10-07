@@ -1,5 +1,5 @@
 <script>
-	let searchTypes = ['Books', 'Users', 'Genres', 'Authors'];
+	let searchTypes = ['Books', 'Users', 'Genres'];
 	let selected = searchTypes[0];
 	let searchText = '';
 

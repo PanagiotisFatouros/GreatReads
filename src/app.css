@@ -50,4 +50,8 @@ h1 {
 	.profile_pic_small {
 		@apply w-14 h-14 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center;
 	}
+
+	.profile_pic_large {
+		@apply w-14 h-14 bg-white rounded-full overflow-hidden flex justify-center items-center;
+	}
 }

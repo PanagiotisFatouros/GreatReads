@@ -40,15 +40,21 @@
 		}
 	}
 
+	let edittingReview:boolean = false;
+
+	function handleEdit() {
+		edittingReview = true;
+	}
+
 	$: userReview;
 </script>
 
 <div class=" mt-3 w-full">
-	{#if userReview === undefined}
-		<ReviewInput bind:review={userReview} />
+	{#if userReview === undefined || edittingReview}
+		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false}/>
 	{:else}
 		<!-- TODO: not catching delete event for some reason -->
-		<ReviewCard review={userReview} on:delete={deleteUserReview} />
+		<ReviewCard review={userReview} on:delete={deleteUserReview} on:edit={handleEdit} />
 	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />
@@ -56,7 +62,7 @@
 	<div>
 		{#each otherReviews as review}
 			<!-- on:delete never occurs here but without it, it doesn't work above -->
-			<ReviewCard {review} on:delete={deleteUserReview} />
+			<ReviewCard {review} on:delete={deleteUserReview} on:edit={handleEdit} />
 		{/each}
 	</div>
 </div>
