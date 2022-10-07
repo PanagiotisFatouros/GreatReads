@@ -5,6 +5,9 @@
 	import RatingInput from '../components/RatingInput.svelte';
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
+	import { isOverlayOpen } from '../stores/OverlayStore';
+
+	isOverlayOpen.set(false)
 
 	const session = getSession();
 
@@ -17,6 +20,7 @@
 	}
 
 	let rating: number = 0;
+	
 </script>
 
 <StarRating rating={4.3} />

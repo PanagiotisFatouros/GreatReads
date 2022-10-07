@@ -6,6 +6,7 @@
 	const baseURL: string = $page.url.origin;
 
 	let selected: searchTypes = searchTypes.books;
+
 	let searchText = '';
 
 	function handleSubmit() {

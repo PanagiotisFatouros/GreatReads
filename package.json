@@ -50,6 +50,8 @@
 		"@typescript-eslint/parser": "^5.36.2",
 		"esbuild": "^0.15.7",
 		"lucia-sveltekit": "^0.8.6",
-		"postcss-load-config": "^3.1.0"
+		"postcss-load-config": "^3.1.0",
+		"svelte-loading-spinners": "^0.1.7",
+		"svelte-local-storage-store": "^0.3.1"
 	}
 }
