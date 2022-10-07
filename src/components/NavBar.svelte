@@ -14,13 +14,13 @@
 	<a id="logo" href={loggedIn === true ? '/' : '/authentication'} class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
     {#if loggedIn}
+        <HeaderSearchBar />
         <div id="rightNav" class="flex justify-around content-center">
             <ul class="flex justify-around">
                 <a href="null">
                     <li class="list-none p-3 text-primary-1 font-heading text-lg">My Library</li>
                 </a>
             </ul>
-            <HeaderSearchBar />
 
             <!-- user icon -->
             <svg
