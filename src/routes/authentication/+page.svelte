@@ -1,18 +1,28 @@
 <script>
-	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
-	import { getSession } from 'lucia-sveltekit/client';
-	const session = getSession();
-	if ($session) {
-		if (browser) {
-			goto('/authentication/success');
-		}
-	}
+    import SearchBar from "../../components/SearchBar.svelte";
 </script>
 
-<form method="POST" action="?/login">
-    Enter Username:<input name="username" type="username">
-    Enter Password:<input name="password" type="password">
-    <button>Login</button>
-    <button formaction="?/register">Register</button>
-</form>
+<h1 class="text-heading1 font-heading text-primary-1">Welcome to GreatReads</h1>
+<div id="container">
+    <SearchBar placeholder="Find a book"/>
+</div>
+
+
+<style>
+    h1 {
+        position: absolute;
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -40%);
+        font-weight: 100;
+        white-space: nowrap;
+    }
+    #container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+    }
+
+</style>

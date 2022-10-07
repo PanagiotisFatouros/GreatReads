@@ -4,7 +4,7 @@
 	import ProfileStatistics from '../../../components/ProfileStatistics.svelte';
 	import ReviewsDisplay from '../../../components/ReviewsDisplay.svelte';
 	let user1: Client = {
-		id: '1',
+		id: "1",
 		reviews: [
 			{
 				id: 123,
@@ -15,7 +15,7 @@
 				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
 				rating: 3,
 				upvotes: 10,
-				isEdited: false
+				isEdited: false,
 			}
 		],
 		profilePic:
