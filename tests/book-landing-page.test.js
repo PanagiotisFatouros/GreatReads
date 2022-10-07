@@ -20,8 +20,8 @@ test('Valid Book Page (Not Logged In)', async ({ page, baseURL }) => {
 test('Valid Book Page (Logged In)', async ({ page, baseURL }) => {
 	const bookName = 'The Google Story (2018 Updated Edition)';
 	const h1ClassName = `h1.text-heading1.font-heading.text-secondary.mr-5`;
-	await page.goto(`${baseURL}/authentication`);
-	await page.fill('input[name="username"]', 'test');
+	await page.goto(`${baseURL}/authentication/login`);
+	await page.fill('input[name="email"]', 'test@testing.com');
 	await page.fill('input[name="password"]', 'test');
 	await page.click('button >> text=Login');
 	await page.waitForURL('**/success');
