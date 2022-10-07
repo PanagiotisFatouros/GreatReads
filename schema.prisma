@@ -12,7 +12,7 @@ model User {
   identifier_token String             @unique 
   hashed_password  String?
   RefreshToken     RefreshToken[]
-  name             String             @unique @db.VarChar(70)
+  name             String             @db.VarChar(70)
   bio              String             @db.VarChar(300)
   profilePic       String             @db.VarChar(45)
   favAuthor        String             @db.VarChar(70)

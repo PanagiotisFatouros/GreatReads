@@ -27,6 +27,7 @@ export async function GET({ params }: RequestEvent) {
 		// else: create new entry for book then proceed
 		let reviews: Review[] = [];
 		let collections: Collection[] = [];
+		let publicCollections: Collection[] = [];
 		let avgRating: number;
 		let numRating: number;
 		if (existingBookInDatabase == null) {
@@ -125,6 +126,40 @@ export async function GET({ params }: RequestEvent) {
 				};
 				collections.push(collection);
 			});
+
+			const prismaPublicCollections = await prismaClient.prismaCollection.findMany({
+				where: { bookId: googleBooksId, isPublic: true },
+				select: {
+					id: true,
+					title: true,
+					creationDate: true,
+					isPublic: true,
+					upvotes: true,
+					user: {
+						select: {
+							id: true,
+							name: true,
+							profilePic: true
+						}
+					}
+				}
+			});
+
+			prismaPublicCollections.forEach((prismaCollection) => {
+				const publicCollection: Collection = {
+					id: prismaCollection.id,
+					title: prismaCollection.title,
+					creationDate: prismaCollection.creationDate,
+					isPublic: prismaCollection.isPublic,
+					upvotes: prismaCollection.upvotes,
+					user: {
+						id: prismaCollection.user.id,
+						name: prismaCollection.user.name,
+						profilePic: prismaCollection.user.profilePic
+					}
+				};
+				publicCollections.push(publicCollection);
+			});
 		}
 
 		// creating google book object
@@ -144,7 +179,7 @@ export async function GET({ params }: RequestEvent) {
 			numRatings: numRating,
 			reviews: reviews,
 			userNotes: collections,
-			publicNotes: collections.filter((collection) => collection.isPublic == true)
+			publicNotes: publicCollections
 		};
 		return new Response(JSON.stringify(targetGoogleBook));
 	}
