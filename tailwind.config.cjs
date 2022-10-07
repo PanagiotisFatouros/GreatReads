@@ -44,7 +44,8 @@ module.exports = {
 		height: ['checked'],
 		ring: ['checked'],
 		extend: {
-			boxShadow: ['active']
+			boxShadow: ['active'],
+			opacity: ['disabled'],
 		}
 	}
 };

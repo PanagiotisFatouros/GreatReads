@@ -1,7 +1,9 @@
 import { expect, test } from '@playwright/test';
+import { readGoogleBooksResponse } from '../src/scripts.js';
+import { googleBooksResponse, expectedResponse } from './values.js';
 
-test('Empty Test', async ({ page }) => {
-	await page.goto('https://playwright.dev/');
-	const name = await page.innerText('.navbar__title');
-	expect(name).toBe('Playwright');
+
+test('Test json parse of google books response', ({ }) => {
+	let response = readGoogleBooksResponse(googleBooksResponse);
+	expect(response).toEqual(expectedResponse);
 });

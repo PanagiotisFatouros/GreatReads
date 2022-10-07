@@ -86,12 +86,11 @@ log in test: you can log in with username/password both empty as this is set as 
 
 Go to view a book as in the above dot-point and all the entering a review functionality is now working.
 
-### 
-
 ## Viewing dummy profile (not connected to database)
 
 ../profile/userID
 Not currently connected to database, can type anything and it will work.
+
 ## Viewing Library and Bookshelf (not connected to database)
 Not currently connected to database, can type anything and it will work.
 
@@ -100,6 +99,6 @@ Not currently connected to database, can type anything and it will work.
 …/library/123/bookshelves/bookshelf1
 
 ## Search results page (not connected to database)
-Not currently connected to database, can type anything and it will work.
 
+Not currently connected to database, can type anything and it will work.
 …/search
