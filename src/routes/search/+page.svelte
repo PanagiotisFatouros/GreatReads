@@ -4,10 +4,24 @@
 	import SortPanel from '../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../stores/OverlayStore.js';
 	import type { Book } from '../../types/book.type';
+	import {page} from '$app/stores';
+	import { goto } from '$app/navigation';
+    
+    //let searchText = $page.params.searched ? $page.params.searched : ""
+    let searchText = decodeURI($page.url.pathname.substring(1))
+	console.log($page.url.search)
+
+	//TODO: not reloading when search text changes
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+	console.log(data);
+
+
 
 	let searchTerm: string = '';
 	let book: Book = {
-		id: '123',
+		id: 'zyTCAlFPjgYC',
 		title: 'The Hunger Games',
 		authors: ['Suzanne Collins'],
 		pageCount: 384,
@@ -87,8 +101,8 @@
 	{/if}
 </div>
 
-<div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
+<div class="mx-6 flex flex-row flex-wrap justify-start items-center">
 	{#each books as book}
-		<BookCard />
+		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book}/>
 	{/each}
 </div>

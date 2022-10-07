@@ -3,12 +3,12 @@
 </script>
 
 <div id="navBar" class="bg-primary-3 w-full h-14 flex justify-between content-center m-0">
-	<a id="logo" href="null" class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
+	<a id="logo" href="/" class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
 	<div id="rightNav" class="bg-primary-3 flex justify-around content-center space-x-2">
 		<ul class="flex justify-around">
-			<li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="null" class=" w-full h-full px-3 flex justify-center items-center">Browse</a></li>
-			<li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="null" class=" w-full h-full px-3 flex justify-center items-center">Library</a></li>
+			<li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/" class=" w-full h-full px-3 flex justify-center items-center">Browse</a></li>
+			<li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/library/bookshelves" class=" w-full h-full px-3 flex justify-center items-center">Library</a></li>
 		</ul>
 
 		<HeaderSearchBar />
@@ -34,8 +34,8 @@
 			
 
 			<div class=" absolute right-0 hidden group-hover:block font-body bg-primary-3 shadow-lg text-white self-start" id="dropdown-content">
-				<a href="/sign-out" class='block px-3 py-1 hover:bg-hover-primary-3'>Sign Out</a>
-				<a href="/settings" class='block px-3 py-1 hover:bg-hover-primary-3'>Settings</a>	
+				<a href="/sign-out" class='block px-5 py-1 hover:bg-hover-primary-3'>Sign Out</a>
+				<a href="/settings" class='block px-5 py-1 hover:bg-hover-primary-3'>Settings</a>	
 			</div>
 		</div>
 		
@@ -45,6 +45,5 @@
 <style>
 	#dropdown-content {
 		z-index: 5;
-		min-width: 120px;
 	}
 </style>

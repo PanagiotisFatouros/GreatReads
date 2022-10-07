@@ -1,12 +1,24 @@
-<script>
-	let searchTypes = ['Books', 'Users', 'Genres', 'Authors'];
-	let selected = searchTypes[0];
+<script lang='ts'>
+	import { goto } from "$app/navigation";
+	import { page } from '$app/stores';
+	import { searchTypes } from '../types/searchTypes.enum'
+
+	const baseURL: string = $page.url.origin;
+
+	let selected: searchTypes = searchTypes.books;
 	let searchText = '';
 
 	function handleSubmit() {
 		//TODO: test for empty search text
+		let url:URL = new URL(`/search?${selected}=${searchText}`, baseURL);
 
-		alert(`type: ${selected}, searchText: ${searchText}`);
+		console.log(url);
+
+		goto(url, {replaceState: true});
+
+		searchText = '';
+
+		//alert(`type: ${selected}, searchText: ${searchText}`);
 	}
 </script>
 
@@ -19,7 +31,7 @@
 			bind:value={selected}
 			class=" bg-transparent w-full pl-2 cursor-pointer focus:outline-none"
 		>
-			{#each searchTypes as searchType}
+			{#each Object.values(searchTypes) as searchType}
 				<option value={searchType}>
 					{searchType}
 				</option>
