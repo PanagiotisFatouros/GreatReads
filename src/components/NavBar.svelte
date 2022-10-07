@@ -14,14 +14,14 @@
 <div id="navBar" class="{loggedIn === true ? 'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14  flex justify-between content-center m-0">
 	<a id="logo" href={loggedIn === true ? '/' : '/authentication'} class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
+  <HeaderSearchBar />
+
 
     {#if loggedIn}
        <div id="rightNav" class="bg-primary-3 flex justify-around content-center space-x-2">
           <ul class="flex justify-around">
             <li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/library/bookshelves" class=" w-full h-full px-3 flex justify-center items-center">My Library</a></li>
           </ul>
-
-          <HeaderSearchBar />
 
           <!-- dropdown menu -->
               <div class=" h-full inline-block float-right group">
