@@ -5,6 +5,7 @@ import type { Client } from "src/types/book.type";
     export let data;
 
     let user: Client = data.client;
+    console.log(user);
 
     let fullName: string = user.name;
     // TODO: get from database
@@ -107,7 +108,7 @@ import type { Client } from "src/types/book.type";
 
                 if (result && typeof result === 'string') {
                     uploadedPic = result;
-                    console.log(uploadedPic);
+                    //console.log(uploadedPic);
 
                     //TODO: save to database
                 }
