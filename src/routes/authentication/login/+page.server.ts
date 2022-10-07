@@ -1,4 +1,4 @@
-import { invalid, redirect } from "@sveltejs/kit";
+import { redirect } from "@sveltejs/kit";
 import type { Actions } from "@sveltejs/kit";
 import { auth } from "../../../lib/lucia";
 import { setCookie } from "lucia-sveltekit"

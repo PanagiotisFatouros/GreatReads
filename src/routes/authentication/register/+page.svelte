@@ -1,4 +1,16 @@
 <script>
+	import { browser } from '$app/environment';
+	import { goto } from '$app/navigation';
+
+
+    /** @type {import('./$types').ActionData} */
+    export let form;
+
+    if (form) {
+        if (browser) {
+            goto('/')
+        }
+    }
 
 </script>
 

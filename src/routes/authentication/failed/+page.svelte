@@ -19,7 +19,7 @@
 </script>
 
 <div id="main">
-	<p class="text-primary font-heading text-heading2">Login failed! Please try again</p>
+	<p class="text-primary font-heading text-heading2">Invalid credentials, Please try again</p>
 	<BarLoader color="rgb(255, 102, 99)" size="145" unit="px" duration="1.5s"/>
 </div>
 
