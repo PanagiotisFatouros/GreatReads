@@ -1,13 +1,13 @@
 import { error } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { prismaClient } from '$lib/lucia';
-import type { Prisma, PrismaBook, PrismaCollection } from '@prisma/client';
+import type { PrismaCollection } from '@prisma/client';
 import type { Collection } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }: RequestEvent) {
 	
-    let { id, title, isPublic, upvotes } = await request.json()
+    let { id } = await request.json()
     const collectionId = Number(id) ? parseInt(id) : -1
     if (collectionId == -1 ){
         throw error(400, 'Collection ID is not valid/specified')
@@ -27,14 +27,15 @@ export async function PUT({ request }: RequestEvent) {
         })
 
         if (existingPrismaCollection != null){
+            if (!existingPrismaCollection.isPublic){
+                throw error(400, "attempting to downvote private collection")
+            }
             updatedPrismaCollection = await prismaClient.prismaCollection.update({
                 where:{
                     id: collectionId
                 },
                 data:{
-                    title: title !== undefined? title: existingPrismaCollection.title,
-                    isPublic: isPublic !== undefined? isPublic: existingPrismaCollection.isPublic,
-                    upvotes: upvotes !== undefined? upvotes: existingPrismaCollection.upvotes
+                    upvotes: existingPrismaCollection.upvotes - 1
                 }
             })
 
@@ -57,6 +58,6 @@ export async function PUT({ request }: RequestEvent) {
         }
     }
     catch(err){
-      throw error(400, `Collection not succesfully updated, error: ${err}`)
+      throw error(400, `Collection not successfully downvoted, error: ${err}`)
     }
 }
