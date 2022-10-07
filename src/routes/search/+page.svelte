@@ -8,7 +8,7 @@
 	import { goto } from '$app/navigation';
     
     //let searchText = $page.params.searched ? $page.params.searched : ""
-    let searchText = decodeURI($page.url.pathname.substring(1))
+    //let searchText = decodeURI($page.url.pathname.substring(1))
 	console.log($page.url.search)
 
 	//TODO: not reloading when search text changes
