@@ -23,7 +23,7 @@ test('Valid Book Page (Logged In)', async ({ page, baseURL }) => {
 	await page.goto(`${baseURL}/authentication/login`);
 	await page.fill('input[name="email"]', 'test@testing.com');
 	await page.fill('input[name="password"]', 'test');
-	await page.click('button >> text=Login');
+	await page.click('button >> text=Submit');
 	await page.waitForURL('**/success');
 	await page.goto(`${baseURL}/books/${validBookId}`);
 	await page.waitForURL(`**/${validBookId}`);
