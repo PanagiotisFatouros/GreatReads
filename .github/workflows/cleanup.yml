@@ -2,6 +2,7 @@ name: 'nightly cleanup artifacts'
 on:
   schedule:
     - cron: '0 1 * * *' # Every night at 1am do the cleanup
+  workflow_dispatch:
 
 jobs:
   delete-artifacts:
