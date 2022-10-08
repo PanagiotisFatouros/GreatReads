@@ -1,5 +1,6 @@
 import type { Book } from "./types/book.type";
-import { searchTypes } from "./types/searchTypes.enum";
+import { searchTypes } from "./types/searchTypes.enum.js";
+
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
@@ -82,7 +83,7 @@ function getISBN13(identifiers: any[]){
 
 
 // For google books api search
-export function getCriteria(searchType :searchTypes): string{
+export function getCriteria(searchType: searchTypes): string{
 	switch(searchType) {
 		case searchTypes.books:
 			return "intitle";
