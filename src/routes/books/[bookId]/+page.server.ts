@@ -23,7 +23,7 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 				await fetch(`http://${host}/api/read/books/${bookID}/${session.user.user_id}`)
 			).json();
 
-			console.log(book);
+			// console.log(book);
 
 			return {
 				book: book
