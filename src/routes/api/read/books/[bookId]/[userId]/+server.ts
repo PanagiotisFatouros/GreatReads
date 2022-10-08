@@ -4,6 +4,7 @@ import type { Book, Collection, Review } from 'src/types/book.type';
 import type { Prisma } from '@prisma/client';
 import { prismaClient } from '../../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
+import { readJSONToBook } from '../../../../../../scripts';
 
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
@@ -12,12 +13,13 @@ export async function GET({ params }: RequestEvent) {
 	// Checks to see if existing book is in database,
 
 	let targetGoogleBook: Book;
-	const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(googleBooksId);
+	const response: any = await getBookInfoFromGoogleBooksAPI(googleBooksId);
 	// console.log(restBookInfo)
 
-	if (restBookInfo.error) {
+	if (response.error) {
 		throw error(400, '404 Google Book Does not Exist');
 	} else {
+		const restBookInfo = readJSONToBook(response);
 		// Check if book already in database
 		let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
 			where: { googleBooksId: googleBooksId }
