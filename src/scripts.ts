@@ -1,4 +1,5 @@
 import type { Book } from "./types/book.type";
+import { searchTypes } from "./types/searchTypes.enum";
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
@@ -52,10 +53,44 @@ export function readJSONToBook(jsonOject: any): Book {
 		pageCount: jsonOject.volumeInfo.pageCount,
 		description: jsonOject.volumeInfo.description,
 		genres: jsonOject.volumeInfo.categories,
-		isbn: jsonOject.volumeInfo.industryIdentifiers[0].identifier,
+		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
 		datePublished: jsonOject.volumeInfo.publishedDate,
 		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
 			jsonOject.volumeInfo?.imageLinks?.thumbnail : missingImage
+		
 	};
 	return book;
+}
+
+function getISBN13(identifiers: any[]){
+	let isbn;
+	if (identifiers !== undefined){
+		isbn = identifiers.find((identifier) => 
+		identifier.type === "ISBN_13")?.identifier
+
+		if (isbn === undefined ){
+			isbn = identifiers[0]?.identifier
+
+			if (isbn === undefined){
+				isbn = "-"
+			}
+		}
+	}
+	return isbn
+}
+
+
+
+// For google books api search
+export function getCriteria(searchType :searchTypes): string{
+	switch(searchType) {
+		case searchTypes.books:
+			return "intitle";
+		case searchTypes.authors:
+			return "inauthor";
+		case searchTypes.genres:
+			return "subject";
+		default:
+			return "intitle";
+	}
 }

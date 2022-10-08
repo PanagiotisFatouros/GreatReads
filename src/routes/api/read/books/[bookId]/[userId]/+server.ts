@@ -3,6 +3,7 @@ import { error } from '@sveltejs/kit';
 import type { Book, Collection, Review } from 'src/types/book.type';
 import type { Prisma } from '@prisma/client';
 import { prismaClient } from '../../../../../../lib/lucia';
+import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
@@ -11,7 +12,7 @@ export async function GET({ params }: RequestEvent) {
 	// Checks to see if existing book is in database,
 
 	let targetGoogleBook: Book;
-	const restBookInfo: any = await getBookInfo(googleBooksId);
+	const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(googleBooksId);
 	// console.log(restBookInfo)
 
 	if (restBookInfo.error) {
@@ -22,7 +23,7 @@ export async function GET({ params }: RequestEvent) {
 			where: { googleBooksId: googleBooksId }
 		});
 
-		console.log(existingBookInDatabase);
+		// console.log(existingBookInDatabase);
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
 		let reviews: Review[] = [];
@@ -35,14 +36,16 @@ export async function GET({ params }: RequestEvent) {
 				googleBooksId: googleBooksId
 			};
 			await prismaClient.prismaBook.create({ data: newBookInput });
-			avgRating =
-				restBookInfo.volumeInfo.averageRating == null
-					? 0
-					: Number(restBookInfo.volumeInfo.averageRating);
-			numRating =
-				restBookInfo.volumeInfo.ratingsCount == null
-					? 0
-					: Number(restBookInfo.volumeInfo.ratingsCount);
+			avgRating = 0
+			// avgRating =
+			// 	restBookInfo.volumeInfo.averageRating == null
+			// 		? 0
+			// 		: Number(restBookInfo.volumeInfo.averageRating);
+			numRating = 0
+			// numRating =
+			// 	restBookInfo.volumeInfo.ratingsCount == null
+			// 		? 0
+			// 		: Number(restBookInfo.volumeInfo.ratingsCount);
 		} else {
 			// building reviews
 			const prismaReviews = await prismaClient.prismaReview.findMany({
@@ -60,14 +63,16 @@ export async function GET({ params }: RequestEvent) {
 			});
 
 			if (prismaReviews.length == 0) {
-				avgRating =
-					restBookInfo.volumeInfo.averageRating == null
-						? 0
-						: Number(restBookInfo.volumeInfo.averageRating);
-				numRating =
-					restBookInfo.volumeInfo.ratingsCount == null
-						? 0
-						: Number(restBookInfo.volumeInfo.ratingsCount);
+				avgRating = 0
+				// avgRating =
+				// 	restBookInfo.volumeInfo.averageRating == null
+				// 		? 0
+				// 		: Number(restBookInfo.volumeInfo.averageRating);
+				numRating = 0
+				// numRating =
+				// 	restBookInfo.volumeInfo.ratingsCount == null
+				// 		? 0
+				// 		: Number(restBookInfo.volumeInfo.ratingsCount);
 			} else {
 				avgRating = 0;
 				prismaReviews.forEach((prismaReview) => {
@@ -164,15 +169,16 @@ export async function GET({ params }: RequestEvent) {
 
 		// creating google book object
 		targetGoogleBook = {
-			id: googleBooksId,
-			title: restBookInfo.volumeInfo.title,
-			authors: restBookInfo.volumeInfo.authors,
-			pageCount: restBookInfo.volumeInfo.pageCount,
-			description: restBookInfo.volumeInfo.description,
-			genres: restBookInfo.volumeInfo.categories,
-			isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
-			datePublished: restBookInfo.volumeInfo.publishedDate,
-			imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
+			...restBookInfo,
+			// id: googleBooksId,
+			// title: restBookInfo.volumeInfo.title,
+			// authors: restBookInfo.volumeInfo.authors,
+			// pageCount: restBookInfo.volumeInfo.pageCount,
+			// description: restBookInfo.volumeInfo.description,
+			// genres: restBookInfo.volumeInfo.categories,
+			// isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
+			// datePublished: restBookInfo.volumeInfo.publishedDate,
+			// imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
 
 			// hardcoded fields in api
 			avgRating: avgRating,
@@ -183,18 +189,4 @@ export async function GET({ params }: RequestEvent) {
 		};
 		return new Response(JSON.stringify(targetGoogleBook));
 	}
-}
-
-async function getBookInfo(bookId: String) {
-	const googleBooksApiURL = 'https://www.googleapis.com/books/v1/volumes/';
-	let bookData;
-	await fetch(`${googleBooksApiURL}${bookId}`)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			bookData = data;
-			return bookData;
-		});
-	return bookData;
 }

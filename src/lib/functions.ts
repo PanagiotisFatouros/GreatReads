@@ -1,13 +1,8 @@
+import { readJSONToBook } from "../scripts";
+
 export async function getBookInfoFromGoogleBooksAPI(bookId: String) {
 	const googleBooksApiURL = 'https://www.googleapis.com/books/v1/volumes/';
-	let bookData;
-	await fetch(`${googleBooksApiURL}${bookId}`)
-		.then((response) => {
-			return response.json();
-		})
-		.then((data) => {
-			bookData = data;
-			return bookData;
-		});
-	return bookData;
+	const response = await (await fetch(`${googleBooksApiURL}${bookId}`)).json()
+	console.log(readJSONToBook(response))
+	return readJSONToBook(response);
 }
