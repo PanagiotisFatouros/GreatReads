@@ -41,7 +41,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-		height: 400px;
+		height: 55vh;
 		border-radius: 10px;
 		margin-top: 3vh;
 	}
@@ -74,7 +74,6 @@
 		justify-content: flex-start;
 		flex-direction: column;
 		align-items: center;
-		overflow-y: auto;
 		height: 90%;
 		padding-top: 10px;
 		padding-bottom: 10px;

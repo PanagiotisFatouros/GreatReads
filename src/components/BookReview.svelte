@@ -26,7 +26,7 @@
 		display: flex;
 
 		width: 98%;
-		height: 150px;
+		height: 31%;
 
 		border-radius: 10px;
 		margin-bottom: 10px;
@@ -42,6 +42,7 @@
 		flex-direction: column;
 		justify-content: space-around;
 		width: 90%;
+		padding-bottom: 10px;
 	}
 
 	#comment {
