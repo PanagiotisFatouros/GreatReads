@@ -1,20 +1,24 @@
 <script lang="ts">
+	import { createEventDispatcher } from 'svelte';
+
 	export let show = false;
-	// import genres from API
-	let genres = ['Select Genre...', 'Non-fiction', 'Fantasy', 'Science Fiction'];
-	let genreSelect = genres[0];
-	let pageMin: number;
-	let pageMax: number;
-	let ratingSelect = 0;
+	// import genres from API - change to standard Google Books API filters? Language? Books/magazines?
+	let genres = ['', 'Non-fiction', 'Fantasy', 'Science Fiction'];
+	export let genreSelect = genres[0];
+	export let pageMin: number;
+	export let pageMax: number;
+	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
 	let intWarn = false;
 	let pageWarn = false;
 
+	const dispatch = createEventDispatcher();
+
 	function handleClick() {
-		if (!pageMin) {
+		if (!pageMin && pageMax) {
 			pageMin = 0;
 		}
-		if (!pageMax) {
-			pageMax = 0;
+		if (pageMin && !pageMax) {
+			pageMax = 100000;
 		}
 		if (isNaN(pageMin) || isNaN(pageMax)) {
 			intWarn = true;
@@ -26,6 +30,8 @@
 			intWarn = false;
 			pageWarn = false;
 		}
+		show = false;
+		dispatch('filtering');
 	}
 </script>
 
@@ -61,18 +67,21 @@
 	<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
 
 	<div class="mx-2">
-		<!-- genre selection box -->
-		<div class=" bg-white rounded-full border-solid border-2 border-primary-3 flex my-1">
-			<select
-				bind:value={genreSelect}
-				class="bg-transparent w-full pl-2 cursor-pointer focus:outline-none"
-			>
-				{#each genres as genre}
-					<option value={genre}>
-						{genre}
-					</option>
-				{/each}
-			</select>
+		<div class="flex">
+			<p class="self-center mr-2">Genre:</p>
+			<!-- genre selection box -->
+			<div class=" bg-white rounded-full border-solid border-2 border-primary-3 w-4/5 my-1 justify-self-end">
+				<select
+					bind:value={genreSelect}
+					class="bg-transparent w-full pl-2 cursor-pointer focus:outline-none"
+				>
+					{#each genres as genre}
+						<option value={genre}>
+							{genre}
+						</option>
+					{/each}
+				</select>
+			</div>
 		</div>
 
 		<!-- rating filter -->
@@ -110,7 +119,7 @@
 						/>
 					</svg>
 				{/each}
-				<p class="align-middle mx-1">& up</p>
+				<p class="align-middle">+</p>
 			</label><br />
 		</div>
 		<div class="flex">
@@ -138,7 +147,7 @@
 						/>
 					</svg>
 				{/each}
-				<p class="text-primary-3 font-body text-body2 align-middle mx-1">& up</p>
+				<p class="text-primary-3 font-body text-body2 align-middle">+</p>
 			</label><br />
 		</div>
 
@@ -169,7 +178,6 @@
 
 	<div class="flex justify-center">
 		<button
-			href="null"
 			on:click={() => handleClick()}
 			class="bg-secondary w-28 h-7 rounded-full mt-2 text-white">Filter</button
 		>

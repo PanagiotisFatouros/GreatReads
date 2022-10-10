@@ -33,8 +33,12 @@
 	let books: Book[];
 	let users: Client[];
 
+	// subset of books - based on filters applied
+	let booksShown: Book[];
+
 	$: books = data.books;
 	$: users = data.users;
+	$: booksShown = books;
 
 	let searchTerm: string 
 	$: searchTerm= data.searchString;
@@ -42,6 +46,42 @@
 	let filter = false;
 	let sort = false;
 	$: isOverlayOpen.set(filter || sort);
+
+	// Filter
+	let genreSelect: string;
+	let pageMin: number;
+	let pageMax: number;
+	let ratingSelect: number;
+
+	function handleFilter() {
+		let g: boolean = true;
+		let p: boolean = true;
+		let r: boolean = true;
+		booksShown = [];
+		for (let book of books) {
+			if (genreSelect != '') {
+				if (!book.genres.includes(genreSelect)) {
+					g = false;
+				}
+			}
+			
+			if (pageMin || pageMax) {
+				if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
+					p = false;
+				}
+			} 
+
+			if (ratingSelect != 0) {
+				if ((!book.avgRating) || ((ratingSelect == 1) && (book.avgRating < 4.0)) || ((ratingSelect == 2) && (book.avgRating < 3.0))) {
+					r = false;
+				}
+			}
+
+			if (g && p && r) {
+				booksShown.push(book);
+			}
+		}
+	}
 </script>
 
 {#if isBookSearch}
@@ -92,7 +132,7 @@
 <div class="flex flex-col justify-start w-full">
 	{#if filter && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} />
+			<FilterPanel bind:show={filter} bind:genreSelect={genreSelect} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
 		</div>
 	{/if}
 	{#if sort && $isOverlayOpen}
@@ -103,7 +143,7 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
-	{#each books as book}
+	{#each booksShown as book}
 		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book}/>
 	{/each}
 </div>
