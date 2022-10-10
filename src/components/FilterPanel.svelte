@@ -2,9 +2,6 @@
 	import { createEventDispatcher } from 'svelte';
 
 	export let show = false;
-	// import genres from API - change to standard Google Books API filters? Language? Books/magazines?
-	let genres = ['', 'Non-fiction', 'Fantasy', 'Science Fiction'];
-	export let genreSelect = genres[0];
 	export let pageMin: number;
 	export let pageMax: number;
 	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
@@ -67,23 +64,6 @@
 	<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
 
 	<div class="mx-2">
-		<div class="flex">
-			<p class="self-center mr-2">Genre:</p>
-			<!-- genre selection box -->
-			<div class=" bg-white rounded-full border-solid border-2 border-primary-3 w-4/5 my-1 justify-self-end">
-				<select
-					bind:value={genreSelect}
-					class="bg-transparent w-full pl-2 cursor-pointer focus:outline-none"
-				>
-					{#each genres as genre}
-						<option value={genre}>
-							{genre}
-						</option>
-					{/each}
-				</select>
-			</div>
-		</div>
-
 		<!-- rating filter -->
 		<input
 			type="radio"

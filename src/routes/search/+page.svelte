@@ -48,23 +48,15 @@
 	$: isOverlayOpen.set(filter || sort);
 
 	// Filter
-	let genreSelect: string;
 	let pageMin: number;
 	let pageMax: number;
 	let ratingSelect: number;
 
 	function handleFilter() {
-		let g: boolean = true;
 		let p: boolean = true;
 		let r: boolean = true;
 		booksShown = [];
 		for (let book of books) {
-			if (genreSelect != '') {
-				if (!book.genres.includes(genreSelect)) {
-					g = false;
-				}
-			}
-			
 			if (pageMin || pageMax) {
 				if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
 					p = false;
@@ -77,7 +69,7 @@
 				}
 			}
 
-			if (g && p && r) {
+			if (p && r) {
 				booksShown.push(book);
 			}
 		}
@@ -132,7 +124,7 @@
 <div class="flex flex-col justify-start w-full">
 	{#if filter && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} bind:genreSelect={genreSelect} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
+			<FilterPanel bind:show={filter} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
 		</div>
 	{/if}
 	{#if sort && $isOverlayOpen}
