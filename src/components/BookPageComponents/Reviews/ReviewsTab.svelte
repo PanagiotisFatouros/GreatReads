@@ -10,18 +10,21 @@
 
 	const baseURL = $page.url.origin;
 
-	export let reviews: Review[];
+	export let reviews: Review[] | undefined;
 
 	let userReview: Review | undefined;
 	let otherReviews: Review[] = [];
 
-	reviews.forEach((review) => {
-		if (review.user?.id === user_id) {
-			userReview = review;
-		} else {
-			otherReviews.push(review);
-		}
-	});
+	if (reviews != undefined) {
+		reviews.forEach((review) => {
+			if (review.user?.id === user_id) {
+				userReview = review;
+			} else {
+				otherReviews.push(review);
+			}
+		});
+	}
+	
 
 	async function deleteUserReview() {
 		if (userReview != undefined) {

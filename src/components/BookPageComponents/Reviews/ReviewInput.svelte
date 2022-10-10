@@ -64,13 +64,18 @@
 	async function updateReview() {
 		if (review != undefined && rating != 0 && title != '' && comment != '') {
 			
-			//TODO: update review in database
+			const response = await fetch(`${baseURL}/api/update/review`, {
+				method: 'PUT',
+				body: JSON.stringify({
+					id: review.id,
+					title: title,
+					comment: comment,
+					rating: rating
+				})
+			});
+			//bind response to userReview in ReviewsTab
+			review = await response.json();
 
-
-			review.rating = rating;
-			review.title = title;
-			review.comment = comment;
-			review.isEdited = true;
 
 			//tell Reviews Tab to go back to displaying ReviewCard
 			dispatch('cancel')

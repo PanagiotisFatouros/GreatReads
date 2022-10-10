@@ -54,7 +54,9 @@
 	<div class=" col-span-5 mt-5 mr-3">
 		<div class="flex justify-start items-center flex-wrap">
 			<h1 class=" text-heading1 font-heading text-secondary mr-5">{book.title}</h1>
-			<StarRating rating={book.avgRating} />
+			{#if book.avgRating != undefined}
+				<StarRating rating={book.avgRating} />
+			{/if}
 			<p class=" text-body2 ml-4">{book.numRatings} Reviews</p>
 		</div>
 

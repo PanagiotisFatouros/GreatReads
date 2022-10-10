@@ -3,7 +3,7 @@
 	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
 
-	export let collections: Collection[];
+	export let collections: Collection[] | undefined;
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import { page } from '$app/stores';
@@ -24,7 +24,7 @@
 			
 			let deletedCollection:Collection = await response.json();
 			
-			if (deletedCollection != undefined) {
+			if (deletedCollection != undefined && collections != undefined) {
 				//successful
 				collections = collections.filter((c) => c.id !== selectedCollection!.id);
 				selectedCollection = null;
@@ -50,7 +50,7 @@
 	}
 
 	function displayNewCollection() {
-		if (newCollection != undefined) {
+		if (newCollection != undefined && collections != undefined) {
 			collections.push(newCollection);
 			
 			//trigger refresh
@@ -85,7 +85,7 @@
 		</div>
 
 		<div class="flex flex-col mt-1">
-			{#if collections.length == 0}
+			{#if collections == undefined || collections.length == 0}
 				<p class="mt-3">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
