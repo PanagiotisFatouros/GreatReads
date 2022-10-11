@@ -19,23 +19,27 @@
 
 	let diff = getTimeAgo(review.date);
 
+	let isDeletingReview: boolean = false;
+
 	function showDeleteReviewConfirmation() {
+		isDeletingReview = true;
 		isOverlayOpen.set(true);
 	}
 
 	function cancelDeleteReview() {
+		isDeletingReview = false;
 		isOverlayOpen.set(false);
 	}
 
 	function deleteReview() {
+		isDeletingReview = false;
 		isOverlayOpen.set(false);
-		console.log('dispatching delete');
 
 		dispatch('delete');
 	}
 </script>
 
-{#if $isOverlayOpen}
+{#if isDeletingReview == true && $isOverlayOpen}
 	<Confirmation
 		title="Delete Review"
 		description="Are you sure you want to delete this review? <br/>This can not be undone."
@@ -99,7 +103,7 @@
 			</div>
 			
 		{:else}
-			<VoteButtons />
+			<VoteButtons  />
 		{/if}
 	</div>
 	<p class="text-primary-3 pb-3">{review.comment}</p>

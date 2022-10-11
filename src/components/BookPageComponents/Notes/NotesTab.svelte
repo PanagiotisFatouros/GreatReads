@@ -2,6 +2,7 @@
 	import NotesCollection from './NotesCollection.svelte';
 	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
+	import { createEventDispatcher } from 'svelte';
 
 	export let collections: Collection[] | undefined;
 
@@ -10,6 +11,8 @@
 	import CollectionInput from './CollectionInput.svelte';
 
 	const baseURL: string = $page.url.origin;
+
+	const dispatch = createEventDispatcher()
 
 
 	let newCollection: Collection | undefined = undefined;
@@ -55,6 +58,12 @@
 			
 			//trigger refresh
 			collections = collections;
+
+			if (newCollection.isPublic) {
+				dispatch('newPublicCollection', {
+					collection: newCollection
+				})
+			}
 
 			newCollection = undefined;
 		}

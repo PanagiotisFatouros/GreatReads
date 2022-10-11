@@ -74,7 +74,16 @@
 				})
 			});
 			//bind response to userReview in ReviewsTab
-			review = await response.json();
+			let updatedReview: Review = await response.json();
+
+			if (updatedReview != null) {
+				//update the locally stored user review
+				review.comment = updatedReview.comment;
+				review.title = updatedReview.title;
+				review.isEdited = updatedReview.isEdited;
+				review.upvotes = updatedReview.upvotes;
+				review.rating = updatedReview.rating;
+			}
 
 
 			//tell Reviews Tab to go back to displaying ReviewCard
