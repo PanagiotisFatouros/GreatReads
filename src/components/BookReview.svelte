@@ -9,7 +9,7 @@
 	let diff = getTimeAgo(review.date);
 </script>
 
-<div id="review" class="{displayText ? "displayAll" : ""} bg-primary-1">
+<div id="{displayText ? 'displayAll' : 'review'}" class="bg-primary-1">
 	<div id="cover"><img src={review.img} alt="" /></div>
 	<div id="text">
 		<div class="flex items-center text-secondary">
@@ -38,7 +38,17 @@
 		padding: 8px;
 	}
 
-	.displayAll {
+	#displayAll {
+		display: flex;
+		width: 98%;
+		height: 200px;
+		border-radius: 10px;
+		margin-bottom: 10px;
+		padding: 8px;
+		overflow-y: auto;
+	}
+
+	#allText {
 		overflow-y: auto;
 	}
 	#title {
@@ -52,6 +62,7 @@
 		justify-content: space-around;
 		width: 90%;
 		padding-bottom: 10px;
+		overflow-y: auto;
 	}
 
 	#comment {
