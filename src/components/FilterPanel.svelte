@@ -11,6 +11,7 @@
 	const dispatch = createEventDispatcher();
 
 	function handleClick() {
+		// check validity of page numbers
 		if (!pageMin && pageMax) {
 			pageMin = 0;
 		}

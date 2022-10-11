@@ -74,6 +74,8 @@
 			}
 		}
 	}
+
+	// Sort
 </script>
 
 {#if isBookSearch}
@@ -129,7 +131,7 @@
 	{/if}
 	{#if sort && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sort} />
+			<SortPanel bind:show={sort} bind:booksShown={booksShown} />
 		</div>
 	{/if}
 </div>
