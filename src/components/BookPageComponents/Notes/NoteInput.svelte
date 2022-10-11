@@ -65,15 +65,8 @@
                 alert("Page Number must be positive");
             }
             else {
-                const response = await fetch(`${baseURL}/api/update/note`, {
-                    method: 'PUT',
-                    body: JSON.stringify({
-                        id: note.id,
-                        title: title,
-                        pageNum: pageNum,
-                        content: noteContent
-                    })
-                });
+                //TODO: update in database
+                //const newNote: Note = await response.json();
 
                 note.pageNum = pageNum;
                 note.title = title;

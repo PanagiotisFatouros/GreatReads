@@ -25,8 +25,6 @@
 		});
 	}
 	
-	console.log(user_id);
-	console.log(userReview);
 
 	async function deleteUserReview() {
 		if (userReview != undefined) {
@@ -37,8 +35,6 @@
 			let deletedReview: Review = await response.json();
 			if (deletedReview != undefined) {
 				//successful
-				//remove from local reviews
-				reviews?.splice(reviews.indexOf(userReview), 1)
 				userReview = undefined;
 			}
 			else {

@@ -1,24 +1,19 @@
 <script lang="ts">
 	//TODO:  - changing vote from up to down or vice versa should change count by 2 otherwise its just resetting to what it was before
 	//       - clicking same button again should undo vote
-	//       - pass in rating from parent component and dispatch event when changed
-
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
+	//       - pass in voteCount from parent component and dispatch event when changed
 
 	let colourUp: string = 'text-primary-3';
 	let colourDown: string = 'text-primary-3';
 	let hoverable: string = 'hover:text-accent';
 	let clickedUp: boolean = false;
 	let clickedDown: boolean = false;
-	
-	export let rating: number = 0;
+	let voteCount: number = 0; // get from database
 
 	// User can vote at most once in either direction, and can change their vote
 	function handleClickUp() {
 		if (!clickedUp) {
-			rating++;
+			voteCount++;
 			colourUp = 'text-accent';
 			colourDown = 'text-primary-3';
 			clickedUp = true;
@@ -28,7 +23,7 @@
 	}
 	function handleClickDown() {
 		if (!clickedDown) {
-			rating--;
+			voteCount--;
 			colourDown = 'text-accent';
 			colourUp = 'text-primary-3';
 			clickedDown = true;
@@ -57,7 +52,7 @@
 		</svg>
 	</div>
 
-	<p class="text-primary-3 font-body text-center leading-tight">{rating}</p>
+	<p class="text-primary-3 font-body text-center leading-tight">{voteCount}</p>
 
 	<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 	<div class="w-5 h-5" style="cursor:pointer" on:click|stopPropagation={() => handleClickDown()}>
