@@ -7,6 +7,7 @@
 	import type { Book, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
+	import { handleFilter } from '../../components/FilterPanel.svelte';
     
     //let searchText = $page.params.searched ? $page.params.searched : ""
     //let searchText = decodeURI($page.url.pathname.substring(1))
@@ -43,36 +44,17 @@
 	let searchTerm: string 
 	$: searchTerm= data.searchString;
 
-	let filter = false;
-	let sort = false;
-	$: isOverlayOpen.set(filter || sort);
+	let filterOn = false;
+	let sortOn = false;
+	$: isOverlayOpen.set(filterOn || sortOn);
 
 	// Filter
 	let pageMin: number;
 	let pageMax: number;
 	let ratingSelect: number;
 
-	function handleFilter() {
-		let p: boolean = true;
-		let r: boolean = true;
-		booksShown = [];
-		for (let book of books) {
-			if (pageMin || pageMax) {
-				if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
-					p = false;
-				}
-			} 
-
-			if (ratingSelect != 0) {
-				if ((!book.avgRating) || ((ratingSelect == 1) && (book.avgRating < 4.0)) || ((ratingSelect == 2) && (book.avgRating < 3.0))) {
-					r = false;
-				}
-			}
-
-			if (p && r) {
-				booksShown.push(book);
-			}
-		}
+	function filter() {
+		booksShown = handleFilter(books);
 	}
 
 	// Sort
@@ -84,7 +66,7 @@
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
 		<!-- filter button -->
-		<div style="cursor:pointer" on:click={() => (filter = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (filterOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -102,7 +84,7 @@
 			<p class="ml-1 mr-3">Filter</p>
 		</div>
 		<!-- sort button -->
-		<div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -124,14 +106,14 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filter && $isOverlayOpen}
+	{#if filterOn && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
+			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
 		</div>
 	{/if}
-	{#if sort && $isOverlayOpen}
+	{#if sortOn && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sort} bind:booksShown={booksShown} />
+			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} />
 		</div>
 	{/if}
 </div>

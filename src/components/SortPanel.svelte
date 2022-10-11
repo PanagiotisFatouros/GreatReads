@@ -17,10 +17,6 @@
 		booksShown = booksShown;
 		show = false;
 	}
-
-	function sortBy(a: Book, b: Book, property: string) {
-		
-	}
 </script>
 
 <div
