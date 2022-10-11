@@ -30,7 +30,7 @@
 	</div>
 	<div id="reviews-container">
 		{#each reviews as review}
-			<BookReview {review} />
+			<BookReview {review} displayText={false}/>
 		{/each}
 	</div>
 </div>

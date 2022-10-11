@@ -1,11 +1,65 @@
 <script lang="ts">
     import BookReview from "../../../../components/BookReview.svelte";
-    import FilterPanel from "../../../../components/FilterPanel.svelte";
     import SortPanel from "../../../../components/SortPanel.svelte";
     import { isOverlayOpen } from "../../../../stores/OverlayStore";
    
     let reviews = [
 			{
+				id: 123,
+				title: 'Worst Book Ever',
+				comment:
+					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This This sucks This sucks This sucks This sucks This sucks This sucks This sucks This',
+				date: new Date(),
+				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+				rating: 3,
+				upvotes: 10,
+				isEdited: false
+			},
+            {
+				id: 123,
+				title: 'Worst Book Ever',
+				comment:
+					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
+				date: new Date(),
+				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+				rating: 3,
+				upvotes: 10,
+				isEdited: false
+			},
+            {
+				id: 123,
+				title: 'Worst Book Ever',
+				comment:
+					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
+				date: new Date(),
+				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+				rating: 3,
+				upvotes: 10,
+				isEdited: false
+			},
+            {
+				id: 123,
+				title: 'Worst Book Ever',
+				comment:
+					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
+				date: new Date(),
+				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+				rating: 3,
+				upvotes: 10,
+				isEdited: false
+			},
+            {
+				id: 123,
+				title: 'Worst Book Ever',
+				comment:
+					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
+				date: new Date(),
+				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
+				rating: 3,
+				upvotes: 10,
+				isEdited: false
+			},
+            {
 				id: 123,
 				title: 'Worst Book Ever',
 				comment:
@@ -61,23 +115,22 @@
 				isEdited: false
 	}];
 
+    const clientID = 1;
+    const clientName = "Dean Coleman"
+
     let sort = false;
     $: isOverlayOpen.set(sort);
 </script>
 
     <div class="mt-6 mx-8" id="header">
         <div class="text-primary-3 text-heading2 font-heading flex items-center">
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-                class="w-6 h-6 mr-1 cursor-pointer"
-            >
+            <a href="/profile/{clientID}">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-            All Reviews
+            </svg>                  
+            </a>
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            {clientName}'s Reviews
         </div>
         <hr class=" border-1 border-primary-3 my-3" />
         <div class="text-primary-3 text-heading3 font-heading flex">
@@ -113,7 +166,7 @@
 <div id="container">
     <div id="main">
         {#each reviews as rev}
-            <BookReview review={rev}/>
+            <BookReview review={rev} displayText={true}/>
         {/each}
     </div>
 </div>
@@ -124,13 +177,16 @@
         flex-direction: column;
         align-items: center;
         margin-top: 1%;
+        margin-left: 15px;
+        margin-right: 15px;
     }
     #main {
         display: flex;
         flex-direction: column;
+        justify-content: flex-start;
         align-items: center;
         width: 100%;
-        height: 80vh;
+        overflow-y: auto;
     }
 </style>
 
