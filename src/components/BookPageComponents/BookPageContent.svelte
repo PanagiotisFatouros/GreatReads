@@ -11,16 +11,20 @@
 
 	// TODO: changed based on if book is already saved or not
 	let selectedTab: Tabs = Tabs.reviews;
+
+	function addToPublicCollections(event:any) {
+		book.publicNotes?.push(event.detail.collection);
+	}
 </script>
 
 <BookTabSelection bind:selectedTab />
 
 <div class=" flex justify-center">
 	{#if selectedTab === Tabs.reviews}
-		<ReviewsTab reviews={book.reviews} />
+		<ReviewsTab bind:reviews={book.reviews} />
 	{:else if selectedTab === Tabs.notes}
-		<NotesTab collections={book.userNotes} />
+		<NotesTab bind:collections={book.userNotes} on:newPublicCollection={addToPublicCollections} />
 	{:else}
-		<PublicNotesTab collections={book.publicNotes} />
+		<PublicNotesTab bind:collections={book.publicNotes} />
 	{/if}
 </div>
