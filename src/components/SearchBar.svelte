@@ -3,11 +3,11 @@
 	export let placeholder: string = '';
 </script>
 
-<div class=" flex bg-primary-1 rounded-full w-full py-1 px-2">
+<div class="flex bg-primary-1 rounded-full w-full py-1 px-2 opacity-80">
 	<input
 		type="text"
 		bind:value={searchText}
-		class=" bg-transparent w-full focus:outline-none px-2"
+		class="font-heading bg-transparent w-full focus:outline-none px-2"
 		{placeholder}
 	/>
 
@@ -19,7 +19,7 @@
 			viewBox="0 0 24 24"
 			stroke-width="1.5"
 			stroke="currentColor"
-			class="w-6 h-6 text-secondary"
+			class="w-6 h-6 text-primary-3"
 		>
 			<path
 				stroke-linecap="round"

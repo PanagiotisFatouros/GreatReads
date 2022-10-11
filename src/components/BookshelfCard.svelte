@@ -1,15 +1,20 @@
-<script>
-	let bookshelf = {
-		name: '20 Characters Max',
-		books: [
-			{
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			}
-		]
-	};
+<script lang='ts'>
+	import type {Bookshelf} from '../types/book.type'
+	import { goto } from "$app/navigation";
+
+	// let bookshelf = {
+	// 	name: '20 Characters Max',
+	// 	books: [
+	// 		{
+	// 			img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
+	// 		}
+	// 	]
+	// };
+	export let bookshelf: Bookshelf;
+	
 </script>
 
-<div id="card" class="bg-primary-3">
+<div id="card" on:click={() => goto(`/library/bookshelves/${bookshelf.id}`)} class="bg-primary-3 cursor-pointer hover:opacity-70">
 	<div id="Header" class="bg-secondary">
 		<span>{bookshelf.name}</span>
 		<svg
@@ -24,9 +29,21 @@
 			<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
 		</svg>
 	</div>
-	<div id="Book1" class="bg-primary-3"><img src={bookshelf.books[0].img} alt="" /></div>
-	<div id="Book2" class="bg-primary-3"><img src={bookshelf.books[0].img} alt="" /></div>
-	<div id="Book3" class="bg-primary-3" />
+	<div id="Book1" class="bg-primary-3">
+		{#if bookshelf.books.length >= 1}
+		<img src={bookshelf.books[0].imageURL} alt="" />
+		{/if}
+	</div>
+	<div id="Book2" class="bg-primary-3">
+		{#if bookshelf.books.length >= 2}
+		<img src={bookshelf.books[1].imageURL} alt="" />
+		{/if}
+	</div>
+	<div id="Book3" class="bg-primary-3">
+		{#if bookshelf.books.length >= 3}
+		<img src={bookshelf.books[2].imageURL} alt="" />
+		{/if}
+	</div>
 	<div id="Footer" class="bg-secondary" />
 </div>
 

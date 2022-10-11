@@ -7,45 +7,12 @@
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import { page } from '$app/stores';
-	import { getSession } from 'lucia-sveltekit/client';
+	import CollectionInput from './CollectionInput.svelte';
 
-	const session = getSession();
-	const user_id = $session?.user.user_id;
-
-	const bookId = $page.params.bookId;
 	const baseURL: string = $page.url.origin;
 
-	let newCollectionTitle = '';
-	let isPublic = false;
 
-	async function createNewCollection() {
-		//TODO: check string is not empty and add to database
-		// alert(`Title: ${newCollectionTitle}, isPublic: ${isPublic}`);
-
-		//remove overlay
-		isOverlayOpen.set(false);
-
-		const response = await fetch(`${baseURL}/api/create/collection/${bookId}`, {
-			method: 'POST',
-			body: JSON.stringify({
-				title: newCollectionTitle,
-				userId: user_id,
-				isPublic: isPublic
-			})
-		});
-
-		//reset
-		newCollectionTitle = '';
-		isPublic = false;
-
-		const newCollection: Collection = await response.json();
-		console.log(newCollection);
-
-		collections.push(newCollection);
-		//trigger refresh
-		collections = collections;
-	}
-
+	let newCollection: Collection | undefined = undefined;
 	let selectedCollection: Collection | null = null;
 
 	async function deleteCollection() {
@@ -82,6 +49,17 @@
 		selectedCollection = collection;
 	}
 
+	function displayNewCollection() {
+		if (newCollection != undefined) {
+			collections.push(newCollection);
+			
+			//trigger refresh
+			collections = collections;
+
+			newCollection = undefined;
+		}
+	}
+
 	$: collections;
 </script>
 
@@ -89,46 +67,12 @@
 	<!-- TODO: maybe move to new component -->
 	<!-- show form to create new collection -->
 	{#if $isOverlayOpen && selectedCollection == null}
-		<form
-			on:submit={createNewCollection}
-			class=" bg-white fixed z-10 top-1/2 left-1/2 w-96 flex flex-col p-3 rounded-2xl"
-			id="collectionForm"
-		>
-			<h2 class=" text-secondary">New Notes Collection</h2>
+		<CollectionInput bind:collection={newCollection} on:newCollection={displayNewCollection}/>
 
-			<input
-				bind:value={newCollectionTitle}
-				type="text"
-				placeholder="Title..."
-				class=" standard_input my-2"
-			/>
-
-			<div class="flex justify-between text-body2 space-x-2 mt-1 w-full items-center">
-				<!-- TODO: replace with Flowbite toggle - wasn't working -->
-				<div class="flex items-center space-x-3 ml-1">
-					<label for="publicCheckbox" class="text-body1 font-body">Make Public</label>
-					<input
-						type="checkbox"
-						id="publicCheckbox"
-						bind:checked={isPublic}
-						class=" text-accent rounded-sm"
-					/>
-				</div>
-
-				<div class="">
-					<button
-						on:click={() => isOverlayOpen.set(false)}
-						class=" btn bg-primary-1 rounded-full px-2"><p>Cancel</p></button
-					>
-					<button type="submit" class="btn bg-accent text-white rounded-full px-2"
-						><p>Create</p></button
-					>
-				</div>
-			</div>
-		</form>
 	{:else if selectedCollection != null}
 		<!-- show selected collection -->
 		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} />
+
 	{:else}
 		<!-- show list of collections -->
 		<div class=" mt-3 flex">
@@ -172,8 +116,3 @@
 	{/if}
 </div>
 
-<style>
-	#collectionForm {
-		transform: translate(-50%, -50%);
-	}
-</style>

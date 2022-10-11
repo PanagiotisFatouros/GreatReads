@@ -1,9 +1,13 @@
+import type { Book } from "./types/book.type";
+import { searchTypes } from "./types/searchTypes.enum.js";
+
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
 const DAY = HOUR * 24;
 const WEEK = DAY * 7;
 const MONTH = DAY * 30;
 const YEAR = DAY * 365;
+const missingImage = "https://www.lostbookproductions.com/wp-content/uploads/2019/01/logo-lost-book-lg.png"
 
 export function getTimeAgo(date: Date) {
 	if (typeof date === 'string') {
@@ -36,4 +40,58 @@ export function getTimeAgo(date: Date) {
 	const count = Math.floor(secondsAgo / divisor);
 
 	return `${count} ${unit}${count > 1 ? 's' : ''} ago`;
+}
+
+export function readGoogleBooksResponse(jsonOject: any): Book[] {
+	return jsonOject.items.map(readJSONToBook);
+}
+
+export function readJSONToBook(jsonOject: any): Book {
+	let book: Book = {
+		id: jsonOject.id,
+		title: jsonOject.volumeInfo.title,
+		authors: jsonOject.volumeInfo.authors,
+		pageCount: jsonOject.volumeInfo.pageCount,
+		description: jsonOject.volumeInfo.description,
+		genres: jsonOject.volumeInfo.categories,
+		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
+		datePublished: jsonOject.volumeInfo.publishedDate,
+		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
+			jsonOject.volumeInfo?.imageLinks?.thumbnail : missingImage
+		
+	};
+	return book;
+}
+
+function getISBN13(identifiers: any[]){
+	let isbn;
+	if (identifiers !== undefined){
+		isbn = identifiers.find((identifier) => 
+		identifier.type === "ISBN_13")?.identifier
+
+		if (isbn === undefined ){
+			isbn = identifiers[0]?.identifier
+
+			if (isbn === undefined){
+				isbn = "-"
+			}
+		}
+	}
+	return isbn
+}
+
+
+
+// For google books api search
+export function getCriteria(searchType: searchTypes): string{
+	switch(searchType) {
+		case searchTypes.books:
+			return "intitle";
+		case searchTypes.authors:
+			return "inauthor";
+		case searchTypes.genres:
+			return "subject";
+		default:
+			return "intitle";
+	}
 }
