@@ -1,5 +1,6 @@
 <script lang='ts'>
 import type { Client } from "src/types/book.type";
+import { BlobServiceClient } from "@azure/storage-blob";
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -10,6 +11,13 @@ import type { Client } from "src/types/book.type";
     let fullName: string = user.name;
     // TODO: get from database
     let email: string = "user@gmail.com";
+
+    // Create connection to blob storage
+    let containerName = "profile-photos";
+    let AZURE_STORAGE_CONNECTION_STRING: string = "DefaultEndpointsProtocol=https;AccountName=greatreadsblobstorage;AccountKey=b8DpLC3HoaRgip+rjzn2RcjRXw4fed4vEqTC6jRSQcFeu+HApYy9OjCtg3GHyuV0Fva49FAtvtEi+AStndok2g==;EndpointSuffix=core.windows.net";
+    const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
+    const containerClient = blobServiceClient.getContainerClient(containerName);
+
 
     const hiddenPassword = '************';
     let password: string = hiddenPassword;
@@ -88,6 +96,13 @@ import type { Client } from "src/types/book.type";
     let fileInput: HTMLInputElement;
     let uploadedPic: string = '';
 
+    async function uploadFileToStorage(file: string) {
+       let blobClient = containerClient.getBlockBlobClient(user.id);
+       console.log(`\nUploading to Azure storage as blob\n\tname: ${user.id}:\n\tURL: ${blobClient.url}`);
+       let uploadResponse = await blobClient.upload(file, file.length);
+       console.log('\n Upload of image was succesful: requestId: ${uploadResponse.requestId}');
+    }
+
     function handleFileSelected(event) {
         let image = event.target?.files[0];
         //console.log(image);
@@ -108,9 +123,8 @@ import type { Client } from "src/types/book.type";
 
                 if (result && typeof result === 'string') {
                     uploadedPic = result;
-                    //console.log(uploadedPic);
+                    uploadFileToStorage(uploadedPic);
 
-                    //TODO: save to database
                 }
             }
         }
