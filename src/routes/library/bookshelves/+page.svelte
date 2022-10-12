@@ -5,6 +5,7 @@
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import type { Bookshelf, Book } from 'src/types/book.type';
 	import { getSession } from 'lucia-sveltekit/client';
+	import {goto} from '$app/navigation'
 	
 
 	let addBookshelf = false;
@@ -19,7 +20,8 @@
 
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading flex items-center">
-		<svg
+		<button on:click={() => goto('/library')}>
+			<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
@@ -29,6 +31,8 @@
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
 		</svg>
+		</button>
+		
 		Bookshelves
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />

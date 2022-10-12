@@ -8,7 +8,7 @@ import { auth } from '$lib/lucia';
 export async function GET({ request, params }: RequestEvent) {
 	
     try {
-        console.log(request)
+        //console.log(request)
 
         //const session = await auth.validateRequest(request);
         //console.log(session)

@@ -33,7 +33,7 @@
     {#if loggedIn}
        <div id="rightNav" class="bg-primary-3 flex justify-around content-center space-x-2">
           <ul class="flex justify-around">
-            <li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/library/bookshelves" class=" w-full h-full px-3 flex justify-center items-center">My Library</a></li>
+            <li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/library" class=" w-full h-full px-3 flex justify-center items-center">My Library</a></li>
           </ul>
 
           <!-- dropdown menu -->
