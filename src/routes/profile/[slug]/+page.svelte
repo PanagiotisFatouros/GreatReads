@@ -123,9 +123,10 @@
 		width: 70%;
 	}
 	#profilePic {
-		height: 30%;
+		height: 40%;
 		width: auto;
 		border-radius: 50%;
+		border: 2px solid #424C55;
 	}
 
 	#bio {

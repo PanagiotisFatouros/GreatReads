@@ -25,7 +25,7 @@
 	<div id="books-container">
 		{#each bookshelf.books as book}
 			<div class="book">
-				<imageURL src={book.imageURL} alt="Book Cover"/>
+				<img src={book.imageURL} alt="Book Cover"/>
 				<p id="title" class="text-primary-1 text-xs font-light">{book.title}</p>
 			</div>
 		{/each}
@@ -40,6 +40,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		border-radius: 10px;
+		box-shadow: 5px 5px 5px gray;
 	}
 
 	#header {
@@ -68,7 +69,7 @@
 	#books-container {
 		display: flex;
 		justify-content: flex-start;
-		padding: 10px;
+		padding: 5px 10px 5px 10px;
 	}
 
 	.book {
@@ -83,10 +84,11 @@
 
 	#title {
 		text-align: center;
-		margin-top: 5px;
+		margin-top: 2px;
 		display: -webkit-box;
 		overflow: hidden;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
+
 	}
 </style>

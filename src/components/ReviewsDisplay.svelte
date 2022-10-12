@@ -44,15 +44,14 @@
 		height: 55vh;
 		border-radius: 10px;
 		margin-top: 3vh;
+		box-shadow: 5px 5px 5px gray;
 	}
 
 	#header {
 		display: flex;
 		justify-content: space-between;
 		width: 100%;
-		height: 10%;
-		padding-top: 4px;
-		padding-bottom: 4px;
+		height: 8%;
 		border-radius: 10px 10px 0 0;
 		color: white;
 		font-weight: 300;
@@ -74,8 +73,8 @@
 		justify-content: flex-start;
 		flex-direction: column;
 		align-items: center;
-		height: 90%;
+		height: 92%;
 		padding-top: 10px;
-		padding-bottom: 10px;
+		padding-bottom: 5px;
 	}
 </style>

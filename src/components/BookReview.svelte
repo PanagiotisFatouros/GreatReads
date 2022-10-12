@@ -13,14 +13,14 @@
 	<div id="cover"><img src={review.img} alt="" /></div>
 	<div id="text">
 		<div class="flex items-center text-secondary">
-			<h2 id="title">{review.title}</h2>
+			<h2 id="title" class="text-body2">{review.title}</h2>
 			<StarRating rating={review.rating} showRating={false} />
 		</div>
 		<p class="text-primary-3 text-body2 font-body">{diff}</p>
 		{#if (displayText == true)}
 			<p id="allText" class="text-primary-3">{review.comment}</p>
 		{:else}
-			<p id="comment" class="text-primary-3">{review.comment}</p>
+			<p id="comment" class="text-primary-3 text-body2">{review.comment}</p>
 		{/if}
 	</div>
 </div>
@@ -68,7 +68,7 @@
 	#comment {
 		display: -webkit-box;
 		overflow: hidden;
-		-webkit-line-clamp: 1;
+		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
 
