@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Client } from '../../../types/book.type';
+	import type { Bookshelf, Client } from '../../../types/book.type';
 	import BooksDisplay from '../../../components/BooksDisplay.svelte';
 	import ProfileStatistics from '../../../components/ProfileStatistics.svelte';
 	import ReviewsDisplay from '../../../components/ReviewsDisplay.svelte';
@@ -46,6 +46,44 @@
 		bio: "My name is Bob; I'm a avid reader, and lover of non-fiction. My favourite genres of book include literature and sci-fi. When I'm not reading, you will find me in the forest enjoying nature, or kayaking in the moutains.",
 		name: 'Dean Coleman'
 	};
+
+	let currentlyReading: Bookshelf = {
+		name: "Currently Reading",
+		id: 1,
+		isDeletable: false,
+		creationDate: new Date(),
+		user: user1,
+		books: [{
+			id: "1",
+			title: "Hello",
+			authors: ["Bob Marley"],
+			pageCount: 150,
+			genres: ["Sci-fi"],
+			isbn: "9780439023481",
+			datePublished: "23/2/2021",
+			imageURL: "https://books.google.com/books/content?id=buc0AAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+		},
+		{
+			id: "1",
+			title: "Hello",
+			authors: ["Bob Marley"],
+			pageCount: 150,
+			genres: ["Sci-fi"],
+			isbn: "9780439023481",
+			datePublished: "23/2/2021",
+			imageURL: "https://books.google.com/books/content?id=buc0AAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+		},
+		{
+			id: "1",
+			title: "Hello",
+			authors: ["Bob Marley"],
+			pageCount: 150,
+			genres: ["Sci-fi"],
+			isbn: "9780439023481",
+			datePublished: "23/2/2021",
+			imageURL: "https://books.google.com/books/content?id=buc0AAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+		}],
+	}
 </script>
 
 <div id="page">
@@ -56,7 +94,7 @@
 		<ProfileStatistics />
 	</div>
 	<div id="right">
-		<BooksDisplay />
+		<BooksDisplay bookshelf={currentlyReading}/>
 		<!-- "ignore error: will fix itself when using type 'review' instead of placeholder values" -->
 		{#if user1.reviews}
 			<ReviewsDisplay name={user1.name} reviews={user1.reviews} clientID={user1.id}/>

@@ -37,6 +37,7 @@
 			type="text"
 			bind:value={name}
 			class="w-full h-6 mr-2 border-primary-3 border-2 rounded-full p-1"
+			maxlength=20
 		/>
 	</div>
 

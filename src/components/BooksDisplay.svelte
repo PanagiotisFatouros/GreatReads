@@ -1,38 +1,13 @@
-<script>
-	let display = {
-		name: 'Currently Reading (Shows maximum 8)',
-		books: [
-			{
-				name: 'A tale of two cities and two cities and two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			},
-			{
-				name: 'A tale of two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			},
-			{
-				name: 'A tale of two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			},
-			{
-				name: 'A tale of two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			},
-			{
-				name: 'A tale of two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			},
-			{
-				name: 'A tale of two cities',
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api'
-			}
-		]
-	};
+<script lang="ts">
+	import type { Bookshelf } from "../types/book.type"
+	
+	export let bookshelf:Bookshelf;
+
 </script>
 
 <div id="display" class="bg-primary-3">
 	<div id="header" class="bg-secondary">
-		<p id="header-left">{display.name}</p>
+		<p id="header-left">{bookshelf.name}</p>
 		<span id="header-right">
 			<p>See all</p>
 			<svg
@@ -48,10 +23,10 @@
 		</span>
 	</div>
 	<div id="books-container">
-		{#each display.books as book}
-			<div id="book">
-				<img src={book.img} alt="Book Cover" />
-				<p id="title" class="text-primary-1 text-xs font-light">{book.name}</p>
+		{#each bookshelf.books as book}
+			<div class="book">
+				<imageURL src={book.imageURL} alt="Book Cover"/>
+				<p id="title" class="text-primary-1 text-xs font-light">{book.title}</p>
 			</div>
 		{/each}
 	</div>
@@ -96,7 +71,7 @@
 		padding: 10px;
 	}
 
-	#book {
+	.book {
 		width: 8.5%;
 		display: flex;
 		flex-direction: column;
