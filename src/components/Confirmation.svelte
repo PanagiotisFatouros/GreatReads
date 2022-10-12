@@ -16,7 +16,7 @@
 </script>
 
 <div
-	class=" fixed bg-white z-10 top-1/2 left-1/2 flex flex-col items-center rounded-2xl py-4 px-4 self-center"
+	class=" fixed bg-white z-10 top-1/2 left-1/2 flex flex-col items-center rounded-2xl py-6 px-6 self-center"
 	id="confirmation"
 >
 	<h2 class=" text-accent self-center mb-2">{title}</h2>

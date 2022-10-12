@@ -19,6 +19,8 @@ export async function load({ request, url }: ServerLoadEvent) {
 
             let collections: Collection[] = await (await fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`)).json()
 
+			console.log(bookshelves)
+
             return {
                 bookshelves: bookshelves,
                 collections: collections
@@ -32,6 +34,6 @@ export async function load({ request, url }: ServerLoadEvent) {
 	} catch (err) {
 		console.log(err);
 		//not authenticated
-		//throw redirect(307, '/authentication');
+		throw redirect(307, '/authentication');
 	}
 }

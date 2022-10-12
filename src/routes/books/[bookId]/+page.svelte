@@ -2,9 +2,11 @@
 	import StarRating from '../../../components/StarRating.svelte';
 	import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
+	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
+	import { isOverlayOpen } from '../../../stores/OverlayStore';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book } from '../../../types/book.type';
+	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
 	// import { browser } from '$app/environment';
 
@@ -12,9 +14,13 @@
 	export let data;
 
 	let book: Book = data.book;
+	let bookshelves: Bookshelf[] = data.bookshelves
+	console.log(bookshelves)
 
+	let isSavingBook: boolean = false
 	function saveBook() {
-		//TODO: save book to user's bookshelf
+		isSavingBook = true;
+		isOverlayOpen.set(true)
 	}
 
 	function convertToString(val: any) {
@@ -24,6 +30,10 @@
 		return '';
 	}
 </script>
+
+{#if isSavingBook}
+<SaveToBookshelf bookshelves={bookshelves} bookId={book.id} bind:isShowing={isSavingBook} />
+{/if}
 
 <!-- {#await bookPromise} -->
 <!-- <h1>Loading Book</h1>  -->

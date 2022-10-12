@@ -27,6 +27,6 @@ export async function load({ request, url }: ServerLoadEvent) {
 	} catch (err) {
 		console.log(err);
 		//not authenticated
-		//throw redirect(307, '/authentication');
+		throw redirect(307, '/authentication');
 	}
 }

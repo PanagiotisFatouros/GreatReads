@@ -21,6 +21,8 @@ export type Book = {
 
 	userNotes?: Collection[];
 	publicNotes?: Collection[];
+
+	savedBookshelfIDs?: number[];
 };
 
 export type Client = {
@@ -83,6 +85,6 @@ export type Bookshelf = {
 	name: string;
 	isDeletable: boolean;
 	creationDate: Date;
-	user: Client;
-	books: Book[]
+	user?: Client;
+	books?: Book[]
 }
