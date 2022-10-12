@@ -65,7 +65,7 @@
                 alert("Page Number must be positive");
             }
             else {
-                const response = await fetch(`${baseURL}/api/update/note`, {
+                await fetch(`${baseURL}/api/update/note`, {
                     method: 'PUT',
                     body: JSON.stringify({
                         id: note.id,

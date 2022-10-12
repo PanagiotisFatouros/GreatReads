@@ -60,7 +60,7 @@
         if (collection != undefined) {
             //TODO: update in database
 
-            const response = await fetch(`${baseURL}/api/update/collection`, {
+            await fetch(`${baseURL}/api/update/collection`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     id: collection.id,
