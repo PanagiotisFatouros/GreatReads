@@ -79,7 +79,7 @@
 
 	{:else if selectedCollection != null}
 		<!-- show selected collection -->
-		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} />
+		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} on:update />
 
 	{:else}
 		<!-- show list of collections -->

@@ -103,6 +103,13 @@
 		}
 	}
 
+	function onUpdateCollection() {
+		triggerRefresh();
+		dispatch('update', {
+			collection: collection
+		})
+	}
+
 	// to update the ui when a note is added
 	$: collection?.notes?.sort((note1, note2) => note1.pageNum - note2.pageNum);
 </script>
@@ -122,7 +129,7 @@
 		on:confirm={deleteNote}
 	/>
 {:else if $isOverlayOpen && editingCollection && collection != null}
-	<CollectionInput collection={collection} on:cancel={() => editingCollection = false} on:update={triggerRefresh}/>
+	<CollectionInput collection={collection} on:cancel={() => editingCollection = false} on:update={onUpdateCollection}/>
 {/if}
 
 <div class="flex flex-col">
