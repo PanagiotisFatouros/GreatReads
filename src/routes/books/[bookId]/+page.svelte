@@ -2,7 +2,7 @@
 	import StarRating from '../../../components/StarRating.svelte';
 	import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
-	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
+	import { goto } from '$app/navigation';
 
 	import type { Book } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
@@ -12,6 +12,7 @@
 	export let data;
 
 	let book: Book = data.book;
+	let similarBooks: Book[] = data.books;
 
 	function saveBook() {
 		//TODO: save book to user's bookshelf
@@ -70,9 +71,9 @@
 		<hr class=" border-1 border-primary-3" />
 
 		<div class=" space-y-3 mt-3">
-			<!-- TODO: add a loop showing all books -->
-			<AbbreviatedBookCard />
-			<AbbreviatedBookCard />
+			{#each similarBooks.slice(0,8) as book}
+				<AbbreviatedBookCard on:click={() => goto(`/books/${book.id}`)} book={book} />
+			{/each}
 		</div>
 	</div>
 </div>
