@@ -1,20 +1,14 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
 	import type { Book } from '../types/book.type';
 
 	export let show = false;
-	export let pageMin: number;
-	export let pageMax: number;
+	export let pageMin: number = 0;
+	export let pageMax: number = 100000;
 	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
 	export let books: Book[];
 	export let booksShown: Book[];
-	let booksShown1: Book[] = [];
 	let intWarn = false;
 	let pageWarn = false;
-
-	$: booksShown = booksShown1;
-
-	const dispatch = createEventDispatcher();
 
 	function handleClick() {
 		// check validity of page numbers
@@ -37,36 +31,7 @@
 		}
 
 		// handle filtering
-		// booksShown1 = [];
-		// for (let book of books) {
-		// 	let p: boolean = true;
-		// 	let r: boolean = true;
-		// 	if (pageMin || pageMax) {
-		// 		if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
-		// 			p = false;
-		// 		}
-		// 	} 
-
-		// 	if (ratingSelect != 0) {
-		// 		if ((!book.avgRating) || ((ratingSelect == 1) && (book.avgRating < 4.0)) || ((ratingSelect == 2) && (book.avgRating < 3.0))) {
-		// 			r = false;
-		// 		}
-		// 	}
-
-		// 	if (p && r) {
-		// 		booksShown1.push(book);
-		// 	}
-		// }
-
-		// if (!intWarn && !pageWarn) {
-		// 	show = false;
-		// }
-		dispatch('filtering');
-		//booksShown = booksShown1;
-	}
-
-	export function handleFilter(books: Book[]): Book[] {
-		let booksShown: Book[] = [];
+		booksShown = [];
 		for (let book of books) {
 			let p: boolean = true;
 			let r: boolean = true;
@@ -86,7 +51,10 @@
 				booksShown.push(book);
 			}
 		}
-		return booksShown;
+
+		if (!intWarn && !pageWarn) {
+			show = false;
+		}
 	}
 </script>
 
@@ -120,20 +88,6 @@
 		/>
 	</svg>
 	<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
-
-	{pageMin==null}<br/>
-	{#each books as book}
-		{book.title}
-	{/each}
-	<br/><br/>
-	{booksShown1.length}
-	{#each booksShown1 as book}
-		{book.title}
-	{/each}
-	<br/><br/>
-	{#each booksShown as book}
-		{book.title}
-	{/each}
 
 	<div class="mx-2">
 		<!-- rating filter -->

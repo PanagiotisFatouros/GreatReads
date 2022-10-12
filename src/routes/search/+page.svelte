@@ -7,12 +7,11 @@
 	import type { Book, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
-	import { handleFilter } from '../../components/FilterPanel.svelte';
+	//import { handleFilter } from '../../components/FilterPanel.svelte';
     
     //let searchText = $page.params.searched ? $page.params.searched : ""
     //let searchText = decodeURI($page.url.pathname.substring(1))
 	//$: console.log($page.url.search)
-
 	
 
 	/** @type {import('./$types').PageData} */
@@ -37,27 +36,22 @@
 	// subset of books - based on filters applied
 	let booksShown: Book[];
 
-	$: books = data.books;
-	$: users = data.users;
-	$: booksShown = books;
+	books = data.books;
+	users = data.users;
+	booksShown = books;
 
 	let searchTerm: string 
-	$: searchTerm= data.searchString;
+	$: searchTerm = data.searchString;
 
 	let filterOn = false;
 	let sortOn = false;
 	$: isOverlayOpen.set(filterOn || sortOn);
 
-	// Filter
+	// store variables so values remain when opening panels again
 	let pageMin: number;
 	let pageMax: number;
 	let ratingSelect: number;
-
-	function filter() {
-		booksShown = handleFilter(books);
-	}
-
-	// Sort
+	let sortOption: number;
 </script>
 
 {#if isBookSearch}
@@ -108,12 +102,12 @@
 <div class="flex flex-col justify-start w-full">
 	{#if filterOn && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} on:filtering={handleFilter} />
+			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
 	{#if sortOn && $isOverlayOpen}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} />
+			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 </div>

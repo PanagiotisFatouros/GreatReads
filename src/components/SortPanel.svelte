@@ -3,7 +3,7 @@
 
 	export let show = false;
 	export let booksShown: Book[];
-	let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
+	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
 
 	function handleClick() {
 		if (sortOption == 1) {
