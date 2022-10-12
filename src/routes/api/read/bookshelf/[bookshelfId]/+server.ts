@@ -63,7 +63,7 @@ export async function GET({ params }: RequestEvent) {
                 },
                 books: books
             }
-            return new Response(`Bookshelf ${bookshelfId} successfully retrieved, bookshelf: ${JSON.stringify(bookshelf)}`)
+            return new Response(JSON.stringify(bookshelf))
         }
     }
     catch (err){

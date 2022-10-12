@@ -3,29 +3,13 @@
 	import FilterPanel from '../../../../components/FilterPanel.svelte';
 	import SortPanel from '../../../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
-	import type { Book } from '../../../../types/book.type';
+	import type { Bookshelf } from '../../../../types/book.type';
 	import { goto } from '$app/navigation'
 
-	export let bookshelfName = 'Favourites';
-	let book: Book = {
-		id: '123',
-		title: 'The Hunger Games',
-		authors: ['Suzanne Collins'],
-		pageCount: 384,
-		avgRating: 4.3,
-		numRatings: 35,
-		description:
-			'The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.',
-		reviews: [],
-		genres: ['Dystopian', 'science fiction', 'drama', 'action'],
-		isbn: '9780440335702',
-		datePublished: '1st December 2011',
-		imageURL:
-			'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-		userNotes: [],
-		publicNotes: []
-	};
-	let books = [book, book, book, book, book, book, book];
+	/** @type {import('./$types').PageData} */
+	export let data;
+
+	let bookshelf: Bookshelf = data.bookshelf
 	let filter = false;
 	let sort = false;
 	$: isOverlayOpen.set(filter || sort);
@@ -46,7 +30,7 @@
 		</svg>
 		</button>
 		
-		{bookshelfName}
+		{bookshelf.name}
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
@@ -104,7 +88,7 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-	{#each books as book}
+	{#each bookshelf.books as book}
 		<BookCard book={book} />
 	{/each}
 </div>
