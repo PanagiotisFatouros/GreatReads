@@ -55,6 +55,8 @@ export function readJSONToBook(jsonOject: any): Book {
 		description: jsonOject.volumeInfo.description,
 		genres: jsonOject.volumeInfo.categories,
 		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
+		avgRating: jsonOject.volumeInfo.averageRating === undefined? 0 : jsonOject.volumeInfo.averageRating,
+		numRatings: jsonOject.volumeInfo.ratingsCounts === undefined? 0 : jsonOject.volumeInfo.ratingsCounts, 
 		datePublished: jsonOject.volumeInfo.publishedDate,
 		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
 			jsonOject.volumeInfo?.imageLinks?.thumbnail : missingImage
