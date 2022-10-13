@@ -13,9 +13,17 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	let bookshelves = data.bookshelves;
+	let bookshelves:Bookshelf[] = data.bookshelves;
+
+	function addBookshelfLocally(event:any) {
+		
+		bookshelves.push(event.detail.bookshelf);
+
+		bookshelves = bookshelves
+	}
 	
 	$: isOverlayOpen.set(addBookshelf);
+	$: bookshelves
 </script>
 
 <div class="mt-6 mx-8">
@@ -60,7 +68,7 @@
 {#if addBookshelf}
 	<div class="flex flex-col justify-start w-full">
 		<div class="z-20 fixed self-center">
-			<AddBookshelfPanel bind:show={addBookshelf} />
+			<AddBookshelfPanel bind:show={addBookshelf} on:newBookshelf={addBookshelfLocally} />
 		</div>
 	</div>
 {/if}

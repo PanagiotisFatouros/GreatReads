@@ -3,14 +3,25 @@
     import { isOverlayOpen } from '../../stores/OverlayStore'
 
     import { page } from '$app/stores';
+	import { onMount } from "svelte";
     const baseURL = $page.url.origin;
 
     export let bookshelves: Bookshelf[]
-    export let bookId: string
+    export let savedBookshelfIDs: number[] | undefined;
+    export let bookId: string;
     export let isShowing;
 
-    let selectedIDs: number[] = []
-    
+    let selectedIDs: number[] = [];
+
+    onMount(() => {
+        if (savedBookshelfIDs != undefined) {
+            selectedIDs = savedBookshelfIDs;
+        }
+
+        console.log(bookshelves);
+        console.log(selectedIDs);
+        
+    })
 
     function handleCancel() {
         isOverlayOpen.set(false)
@@ -18,27 +29,46 @@
     }
 
     async function handleConfirm() {
-        console.log(selectedIDs)
+        //console.log(selectedIDs)
+        let addedBookshelves: number[] = []
+        let removedBookshelves: number[] = []
 
-        if (selectedIDs.length > 0) {
-            const response = await fetch(`${baseURL}/api/update/bookshelf/add-books`, {
+        selectedIDs.forEach(id => {
+            if (!savedBookshelfIDs?.includes(id)) {
+                addedBookshelves.push(id);
+            }
+        })
+
+        savedBookshelfIDs?.forEach(id => {
+            if (!selectedIDs.includes(id)) {
+                removedBookshelves.push(id);
+            }
+        })
+        if (addedBookshelves.length > 0) {
+            await fetch(`${baseURL}/api/update/bookshelf/add-books`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     bookId: bookId,
-                    bookshelfIds: selectedIDs,
-                    bookshelfId: selectedIDs[0]
+                    bookshelfIds: addedBookshelves
                 })
             })
-            console.log(await response.json())
-
-            isOverlayOpen.set(false);
-            isShowing = false;
-
-            selectedIDs = []
         }
-        else {
-            alert("No bookshelves selected")
+
+        if (removedBookshelves.length > 0) {
+            await fetch(`${baseURL}/api/update/bookshelf/remove-books`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    bookId: bookId,
+                    bookshelfIds: removedBookshelves
+                })
+            })
         }
+
+        //bind back to parent component
+        savedBookshelfIDs = selectedIDs
+
+        isOverlayOpen.set(false);
+        isShowing = false;
     }
 
 </script>

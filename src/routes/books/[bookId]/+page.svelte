@@ -15,7 +15,7 @@
 
 	let book: Book = data.book;
 	let bookshelves: Bookshelf[] = data.bookshelves
-	console.log(bookshelves)
+	
 
 	let isSavingBook: boolean = false
 	function saveBook() {
@@ -29,10 +29,16 @@
 		}
 		return '';
 	}
+
+	$: {
+		if ($isOverlayOpen == false) {
+			isSavingBook = false;
+		}
+	}
 </script>
 
 {#if isSavingBook}
-<SaveToBookshelf bookshelves={bookshelves} bookId={book.id} bind:isShowing={isSavingBook} />
+<SaveToBookshelf bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
 {/if}
 
 <!-- {#await bookPromise} -->
@@ -45,12 +51,27 @@
 			<img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain" />
 		</div>
 
-		<!-- TODO: show popup to select which bookshelf to save it in, and change text to "saved" after -->
+		{#if book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0}
 		<button
 			on:click={saveBook}
 			class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
 			>+ Save Book</button
 		>
+		{:else}
+		<button
+			on:click={saveBook}
+			class=" bg-accent rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
+		>
+			<div class='flex space-x-2'>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+				</svg>
+				<p>Saved</p>
+			</div>
+		</button
+		>
+		{/if}
+		
 
 		<ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
 			<li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>

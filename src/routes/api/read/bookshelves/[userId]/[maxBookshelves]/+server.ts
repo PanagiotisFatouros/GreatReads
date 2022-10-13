@@ -58,9 +58,11 @@ export async function GET({ params }: RequestEvent) {
                 }
             });
         }
+        //console.log(prismaBookshelves);
 
         if (prismaBookshelves == null){
             throw error(400, `Bookshelves not found!`)
+            //return new Response(JSON.stringify([]));
         }
         else{
 
@@ -102,7 +104,7 @@ export async function GET({ params }: RequestEvent) {
 
                 bookshelves.push(bookshelf);
             }
-            console.log(bookshelves)
+            //console.log(bookshelves)
             return new Response(JSON.stringify(bookshelves))
         }
     }

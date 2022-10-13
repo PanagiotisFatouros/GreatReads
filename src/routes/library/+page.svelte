@@ -8,8 +8,10 @@
     /** @type {import('./$types').PageData} */
 	export let data;
 
+
     let bookshelves: Bookshelf[] = data.bookshelves;
     let collections: Collection[] = data.collections;
+
 </script>
 
 <div class="mt-6 mx-8">

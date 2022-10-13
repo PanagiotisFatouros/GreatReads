@@ -19,7 +19,8 @@ export async function load({ request, url }: ServerLoadEvent) {
 
             let collections: Collection[] = await (await fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`)).json()
 
-			console.log(bookshelves)
+			//console.log(bookshelves)
+			console.log(collections)
 
             return {
                 bookshelves: bookshelves,

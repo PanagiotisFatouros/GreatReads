@@ -33,7 +33,7 @@ export async function GET({ params }: RequestEvent) {
 			bookId: true
 		}
 	});
-	//console.log(prismaCollections)
+	console.log(prismaCollections)
 
 	for await (const prismaCollection of prismaCollections) {
 		const googleResponse: any = await getBookInfoFromGoogleBooksAPI(prismaCollection.bookId);
@@ -64,8 +64,8 @@ export async function GET({ params }: RequestEvent) {
 	};
 
 
-	if (collections.length == 0) {
-		return new Response(`404 There are no existing collections for ${userId} in database`);
-	}
+	// if (collections.length == 0) {
+	// 	return new Response(`404 There are no existing collections for ${userId} in database`);
+	// }
 	return new Response(JSON.stringify(collections));
 }

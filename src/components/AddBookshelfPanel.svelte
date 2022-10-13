@@ -1,4 +1,5 @@
 <script lang="ts">
+	import {createEventDispatcher} from 'svelte';
 	import { page } from '$app/stores';
 	const baseURL = $page.url.origin;
 
@@ -6,6 +7,8 @@
 	import type { Bookshelf } from '../types/book.type';
 	const session = getSession();
 	const user_id = $session?.user.user_id;
+
+	const dispatch = createEventDispatcher();
 
 	export let show = false;
 	
@@ -25,6 +28,9 @@
 		//console.log(bookshelf);
 
 		show = false;
+		dispatch('newBookshelf', {
+			bookshelf: bookshelf
+		})
 	}
 
 </script>
