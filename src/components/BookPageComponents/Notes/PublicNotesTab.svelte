@@ -9,13 +9,13 @@
 
 	const baseURL: string = $page.url.origin;
 
-	export let collections: Collection[];
+	export let collections: Collection[] | undefined;
 
-	let filteredCollections: Collection[] = collections;
+	let filteredCollections: Collection[] | undefined = collections;
 	let searchText: string = '';
 
 	// runs every time searchText changes
-	$: filteredCollections = collections.filter((collection) => {
+	$: filteredCollections = collections != undefined ? collections.filter((collection) => {
 		let titleCheck: boolean = collection.title
 			.toLocaleLowerCase()
 			.startsWith(searchText.toLocaleLowerCase());
@@ -24,7 +24,7 @@
 			.startsWith(searchText.toLocaleLowerCase());
 
 		return titleCheck || authorCheck;
-	});
+	}) : [];
 
 	let selectedCollection: Collection | null = null;
 
@@ -75,42 +75,46 @@
 		</div>
 
 		<div>
-			{#each filteredCollections as collection}
-				<div
-					on:click={() => getCollectionNotes(collection)}
-					class=" bg-primary-1 my-4 rounded-3xl pl-2 pr-1 py-2 flex items-center cursor-pointer hover:bg-opacity-70"
-				>
-					<VoteButtons />
+			{#if filteredCollections == undefined || filteredCollections.length == 0}
+				<p>No Collections Found</p>
+			{:else}
+				{#each filteredCollections as collection}
+					<div
+						on:click={() => getCollectionNotes(collection)}
+						class=" bg-primary-1 my-4 rounded-3xl pl-2 pr-1 py-2 flex items-center cursor-pointer hover:bg-opacity-70"
+					>
+						<VoteButtons />
 
-					<div class="flex ml-3 space-x-3 items-center">
-						<div class="profile_pic_small">
-							{#if collection.user.profilePic != ''}
-								<img src={collection.user.profilePic} alt="profile pic" />
-							{/if}
-						</div>
-						<div>
-							<p class="text-secondary">{collection.title}</p>
+						<div class="flex ml-3 space-x-3 items-center">
+							<div class="profile_pic_small">
+								{#if collection.user.profilePic != ''}
+									<img src={collection.user.profilePic} alt="profile pic" />
+								{/if}
+							</div>
+							<div>
+								<p class="text-secondary">{collection.title}</p>
 
-							<div class="text-body2 flex">
-								<p class=" text-primary-2 mr-1">{collection.user.name}</p>
-								<!-- TODO: maybe change to last edited -->
-								<p>- Created {getTimeAgo(collection.creationDate)}</p>
+								<div class="text-body2 flex">
+									<p class=" text-primary-2 mr-1">{collection.user.name}</p>
+									<!-- TODO: maybe change to last edited -->
+									<p>- Created {getTimeAgo(collection.creationDate)}</p>
+								</div>
 							</div>
 						</div>
-					</div>
 
-					<svg
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24"
-						stroke-width="1.5"
-						stroke="currentColor"
-						class="w-6 h-6 text-secondary ml-auto"
-					>
-						<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-					</svg>
-				</div>
-			{/each}
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							fill="none"
+							viewBox="0 0 24 24"
+							stroke-width="1.5"
+							stroke="currentColor"
+							class="w-6 h-6 text-secondary ml-auto"
+						>
+							<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+						</svg>
+					</div>
+				{/each}
+			{/if}
 		</div>
 	{/if}
 </div>
