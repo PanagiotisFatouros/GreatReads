@@ -23,20 +23,28 @@
 		bio: "My name is Bob; I'm a avid reader, and lover of non-fiction. My favourite genres of book include literature and sci-fi. When I'm not reading, you will find me in the forest enjoying nature, or kayaking in the moutains.",
 		name: 'Dean Coleman'
 	};
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+
+	let user:Client = data.user;
+	console.log(user)
+
 </script>
 
 <div id="page">
 	<div id="left">
+		<!-- TODO: change profile pic when working -->
 		<img id="profilePic" src={user1.profilePic} alt="Profile pic" />
-		<p class="text-heading1 text-secondary">{user1.name}</p>
-		<p id="bio" class="font-body">{user1.bio}</p>
-		<ProfileStatistics />
+		<p class="text-heading1 text-secondary">{user.name}</p>
+		<p id="bio" class="font-body">{user.bio}</p>
+		<ProfileStatistics user={user}/>
 	</div>
 	<div id="right">
 		<BooksDisplay />
 		<!-- "ignore error: will fix itself when using type 'review' instead of placeholder values" -->
-		{#if user1.reviews}
-			<ReviewsDisplay name={user1.name} reviews={user1.reviews} />
+		{#if user.reviews}
+			<ReviewsDisplay name={user.name} reviews={user.reviews} />
 		{/if}
 	</div>
 </div>

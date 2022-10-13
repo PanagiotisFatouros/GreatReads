@@ -14,6 +14,7 @@ export async function load({params}: ServerLoadEvent) {
         let favsBookshelf: Bookshelf | null = null
         let numBooksRead: number = 0;
         let reviews: Review[] = []
+        let avgRating: number = 0;
 
 
         const prismaUser = await prismaClient.user.findUnique({
@@ -71,6 +72,7 @@ export async function load({params}: ServerLoadEvent) {
                 }
             }
 
+            let totalRatings = 0;
             for await (const prismaReview of prismaUser.reviews) {
                 const googleResponse: any = await getBookInfoFromGoogleBooksAPI(prismaReview.book.googleBooksId);
 
@@ -85,7 +87,9 @@ export async function load({params}: ServerLoadEvent) {
                     img: readJSONToBook(googleResponse).imageURL
                 }
                 reviews.push(review);
+                totalRatings += review.rating;
             }
+            avgRating = totalRatings / reviews.length;
 
             if (favsBookshelf != null) {
                 user = {
@@ -93,12 +97,18 @@ export async function load({params}: ServerLoadEvent) {
                     name: prismaUser.name,
                     bio: prismaUser.bio,
                     profilePic: prismaUser.profilePic || '',
-                    favAuthor: prismaUser.favAuthor,
-                    favGenre: prismaUser.favGenre,
+                    favAuthor: prismaUser.favAuthor == '' ? '-' : prismaUser.favAuthor,
+                    favGenre: prismaUser.favGenre  == '' ? '-' : prismaUser.favGenre,
                     favsBookshelf: favsBookshelf,
-                    numBooksRead: numBooksRead
+                    numBooksRead: numBooksRead,
+                    reviews: reviews,
+                    avgRating: avgRating
                 }
-                console.log(user)
+                // console.log(user)
+
+                return {
+                    user
+                }
             }
 
         }

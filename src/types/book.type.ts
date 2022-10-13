@@ -41,6 +41,7 @@ export type Client = {
 	favGenre?: string;
 	favsBookshelf?: Bookshelf;
 	numBooksRead?: number;
+	avgRating?: number;
 };
 
 export type Review = {
