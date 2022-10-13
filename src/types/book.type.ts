@@ -39,6 +39,8 @@ export type Client = {
 	bio?: string;
 	favAuthor?: string;
 	favGenre?: string;
+	favsBookshelf?: Bookshelf;
+	numBooksRead?: number;
 };
 
 export type Review = {
