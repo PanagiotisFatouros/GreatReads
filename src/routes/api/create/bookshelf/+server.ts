@@ -16,7 +16,7 @@ export async function POST({ request }: RequestEvent) {
     try {
         const newBookshelfInput: Prisma.PrismaBookshelfCreateInput = {
           	name: name,
-          	isDeletable: true,
+          	isDeletable: false,
           	creationDate: new Date(),
           	user: {connect:{id: userId}}
         }
