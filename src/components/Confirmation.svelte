@@ -23,9 +23,9 @@
 	<p class=" whitespace-pre-line text-center">{@html description}</p>
 
 	<div class=" mt-3 self-end space-x-2">
-		<button on:click={handleCancel} class="btn bg-primary-1 rounded-full px-2"><p>Cancel</p></button
+		<button on:click={handleCancel} class="btn bg-primary-1 rounded-full px-3 py-1"><p>Cancel</p></button
 		>
-		<button on:click={handleConfirm} class="btn bg-accent text-white rounded-full px-2"
+		<button on:click={handleConfirm} class="btn bg-accent text-white rounded-full px-3 py-1"
 			><p>Confirm</p></button
 		>
 	</div>

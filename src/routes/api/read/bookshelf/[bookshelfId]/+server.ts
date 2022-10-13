@@ -3,14 +3,20 @@ import { error } from '@sveltejs/kit';
 import type { Bookshelf, Book } from 'src/types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
+import { auth } from "$lib/lucia";
 
-export async function GET({ params }: RequestEvent) {
-	const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
+export async function GET({params, request}: RequestEvent) {
+
+    const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
+
 
 	if (bookshelfId == -1) {
 		throw error(400, 'Book not specified/ incorrectly mapped.');
 	}
+    
     try {
+        
+
         const prismaBookshelf = await prismaClient.prismaBookshelf.findUnique({
             where: { id: bookshelfId },
             select: {
@@ -27,6 +33,7 @@ export async function GET({ params }: RequestEvent) {
                 books: true
             }
         });
+        console.log(prismaBookshelf?.books);
 
         if (prismaBookshelf == null){
             throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)

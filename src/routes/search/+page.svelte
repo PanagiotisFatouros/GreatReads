@@ -4,7 +4,7 @@
 	import FilterPanel from '../../components/FilterPanel.svelte';
 	import SortPanel from '../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../stores/OverlayStore.js';
-	import type { Book, Client } from '../../types/book.type';
+	import type { Book, Bookshelf, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
     
@@ -31,9 +31,11 @@
 
 	// one will be empty list if searching for the other type
 	let books: Book[];
+	let bookshelves: Bookshelf[];
 	let users: Client[];
 
 	$: books = data.books;
+	$: bookshelves = data.bookshelves;
 	$: users = data.users;
 
 	let searchTerm: string 
@@ -104,10 +106,12 @@
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
 	{#each books as book}
-		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book}/>
+		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
 	{/each}
 </div>
+
 {:else}
+
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading">Search Results for "{searchTerm}"</div>
 	<hr class=" border-1 border-primary-3 my-3" />
@@ -115,7 +119,7 @@
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
 	{#each users as user}
-		<UserCard />
+		<UserCard user={user}/>
 	{/each}
 </div>
 {/if}
