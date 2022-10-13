@@ -3,8 +3,7 @@
 	import BookshelfCard from '../../../components/BookshelfCard.svelte';
 	import AddBookshelfPanel from '../../../components/AddBookshelfPanel.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
-	import type { Bookshelf, Book } from 'src/types/book.type';
-	import { getSession } from 'lucia-sveltekit/client';
+	import type { Bookshelf } from 'src/types/book.type';
 	import {goto} from '$app/navigation'
 	
 
