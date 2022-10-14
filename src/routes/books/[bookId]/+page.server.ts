@@ -3,6 +3,7 @@ import type { ServerLoadEvent } from '@sveltejs/kit';
 import { auth } from '$lib/lucia';
 import type { Book, Bookshelf } from 'src/types/book.type';
 import { error, redirect } from '@sveltejs/kit';
+import { readGoogleBooksResponse } from '../../../scripts';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ request, url, params }: ServerLoadEvent) {
@@ -29,9 +30,22 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 
 			// console.log(book);
 
+			// search for list of similar books based on author
+			let books: Book[] = [];
+			let authors: string[] = book.authors;
+			console.log(book.authors)
+
+			for await (let author of authors) {
+                const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`)).json()
+                const googleBooks = readGoogleBooksResponse(response)
+				books = books.concat(googleBooks)
+			}
+			
+			console.log(books)
 			return {
 				book: book,
-				bookshelves
+				bookshelves,
+				books
 			};
 		} else {
 			//not authenticated

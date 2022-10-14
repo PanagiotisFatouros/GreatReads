@@ -15,7 +15,7 @@
 
 	let book: Book = data.book;
 	let bookshelves: Bookshelf[] = data.bookshelves
-	
+	let similarBooks: Book[] = data.books;
 
 	let isSavingBook: boolean = false
 	function saveBook() {
@@ -103,9 +103,10 @@
 		<hr class=" border-1 border-primary-3" />
 
 		<div class=" space-y-3 mt-3">
-			<!-- TODO: add a loop showing all books -->
-			<AbbreviatedBookCard />
-			<AbbreviatedBookCard />
+			{#each similarBooks.slice(0,8) as book}
+				<AbbreviatedBookCard on:click={() => 
+        (`/books/${book.id}`)} book={book} />
+			{/each}
 		</div>
 	</div>
 </div>
