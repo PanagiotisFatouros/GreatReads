@@ -3,26 +3,8 @@
 	import BooksDisplay from '../../../components/BooksDisplay.svelte';
 	import ProfileStatistics from '../../../components/ProfileStatistics.svelte';
 	import ReviewsDisplay from '../../../components/ReviewsDisplay.svelte';
-	let user1: Client = {
-		id: "1",
-		reviews: [
-			{
-				id: 123,
-				title: 'Worst Book Ever',
-				comment:
-					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
-				date: new Date(),
-				img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
-				rating: 3,
-				upvotes: 10,
-				isEdited: false,
-			}
-		],
-		profilePic:
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8kiSH5ZSAcVoj3tAQQDoP_ux0sSricMyUg&usqp=CAU',
-		bio: "My name is Bob; I'm a avid reader, and lover of non-fiction. My favourite genres of book include literature and sci-fi. When I'm not reading, you will find me in the forest enjoying nature, or kayaking in the moutains.",
-		name: 'Dean Coleman'
-	};
+
+	const profilePic = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8kiSH5ZSAcVoj3tAQQDoP_ux0sSricMyUg&usqp=CAU'
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -33,16 +15,20 @@
 </script>
 
 <div id="page">
-	<div id="left">
+	<div id="left" class=" space-y-3">
 		<!-- TODO: change profile pic when working -->
-		<img id="profilePic" src={user1.profilePic} alt="Profile pic" />
-		<p class="text-heading1 text-secondary">{user.name}</p>
+		<img id="profilePic" src={profilePic} alt="Profile pic" />
+		<p class="text-heading1 font-heading text-secondary">{user.name}</p>
+		{#if user.bio != ''}
 		<p id="bio" class="font-body">{user.bio}</p>
+		{/if}
 		<ProfileStatistics user={user}/>
 	</div>
-	<div id="right">
-		<BooksDisplay />
-		<!-- "ignore error: will fix itself when using type 'review' instead of placeholder values" -->
+	<div id="right" class="">
+		{#if user.favsBookshelf}
+		<BooksDisplay bookshelf={user.favsBookshelf}/>
+		{/if}
+		
 		{#if user.reviews}
 			<ReviewsDisplay name={user.name} reviews={user.reviews} />
 		{/if}
@@ -53,21 +39,25 @@
 	#page {
 		display: flex;
 		justify-content: space-around;
-		padding: 20px;
+		/* padding: 20px; */
+		padding-top: 3rem;
+		padding-left: 1rem;
+		padding-right: 1rem;
+		margin-bottom: 3rem;
 	}
 	#left {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
+		justify-content: start;
 		align-items: center;
 		width: 25%;
 	}
 	#right {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
+		justify-content: space-between;
 		align-items: center;
-		width: 70%;
+		width: 65%;
 	}
 	#profilePic {
 		height: 30%;

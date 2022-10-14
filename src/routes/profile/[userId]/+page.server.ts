@@ -41,7 +41,9 @@ export async function load({params}: ServerLoadEvent) {
                         ]
                     },
                     include: {
-                        books: true
+                        books: {
+                            take: 7
+                        }
                     }
                 }
             }

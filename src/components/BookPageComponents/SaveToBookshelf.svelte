@@ -83,7 +83,7 @@
     {#if bookshelves.length > 0}
     <div class=" flex flex-col w-full space-y-3 mt-3">
         {#each bookshelves as bookshelf}
-            <label class=" bg-primary-1 rounded-full w-full px-3 py-1"><input bind:group={selectedIDs} type="checkbox" value={bookshelf.id}> {bookshelf.name}</label>
+            <label class=" bg-primary-1 rounded-full w-full px-3 py-1 cursor-pointer hover:opacity-70"><input bind:group={selectedIDs} type="checkbox" value={bookshelf.id}> {bookshelf.name}</label>
         {/each}
     </div>
     {:else}
