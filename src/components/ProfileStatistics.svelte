@@ -2,14 +2,6 @@
 	import type {Client} from '../types/book.type'
 	import StarRating from './StarRating.svelte'
 
-	let person = {
-		booksRead: 45,
-		numReviews: 53,
-		averageRating: 3.9,
-		favAuthor: 'Suzanne Collins',
-		favGenre: 'Crime'
-	};
-
 	export let user:Client
 </script>
 
