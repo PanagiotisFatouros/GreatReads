@@ -6,7 +6,7 @@
 	export let reviews: Review[];
 </script>
 
-<div id="card" class="bg-primary-3 shadow-lg">
+<div id="card" class="bg-primary-3 shadow-xl">
 	<div id="header" class="bg-accent">
 		<h2 class=" self-center ml-3">
 			{name}'s Reviews

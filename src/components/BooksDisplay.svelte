@@ -5,7 +5,7 @@
 	export let bookshelf: Bookshelf;
 </script>
 
-<div id="display" class="bg-primary-3 shadow-lg mb-4">
+<div id="display" class="bg-primary-3 shadow-xl mb-4">
 	<div id="header" class="bg-accent">
 		<div class="flex items-center ml-3 space-x-1">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">

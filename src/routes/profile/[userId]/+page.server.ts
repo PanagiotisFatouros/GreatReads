@@ -28,6 +28,7 @@ export async function load({params}: ServerLoadEvent) {
                 favBook: true,
                 favGenre: true,
                 reviews: {
+                    take: 3,
                     include: {
                         book: true
                     }
