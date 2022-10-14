@@ -4,19 +4,24 @@
 	import { getTimeAgo } from '../scripts';
 
 	export let review: Review;
+	export let displayText: boolean;
 
 	let diff = getTimeAgo(review.date);
 </script>
 
-<div class="flex p-4 w-full rounded-2xl bg-primary-1">
+<div id="{displayText ? 'displayAll' : 'review'}" class="flex p-4 bg-primary-1 rounded-2xl w-full">
 	<div id="cover"><img src={review.img} alt="" /></div>
 	<div id="text">
 		<div class="flex items-center text-secondary">
 			<h2 id="title">{review.title}</h2>
 			<StarRating rating={review.rating} showRating={false} />
 		</div>
-		<p class="text-primary-3 text-body2 font-body mb-3">{diff}</p>
-		<p id="comment" class="text-primary-3 font-body">{review.comment}</p>
+		<p class="text-primary-3 text-body2 font-body">{diff}</p>
+		{#if (displayText == true)}
+			<p id="allText" class="text-primary-3">{review.comment}</p>
+		{:else}
+			<p id="comment" class="text-primary-3">{review.comment}</p>
+		{/if}
 	</div>
 </div>
 
@@ -25,8 +30,8 @@
 	/* #review {
 		display: flex;
 
-		width: 100%;
-		height: 150px;
+		width: 98%;
+		height: 31%;
 
 		border-radius: 10px;
 		margin-bottom: 10px;
@@ -45,6 +50,8 @@
 		flex-direction: column;
 		justify-content: start;
 		width: 90%;
+		padding-bottom: 10px;
+		overflow-y: auto;
 	}
 
 	#comment {

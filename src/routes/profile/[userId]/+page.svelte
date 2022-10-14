@@ -30,7 +30,7 @@
 		{/if}
 		
 		{#if user.reviews}
-			<ReviewsDisplay name={user.name} reviews={user.reviews} />
+			<ReviewsDisplay name={user.name} reviews={user.reviews} clientID={user.id}/>
 		{/if}
 	</div>
 </div>

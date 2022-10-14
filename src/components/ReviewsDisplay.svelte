@@ -4,6 +4,7 @@
 
 	export let name: string;
 	export let reviews: Review[];
+	export let clientID: string;
 </script>
 
 <div id="card" class="bg-primary-3 shadow-xl">
@@ -12,22 +13,24 @@
 			{name}'s Reviews
 		</h2>
 		<span id="header-right">
-			<p>See all</p>
-			<svg
-				xmlns="http://www.w3.org/2000/svg"
-				fill="none"
-				viewBox="0 0 24 24"
-				stroke-width="1.5"
-				stroke="currentColor"
-				class="w-6 h-6"
-			>
-				<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-			</svg>
+			<a href="/profile/{clientID}/reviews" ><p>See all</p></a>
+			<a href="/profile/{clientID}/reviews">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke-width="1.5"
+					stroke="currentColor"
+					class="w-6 h-6"
+				>
+					<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+				</svg>
+			</a>
 		</span>
 	</div>
 	<div id="reviews-container" class=" space-y-6 my-6 px-6">
 		{#each reviews as review}
-			<BookReview {review} />
+			<BookReview {review} displayText={false}/>
 		{/each}
 	</div>
 </div>
