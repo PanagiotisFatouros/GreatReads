@@ -5,7 +5,9 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import type { Bookshelf, Client, Note } from '../types/book.type'
+	import type { Bookshelf, Client, Collection, Book } from '../types/book.type'
+	import CollectionCard from '../components/CollectionCard.svelte';
+	import MostPopular from '../components/MostPopular.svelte';
 
 	isOverlayOpen.set(false)
 
@@ -18,6 +20,25 @@
 			goto('/authentication');
 		}
 	}
+	let book1: Book = {
+		id: '123',
+		title: 'The Hunger Games',
+		authors: ['Suzanne Collins'],
+		pageCount: 384,
+		avgRating: 4.3,
+		numRatings: 35,
+		description:
+			'The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.',
+		reviews: [],
+		genres: ['Dystopian', 'science fiction', 'drama', 'action'],
+		isbn: '9780440335702',
+		datePublished: '1st December 2011',
+		imageURL:
+			'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
+		userNotes: [],
+		publicNotes: []
+	};
+
 	let user1: Client = {
 		id: "1",
 		reviews: [
@@ -100,7 +121,17 @@
 		}],
 	};
 
-	let notes
+	let col1: Collection = {
+		id: 1,
+		title: "Chapter Summaries",
+		creationDate: new Date(),
+		isPublic: true,
+		upvotes: 25,
+		user: user1,
+		book: book1,
+	}
+
+	let collections = [col1, col1, col1]
 
 </script>
 
@@ -115,19 +146,24 @@
 			</div>
 		</div>
 		<div id="notes">
-			<h2 class="font-body text-heading2">Recent Notes</h2>
+			<h2 class="font-body font-body2 text-heading2">Recent Notes</h2>
 			<hr class=" border-1 border-primary-3 my-3" />
+			<div id="collections">
+				{#each collections as collection}
+					<CollectionCard collection={col1}/>
+				{/each}
+			</div>
 		</div>
 	</div>
 	<div id="right">
-		Lemonade
+		<MostPopular/>
 	</div>
 </div>
 
 <style>
 	#page {
 		display: flex;
-		justify-content: space-between;
+		justify-content: space-around;
 		padding: 20px;
 	}
 	#left {
@@ -137,8 +173,12 @@
 		width: 70%;
 	}
 
+	#right {
+		width: 25%;
+	}
+
 	.display {
-		margin-bottom: 10px;
+		margin-bottom: 2%;
 	}
 
 	#bookshelves {
@@ -149,7 +189,13 @@
 
 	#notes {
 		width: 98%;
-		height: 40%;
 		align-self: center;
+	}
+
+	#collections {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
 	}
 </style>

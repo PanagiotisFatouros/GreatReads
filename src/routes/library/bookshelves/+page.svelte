@@ -84,9 +84,5 @@
 
 <!-- TODO: close panel when click outside -->
 {#if addBookshelf}
-	<div class="flex flex-col justify-start w-full">
-		<div class="z-20 fixed self-center">
-			<AddBookshelfPanel bind:show={addBookshelf} />
-		</div>
-	</div>
+	<AddBookshelfPanel bind:show={addBookshelf} />
 {/if}

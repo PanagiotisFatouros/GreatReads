@@ -64,6 +64,8 @@ export type Collection = {
 
 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
 	notes?: Note[];
+
+	book: Book;
 };
 
 export type Note = {

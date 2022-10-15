@@ -1,5 +1,8 @@
-<script>
-	let book = {
+<script lang='ts'>
+	import type {Book} from '../types/book.type';
+	export let book: Book;
+	
+	let book1 = {
 		img: 'http://books.google.com/books/content?id=wDVV6y-8YHEC&printsec=frontcover&img=1&zoom=1&source=gbs_api',
 		name: 'Harry Potter and the Cursed Child',
 		author: 'J.K. Rowling',
@@ -12,14 +15,14 @@
 </script>
 
 <div id="card">
-	<div id="cover"><img src={book.img} alt="" /></div>
+	<div id="cover"><img src={book.imageURL} alt="" /></div>
 	<div id="text">
-		<p class="text-body1 text-secondary ">{book.name}</p>
+		<p class="text-body1 text-secondary ">{book.title}</p>
 		<p id="rating" class="text-primary-2 text-body2">
-			{book.rating}
+			{book.avgRating}
 			<StarRating rating={1} showRating={false} isSmall={true} />
 		</p>
-		<p class="text-primary-3 text-body2">{book.author}</p>
+		<p class="text-primary-3 text-body2">{book.authors}</p>
 	</div>
 </div>
 
