@@ -26,9 +26,16 @@
 		publicNotes: []
 	};
 	let books = [book, book, book, book, book, book, book];
-	let filter = false;
-	let sort = false;
-	$: isOverlayOpen.set(filter || sort);
+	let booksShown: Book[] = books;
+	let filterOn = false;
+	let sortOn = false;
+	$: isOverlayOpen.set(filterOn || sortOn);
+
+	// store variables so values remain when opening panels again
+	let pageMin: number;
+	let pageMax: number;
+	let ratingSelect: number;
+	let sortOption: number;
 </script>
 
 <div class="mt-6 mx-8">
@@ -51,7 +58,7 @@
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
 		<!-- filter button -->
-		<div style="cursor:pointer" on:click={() => (filter = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (filterOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -69,7 +76,7 @@
 			<p class="ml-1 mr-3">Filter</p>
 		</div>
 		<!-- sort button -->
-		<div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -91,14 +98,14 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filter}
+	{#if filterOn}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} />
+			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sort}
+	{#if sortOn}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sort} />
+			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 </div>
