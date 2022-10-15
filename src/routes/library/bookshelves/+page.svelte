@@ -23,11 +23,6 @@
 	
 	$: isOverlayOpen.set(addBookshelf);
 	$: bookshelves
-	$: {
-		if ($isOverlayOpen == false) {
-			addBookshelf = false;
-		}
-	}
 </script>
 
 <div class="mt-6 mx-8">
@@ -71,14 +66,8 @@
 <!-- TODO: close panel when click outside -->
 {#if addBookshelf}
 	<div class="flex flex-col justify-start w-full">
-		<div class="z-20 fixed top-1/2 left-1/2" id="addBookshelf">
+		<div class="z-20 fixed self-center">
 			<AddBookshelfPanel bind:show={addBookshelf} on:newBookshelf={addBookshelfLocally} />
 		</div>
 	</div>
 {/if}
-
-<style>
-	#addBookshelf {
-		transform: translate(-50%, -50%);
-	}
-</style>
