@@ -97,7 +97,7 @@
 			genres: ["Sci-fi"],
 			isbn: "9780439023481",
 			datePublished: "23/2/2021",
-			imageURL: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
+			imageURL: 'https://books.google.com/books/content?id=Gts2mAEACAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE705q0MJvL4MtkdG72-Mq2MpD1KP-HqkHucn5VMuS_tADUhRe8Me286ifFq4WJXynkEMeYXuRL3f6zBHQdujnYx0d-itSdxEJKTAxFvlmIH_w4ZbRhQrtuxfxXjeA2wRaSC6xnxF&source=gbs_api',
 		},
 		{
 			id: "1",

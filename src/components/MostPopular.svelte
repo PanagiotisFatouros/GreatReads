@@ -4,6 +4,7 @@
     
     let book1: Book = {
 		id: '7H5dEAAAQBAJ',
+        avgRating: 0,
 		title: 'Confidence Man',
 		authors: ['Maggie Haberman'],
 		pageCount: 608,
@@ -16,6 +17,7 @@
 
     let book2: Book = {
 		id: 'wmnuDwAAQBAJ',
+        avgRating: 0,
 		title: 'It Ends with Us',
 		authors: ['Colleen Hoover'],
 		pageCount: 448,
@@ -28,6 +30,7 @@
 
     let book3: Book = {
 		id: 'ISxGEAAAQBAJ',
+        avgRating: 0,
 		title: 'Verity',
 		authors: ['Colleen Hoover'],
 		pageCount: 336,
@@ -40,6 +43,7 @@
 
     let book4: Book = {
         id: 'X6FSEAAAQBAJ',
+        avgRating: 0,
 		title: 'Lighter',
 		authors: ['Yung Pueblo'],
 		pageCount: 288,
@@ -52,6 +56,7 @@
 
     let book5: Book = {
         id: "3wZaEAAAQBAJ",
+        avgRating: 0,
         title: 'Fairy Tale',
         authors: ['Stephen King'],
         pageCount: 592,

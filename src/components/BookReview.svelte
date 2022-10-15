@@ -9,7 +9,7 @@
 	let diff = getTimeAgo(review.date);
 </script>
 
-<div id="{displayText ? 'displayAll' : 'review'}" class="flex p-4 bg-primary-1 rounded-2xl w-full">
+<div id="{displayText ? 'displayAll' : 'review'}" class="flex bg-primary-1 rounded-2xl w-full">
 	<div id="cover"><img src={review.img} alt="" /></div>
 	<div id="text">
 		<div class="flex items-center text-secondary">
@@ -27,18 +27,16 @@
 
 <style>
 	/* TODO: add button to expand review when clicked */
-	/* #review {
+	#review {
 		display: flex;
-
 		width: 98%;
 		height: 31%;
 
 		border-radius: 10px;
 		margin-bottom: 10px;
 		padding: 8px;
-		margin-left: 10px;
 
-	} */
+	} 
 	#title {
 		margin-right: 10px;
 	}
@@ -57,7 +55,7 @@
 	#comment {
 		display: -webkit-box;
 		overflow: hidden;
-		-webkit-line-clamp: 6;
+		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 	}
 
