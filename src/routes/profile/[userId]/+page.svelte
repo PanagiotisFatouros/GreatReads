@@ -15,7 +15,7 @@
 </script>
 
 <div id="page">
-	<div id="left" class=" space-y-3">
+	<div id="left">
 		<!-- TODO: change profile pic when working -->
 		<img id="profilePic" src={profilePic} alt="Profile pic" />
 		<p class="text-heading1 font-heading text-secondary">{user.name}</p>
@@ -24,7 +24,7 @@
 		{/if}
 		<ProfileStatistics user={user}/>
 	</div>
-	<div id="right" class="">
+	<div id="right">
 		{#if user.favsBookshelf}
 		<BooksDisplay bookshelf={user.favsBookshelf}/>
 		{/if}
@@ -39,11 +39,7 @@
 	#page {
 		display: flex;
 		justify-content: space-around;
-		/* padding: 20px; */
-		padding-top: 3rem;
-		padding-left: 1rem;
-		padding-right: 1rem;
-		margin-bottom: 3rem;
+		padding: 20px;
 	}
 	#left {
 		display: flex;
@@ -53,11 +49,13 @@
 		width: 25%;
 	}
 	#right {
+		position: relative;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-between;
+		justify-content: flex-start;
 		align-items: center;
 		width: 65%;
+		
 	}
 	#profilePic {
 		height: 30%;

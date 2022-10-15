@@ -28,7 +28,7 @@
 			</a>
 		</span>
 	</div>
-	<div id="reviews-container" class=" space-y-6 my-6 px-6">
+	<div id="reviews-container" class=" flex flex-col justify-center items-center ">
 		{#each reviews as review}
 			<BookReview {review} displayText={false}/>
 		{/each}
@@ -41,6 +41,7 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
+		height: 55vh;
 		border-radius: 10px;
 		margin-top: 3vh;
 		box-shadow: 5px 5px 5px gray;
@@ -64,15 +65,13 @@
 	}
 
 	#reviews-container {
-		display: flex;
+		/* display: flex;
 		justify-content: flex-start;
 		flex-direction: column;
-		align-items: center;
-		/* overflow-y: auto; */
-		/* height: 90%; */
-		/* padding-top: 10px; */
-		/* padding-bottom: 10px; */
-		
+		align-items: center; */
+		height: 92%;
+		padding-top: 10px;
+		padding-bottom: 5px;
 
 	}
 </style>

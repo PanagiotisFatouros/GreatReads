@@ -5,7 +5,7 @@
 	export let bookshelf: Bookshelf;
 </script>
 
-<div id="display" class="bg-primary-3 shadow-xl">
+<div id="display" class="bg-primary-3">
 	<div id="header" class="bg-accent">
 		<div class="flex items-center ml-3 space-x-1">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
@@ -52,13 +52,13 @@
 	}
 
 	#header {
-		height: 15%;
+		/* height: 15%; */
 		border-radius: 10px 10px 0 0;
 		display: flex;
 		justify-content: space-between;
 		color: white;
-		padding-top: 5px;
-		padding-bottom: 5px;
+		padding-top: 3px;
+		padding-bottom: 3px;
 	}
 
 	#header-right {
