@@ -6,6 +6,7 @@ import { prismaClient } from '../../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { readJSONToBook } from '../../../../../../scripts';
 
+
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
 	const userId = params.userId || '';
@@ -58,7 +59,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePic: true
+							profilePicExt: true
 						}
 					}
 				}
@@ -89,7 +90,7 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaReview.user.id,
 							name: prismaReview.user.name,
-							profilePic: prismaReview.user.profilePic
+							profilePic: process.env.PROFILE_PHOTOS_URL + prismaReview.user.id + "." + prismaReview.user.profilePicExt
 						}
 					};
 					avgRating += review.rating;
@@ -113,7 +114,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePic: true
+							profilePicExt: true
 						}
 					}
 				}
@@ -128,7 +129,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic
+						profilePic: process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id + "." + prismaCollection.user.profilePicExt
 					}
 				};
 				collections.push(collection);
@@ -146,7 +147,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePic: true
+							profilePicExt: true
 						}
 					}
 				}
@@ -162,7 +163,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic
+						profilePic: process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id + "." + prismaCollection.user.profilePicExt
 					}
 				};
 				publicCollections.push(publicCollection);

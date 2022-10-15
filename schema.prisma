@@ -1,100 +1,111 @@
 datasource db {
   provider = "mysql"
-  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/testdb"
+  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/profile"
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
+enum ImageExt {
+  png
+  jpeg
+  jpg
+}
+
 model User {
   id               String             @id @unique
-  identifier_token String             @unique 
+  identifier_token String             @unique
   hashed_password  String?
   RefreshToken     RefreshToken[]
   name             String             @db.VarChar(70)
   bio              String             @db.VarChar(300)
-  profilePic       String             @db.VarChar(45)
+  profilePicExt    ImageExt?
   favAuthor        String             @db.VarChar(70)
   favGenre         String             @db.VarChar(30)
-  isAuthor         Boolean         
+  isAuthor         Boolean
   favBook          String             @db.Char(12)
   collections      PrismaCollection[]
   bookshelves      PrismaBookshelf[]
   reviews          PrismaReview[]
+
   @@map("user")
 }
 
 model RefreshToken {
-  id                Int               @id @unique @default(autoincrement())
-  refresh_token     String            @unique @db.VarChar(512)
-  user              User              @relation(references: [id], fields: [user_id], onDelete: Cascade)
-  user_id           String
+  id            Int    @id @unique @default(autoincrement())
+  refresh_token String @unique @db.VarChar(512)
+  user          User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+  user_id       String
 
   @@index([user_id])
   @@map("refresh_token")
 }
-model PrismaBook{
-  googleBooksId     String            @id @unique @db.Char(12)
-  collections       PrismaCollection[]
-  bookshelves       PrismaBookshelf[]
-  reviews           PrismaReview[]
+
+model PrismaBook {
+  googleBooksId String             @id @unique @db.Char(12)
+  collections   PrismaCollection[]
+  bookshelves   PrismaBookshelf[]
+  reviews       PrismaReview[]
+
   @@map("book")
 }
 
 model PrismaCollection {
-  id                Int               @id @unique @default(autoincrement())
-  title             String            @db.VarChar(100) 
-  creationDate      DateTime    
-  isPublic          Boolean     
-  upvotes           Int
-  book              PrismaBook              @relation(references: [googleBooksId], fields: [bookId], onDelete: Cascade)
-  bookId            String            @db.Char(12)
-  user              User              @relation(references: [id], fields: [userId], onDelete: Cascade)
-  userId            String
-  notes             PrismaNote[]
+  id           Int          @id @unique @default(autoincrement())
+  title        String       @db.VarChar(100)
+  creationDate DateTime
+  isPublic     Boolean
+  upvotes      Int
+  book         PrismaBook   @relation(references: [googleBooksId], fields: [bookId], onDelete: Cascade)
+  bookId       String       @db.Char(12)
+  user         User         @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId       String
+  notes        PrismaNote[]
 
-  @@map("collection")
   @@index([userId, bookId])
+  @@map("collection")
 }
 
 model PrismaNote {
-  id                Int               @id @unique @default(autoincrement())
-  title             String            @db.VarChar(100)
-  content           String            @db.VarChar(100)
-  collection        PrismaCollection        @relation(references: [id], fields: [collectionId], onDelete: Cascade)
-  collectionId      Int
-  pageNum           Int
-  creationDate      DateTime
-  @@map("note")
+  id           Int              @id @unique @default(autoincrement())
+  title        String           @db.VarChar(100)
+  content      String           @db.VarChar(100)
+  collection   PrismaCollection @relation(references: [id], fields: [collectionId], onDelete: Cascade)
+  collectionId Int
+  pageNum      Int
+  creationDate DateTime
+
   @@index([collectionId])
+  @@map("note")
 }
 
 model PrismaBookshelf {
-  id                Int       @id @unique @default(autoincrement()) 
-  name              String    @db.VarChar(100)
-  isDeletable       Boolean 
-  creationDate      DateTime
-  user              User      @relation(references: [id], fields: [userId], onDelete: Cascade)
-  userId            String
-  books             PrismaBook[]
+  id           Int          @id @unique @default(autoincrement())
+  name         String       @db.VarChar(100)
+  isDeletable  Boolean
+  creationDate DateTime
+  user         User         @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId       String
+  books        PrismaBook[]
 
-  @@map("bookshelf")
   @@index([userId])
+  @@map("bookshelf")
 }
 
 model PrismaReview {
-  id                Int       @id @unique @default(autoincrement())
-  title             String    @db.VarChar(100)
-  comment           String    @db.VarChar(300)
-  rating            Int       @db.TinyInt
-  creationDate      DateTime
-  upvotes           Int       
-  isEdited          Boolean
-  book              PrismaBook      @relation(references: [googleBooksId], fields: [bookId], onDelete: Cascade)
-  bookId            String
-  user              User      @relation(references: [id], fields: [userId], onDelete: Cascade)
-  userId            String
-  @@map("review")
+  id           Int        @id @unique @default(autoincrement())
+  title        String     @db.VarChar(100)
+  comment      String     @db.VarChar(300)
+  rating       Int        @db.TinyInt
+  creationDate DateTime
+  upvotes      Int
+  isEdited     Boolean
+  book         PrismaBook @relation(references: [googleBooksId], fields: [bookId], onDelete: Cascade)
+  bookId       String
+  user         User       @relation(references: [id], fields: [userId], onDelete: Cascade)
+  userId       String
+
   @@index([userId, bookId])
+  @@map("review")
 }

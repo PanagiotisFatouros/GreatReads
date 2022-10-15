@@ -8,7 +8,7 @@ import { setCookie } from 'lucia-sveltekit';
 export const actions: Actions = {
 	default: async ({ cookies, request }) => {
 		const data = await request.formData();
-        const email = data.get('email')?.toString() || '';
+		const email = data.get('email')?.toString() || '';
 		const fullName = data.get('fullName')?.toString() || '';
 		const password = data.get('password')?.toString() || '';
 		console.log(email, password);
@@ -20,7 +20,7 @@ export const actions: Actions = {
 				user_data: {
 					name: fullName,
 					bio: '',
-					profilePic: '',
+					profilePicExt: null,
 					favAuthor: '',
 					favGenre: '',
 					isAuthor: false,

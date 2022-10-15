@@ -7,28 +7,28 @@ import type { Bookshelf } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }: RequestEvent) {
-	
-    const { name, isDeletable, userId } = await request.json()
 
-    let createdPrismaBookshelf: PrismaBookshelf
-	  let createdBookshelf: Bookshelf
+	const { name, isDeletable, userId } = await request.json()
 
-    try {
-        const newBookshelfInput: Prisma.PrismaBookshelfCreateInput = {
-          	name: name,
-          	isDeletable: isDeletable,
-          	creationDate: new Date(),
-          	user: {connect:{id: userId}}
-        }
-        createdPrismaBookshelf = await prismaClient.prismaBookshelf.create({data: newBookshelfInput})
+	let createdPrismaBookshelf: PrismaBookshelf
+	let createdBookshelf: Bookshelf
+
+	try {
+		const newBookshelfInput: Prisma.PrismaBookshelfCreateInput = {
+			name: name,
+			isDeletable: isDeletable,
+			creationDate: new Date(),
+			user: { connect: { id: userId } }
+		}
+		createdPrismaBookshelf = await prismaClient.prismaBookshelf.create({ data: newBookshelfInput })
 
 		const user: User | null = await prismaClient.user.findUnique({
-			where:{
+			where: {
 				id: createdPrismaBookshelf.userId
 			}
 		})
 
-		if (user != null){
+		if (user != null) {
 			createdBookshelf = {
 				id: createdPrismaBookshelf.id,
 				name: createdPrismaBookshelf.name,
@@ -37,7 +37,7 @@ export async function POST({ request }: RequestEvent) {
 				user: {
 					id: user.id,
 					name: user.name,
-					profilePic: user.profilePic
+					profilePic: process.env.PROFILE_PHOTOS_URL + user.id + "." + user.profilePicExt
 				},
 				books: []
 			}
@@ -47,8 +47,8 @@ export async function POST({ request }: RequestEvent) {
 			throw error(400, `User ${userId} does not exist`)
 		}
 	}
-    catch(err){
-      	console.log(err)
-      	throw error(400, `Bookshelf not successfully created, error: ${err}`)
-    }
+	catch (err) {
+		console.log(err)
+		throw error(400, `Bookshelf not successfully created, error: ${err}`)
+	}
 }

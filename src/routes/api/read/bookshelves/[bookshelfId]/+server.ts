@@ -5,51 +5,51 @@ import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 
 export async function GET({ params }: RequestEvent) {
-	const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
+    const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
 
-	if (bookshelfId == -1) {
-		throw error(400, 'Book not specified/ incorrectly mapped.');
-	}
+    if (bookshelfId == -1) {
+        throw error(400, 'Book not specified/ incorrectly mapped.');
+    }
     try {
         const prismaBookshelf = await prismaClient.prismaBookshelf.findUnique({
             where: { id: bookshelfId },
             select: {
                 name: true,
-	            isDeletable: true,
-	            creationDate: true,
+                isDeletable: true,
+                creationDate: true,
                 user: {
                     select: {
                         id: true,
                         name: true,
-                        profilePic: true
+                        profilePicExt: true
                     }
                 },
                 books: true
             }
         });
 
-        if (prismaBookshelf == null){
+        if (prismaBookshelf == null) {
             throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
         }
-        else{
+        else {
             console.log(prismaBookshelf.books)
             let books: Book[] = []
             for await (const prismaBook of prismaBookshelf.books) {
-                const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
+                const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
                 const book: Book = {
                     id: prismaBook.googleBooksId,
-			        title: restBookInfo.volumeInfo.title,
-			        authors: restBookInfo.volumeInfo.authors,
-			        pageCount: restBookInfo.volumeInfo.pageCount,
-			        // description: restBookInfo.volumeInfo.description,
-			        genres: restBookInfo.volumeInfo.categories,
-			        isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
-			        datePublished: restBookInfo.volumeInfo.publishedDate,
-			        imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
+                    title: restBookInfo.volumeInfo.title,
+                    authors: restBookInfo.volumeInfo.authors,
+                    pageCount: restBookInfo.volumeInfo.pageCount,
+                    // description: restBookInfo.volumeInfo.description,
+                    genres: restBookInfo.volumeInfo.categories,
+                    isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
+                    datePublished: restBookInfo.volumeInfo.publishedDate,
+                    imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
                 }
                 books.push(book)
             };
-            
+
             console.log(books)
             const bookshelf: Bookshelf = {
                 id: bookshelfId,
@@ -59,14 +59,14 @@ export async function GET({ params }: RequestEvent) {
                 user: {
                     id: prismaBookshelf.user.id,
                     name: prismaBookshelf.user.name,
-                    profilePic: prismaBookshelf.user.profilePic
+                    profilePic: process.env.PROFILE_PHOTOS_URL + prismaBookshelf.user.id + "." + prismaBookshelf.user.profilePicExt
                 },
                 books: books
             }
             return new Response(`Bookshelf ${bookshelfId} successfully retrieved, bookshelf: ${JSON.stringify(bookshelf)}`)
         }
     }
-    catch (err){
+    catch (err) {
         throw error(400, `Bookshelf not successfully retrevied, error: ${err}`)
-	}
+    }
 }

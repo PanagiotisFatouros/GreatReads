@@ -3,7 +3,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { error } from '@sveltejs/kit';
 import { prismaClient } from '$lib/lucia';
 import type { PrismaCollection, Prisma, User } from '@prisma/client';
-import type {  Collection } from 'src/types/book.type';
+import type { Collection } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ params, request }: RequestEvent) {
@@ -29,7 +29,7 @@ export async function POST({ params, request }: RequestEvent) {
 				id: createdPrismaCollection.userId
 			}
 		})
-		if (user != null){
+		if (user != null) {
 			createdCollection = {
 				id: createdPrismaCollection.id,
 				title: createdPrismaCollection.title,
@@ -39,7 +39,7 @@ export async function POST({ params, request }: RequestEvent) {
 				user: {
 					id: user.id,
 					name: user.name,
-					profilePic: user.profilePic
+					profilePic: process.env.PROFILE_PHOTOS_URL + user.id + "." + user.profilePicExt
 				}
 			}
 			return new Response(JSON.stringify(createdCollection));

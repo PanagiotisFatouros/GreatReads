@@ -16,30 +16,28 @@
 	}
 
 	isOverlayOpen.set(true);
-
 </script>
 
 <div id="main">
 	<p class="text-primary font-heading text-heading2">Login successful!</p>
-	<BarLoader color="rgb(255, 102, 99)" size="145" unit="px" duration="1.5s"/>
+	<BarLoader color="rgb(255, 102, 99)" size="145" unit="px" duration="1.5s" />
 </div>
 
 <style>
 	#main {
-        position: absolute;
-        top: 50%;
-        left: 50%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
 		width: 50%;
-        transform: translate(-50%, -50%);
-        padding: 20px 30px 50px 30px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: white;
-        border-radius: 15px;
-        z-index: 10;
+		transform: translate(-50%, -50%);
+		padding: 20px 30px 50px 30px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: white;
+		border-radius: 15px;
+		z-index: 10;
 		height: 275px;
-    }
+	}
 </style>
-

@@ -6,10 +6,10 @@ import type { Collection } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }: RequestEvent) {
-	
+
     let { id } = await request.json()
     const collectionId = Number(id) ? parseInt(id) : -1
-    if (collectionId == -1 ){
+    if (collectionId == -1) {
         throw error(400, 'Collection ID is not valid/specified')
     }
 
@@ -18,23 +18,23 @@ export async function PUT({ request }: RequestEvent) {
     try {
 
         const existingPrismaCollection = await prismaClient.prismaCollection.findUnique({
-            where:{
+            where: {
                 id: collectionId
             },
-            include:{
+            include: {
                 user: true
             }
         })
 
-        if (existingPrismaCollection != null){
-            if (!existingPrismaCollection.isPublic){
+        if (existingPrismaCollection != null) {
+            if (!existingPrismaCollection.isPublic) {
                 throw error(400, "attempting to downvote private collection")
             }
             updatedPrismaCollection = await prismaClient.prismaCollection.update({
-                where:{
+                where: {
                     id: collectionId
                 },
-                data:{
+                data: {
                     upvotes: existingPrismaCollection.upvotes - 1
                 }
             })
@@ -48,7 +48,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: existingPrismaCollection.user.id,
                     name: existingPrismaCollection.user.name,
-                    profilePic: existingPrismaCollection.user.profilePic
+                    profilePic: process.env.PROFILE_PHOTOS_URL + existingPrismaCollection.user.id + "." + existingPrismaCollection.user.profilePicExt
                 }
             }
             return new Response(JSON.stringify(returnedCollection))
@@ -57,7 +57,7 @@ export async function PUT({ request }: RequestEvent) {
             throw error(404, "Can't find target collection in database")
         }
     }
-    catch(err){
-      throw error(400, `Collection not successfully downvoted, error: ${err}`)
+    catch (err) {
+        throw error(400, `Collection not successfully downvoted, error: ${err}`)
     }
 }

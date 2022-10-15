@@ -3,14 +3,6 @@ import { auth } from '$lib/lucia';
 import { redirect } from '@sveltejs/kit';
 import { prismaClient } from '../../lib/lucia';
 import type { Client } from '../../types/book.type';
-import { BlobServiceClient } from '@azure/storage-blob';
-
-// Create connection to blob storage
-let containerName = 'profile-photos';
-let AZURE_STORAGE_CONNECTION_STRING: string = 'DefaultEndpointsProtocol=https;AccountName=greatreadsblobstorage;AccountKey=b8DpLC3HoaRgip+rjzn2RcjRXw4fed4vEqTC6jRSQcFeu+HApYy9OjCtg3GHyuV0Fva49FAtvtEi+AStndok2g==;EndpointSuffix=core.windows.net';
-const blobServiceClient = BlobServiceClient.fromConnectionString(AZURE_STORAGE_CONNECTION_STRING);
-const containerClient = blobServiceClient.getContainerClient(containerName);
-
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ request }: ServerLoadEvent) {
@@ -28,7 +20,7 @@ export async function load({ request }: ServerLoadEvent) {
                 const client: Client = {
                     name: prismaUser.name || '',
                     id: prismaUser.id || '',
-                    profilePic: prismaUser.profilePic || '',
+                    profilePic: process.env.PROFILE_PHOTOS_URL + prismaUser.id + "." + prismaUser.profilePicExt || '',
                     bio: prismaUser.bio || '',
                     favAuthor: prismaUser.favAuthor || '',
                     favGenre: prismaUser.favGenre || ''
@@ -50,11 +42,4 @@ export async function load({ request }: ServerLoadEvent) {
         //not authenticated
         throw redirect(307, '/authentication');
     }
-}
-
-async function uploadFileToStorage(file: string, fileExt: String, user: Client) {
-    let blobClient = containerClient.getBlockBlobClient(user.id + fileExt);
-    console.log(`\nUploading to Azure storage as blob\n\tname: ${user.id}:\n\tURL: ${blobClient.url}`);
-    let uploadResponse = await blobClient.upload(file, file.length);
-    console.log('\n Upload of image was successful: requestId: ${uploadResponse.requestId}');
 }

@@ -4,8 +4,8 @@
 	"license": "team0-unimelb-ITProject-2022",
 	"type": "module",
 	"scripts": {
-		"start": "node --trace-warnings build",
-		"dev": "node --trace-warnings build",
+		"start": "node -r dotenv/config --trace-warnings build",
+		"dev": "node -r dotenv/config --trace-warnings build",
 		"test_dev": "vite dev",
 		"build": "npm run generate_prisma && vite build && npm run ipv6_fix",
 		"ipv6_fix": "sed -i \"s/0.0.0.0/::/\" ./build/index.js",
@@ -20,6 +20,7 @@
 		"format": "prettier --write --plugin-search-dir=. ."
 	},
 	"devDependencies": {
+		"dotenv": "16.0.3",
 		"@babel/eslint-parser": "^7.18.9",
 		"@playwright/test": "next",
 		"@sveltejs/adapter-node": "next",
@@ -50,6 +51,7 @@
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
 		"esbuild": "^0.15.7",
+		"into-stream": "^3.1.0",
 		"lucia-sveltekit": "^0.8.6",
 		"postcss-load-config": "^3.1.0",
 		"svelte-loading-spinners": "^0.1.7",

@@ -26,7 +26,7 @@ export async function GET({ params }: RequestEvent) {
 				select: {
 					id: true,
 					name: true,
-					profilePic: true
+					profilePicExt: true
 				}
 			}
 		}
@@ -41,7 +41,7 @@ export async function GET({ params }: RequestEvent) {
 			user: {
 				id: prismaCollection.user.id,
 				name: prismaCollection.user.name,
-				profilePic: prismaCollection.user.profilePic
+				profilePic: process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id + "." + prismaCollection.user.profilePicExt
 			}
 		};
 		collections.push(collection);

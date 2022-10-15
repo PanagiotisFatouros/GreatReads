@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Client } from 'src/types/book.type';
+	import { page } from '$app/stores';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -11,6 +12,7 @@
 	// TODO: get from database
 	let email: string = 'user@gmail.com';
 
+	const baseURL: String = $page.url.origin;
 	const hiddenPassword = '************';
 	let password: string = hiddenPassword;
 	let confirmPassword: string = hiddenPassword;
@@ -83,27 +85,37 @@
 	let fileInput: HTMLInputElement;
 	let uploadedPic: string = '';
 
+	async function updateUserProfilePic(id: String, fileType: String, profilePic) {
+		console.log(profilePic);
+		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
+			method: 'POST',
+			body: JSON.stringify({
+				id: id,
+				fileType: fileType,
+				profilePic: profilePic
+			})
+		});
+	}
+
 	function handleFileSelected(event) {
 		let image = event.target?.files[0];
-		//console.log(image);
-
+		const fileType: string = image.type;
 		const fileName: string = image.name;
-		//console.log(fileName);
 
 		const dotIdx = fileName.lastIndexOf('.') + 1;
 		const fileExt = fileName.substring(dotIdx, fileName.length).toLowerCase();
-		//console.log(fileExt);
 
 		if (fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'png') {
+			updateUserProfilePic(user.id, fileType, image);
 			let reader = new FileReader();
 			reader.readAsDataURL(image);
-			reader.onload = (e) => {
+			reader.onload = async (e) => {
 				//console.log(e);
 				let result = e.target?.result;
 
 				if (result && typeof result === 'string') {
-					uploadedPic = result;
-					uploadFileToStorage(uploadedPic);
+					console.log(fileType);
+					updateUserProfilePic(user.id, fileType, result);
 				}
 			};
 		} else {

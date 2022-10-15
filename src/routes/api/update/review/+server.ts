@@ -6,10 +6,10 @@ import type { Review } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }: RequestEvent) {
-	
+
     let { id, title, comment, rating, upvotes } = await request.json()
     const reviewId = Number(id) ? parseInt(id) : -1
-    if (reviewId == -1 ){
+    if (reviewId == -1) {
         throw error(400, 'Review ID is not valid/specified')
     }
 
@@ -18,24 +18,24 @@ export async function PUT({ request }: RequestEvent) {
     try {
 
         const existingPrismaReview = await prismaClient.prismaReview.findUnique({
-            where:{
+            where: {
                 id: reviewId
             },
-            include:{
+            include: {
                 user: true
             }
         })
 
-        if (existingPrismaReview != null){
+        if (existingPrismaReview != null) {
             updatedPrismaReview = await prismaClient.prismaReview.update({
-                where:{
+                where: {
                     id: reviewId
                 },
-                data:{
-                    title: title !== undefined? title : existingPrismaReview.title,
-                    comment: comment !== undefined? comment : existingPrismaReview.comment,
-                    rating: rating !== undefined? rating : existingPrismaReview.rating,
-                    upvotes: upvotes !== undefined? upvotes : existingPrismaReview.upvotes,
+                data: {
+                    title: title !== undefined ? title : existingPrismaReview.title,
+                    comment: comment !== undefined ? comment : existingPrismaReview.comment,
+                    rating: rating !== undefined ? rating : existingPrismaReview.rating,
+                    upvotes: upvotes !== undefined ? upvotes : existingPrismaReview.upvotes,
                     isEdited: true
                 }
             })
@@ -51,7 +51,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: existingPrismaReview.user.id,
                     name: existingPrismaReview.user.name,
-                    profilePic: existingPrismaReview.user.profilePic
+                    profilePic: process.env.PROFILE_PHOTOS_URL + existingPrismaReview.user.id + "." + existingPrismaReview.user.profilePicExt
                 }
             }
             return new Response(JSON.stringify(returnedReview))
@@ -60,7 +60,7 @@ export async function PUT({ request }: RequestEvent) {
             throw error(404, "Can't find target review in database")
         }
     }
-    catch(err){
-      throw error(400, `Review not succesfully updated, error: ${err}`)
+    catch (err) {
+        throw error(400, `Review not succesfully updated, error: ${err}`)
     }
 }
