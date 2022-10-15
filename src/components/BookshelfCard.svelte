@@ -83,7 +83,7 @@
 	}
 	#more {
 		position: absolute;
-		left: 80%;
+		left: 82%;
 	}
 	#Book1,
 	#Book2,
@@ -111,11 +111,6 @@
 		top: 40%;
 		left: 50%;
 		z-index: 1;
-	}
-
-	#Header span {
-		color: white;
-		font-weight: 400;
 	}
 
 	#Footer {
