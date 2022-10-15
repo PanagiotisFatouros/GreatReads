@@ -35,8 +35,8 @@
 
 </script>
 
-<div
-	class="bg-white w-96 pb-3 rounded border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
+<div id="main"
+	class="bg-white w-96 pb-3 rounded-lg border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
 >
 	<svg
 		on:click={() => (show = false)}
@@ -68,6 +68,7 @@
 			type="text"
 			bind:value={name}
 			class="w-full h-6 mr-2 border-primary-3 border-2 rounded-full p-1"
+			maxlength=20
 		/>
 	</div>
 
@@ -75,3 +76,14 @@
 		<button on:click={createBookshelf} class="bg-secondary w-24 h-7 rounded-full mt-3 text-white">Add</button>
 	</div>
 </div>
+
+<style>
+	#main {
+		position: absolute;
+		z-index: 50;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+</style>

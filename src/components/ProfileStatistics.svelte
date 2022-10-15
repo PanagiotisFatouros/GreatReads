@@ -37,6 +37,7 @@
 		height: 150px;
 		padding: 10px;
 		overflow-x: auto;
+		overflow-y: hidden;
 		white-space: nowrap;
 		margin-top: 3rem;
 	}

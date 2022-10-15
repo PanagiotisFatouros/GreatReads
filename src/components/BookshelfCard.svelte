@@ -113,11 +113,6 @@
 		z-index: 1;
 	}
 
-	#Header span {
-		color: white;
-		font-weight: 400;
-	}
-
 	#Footer {
 		width: 100%;
 		height: 5%;

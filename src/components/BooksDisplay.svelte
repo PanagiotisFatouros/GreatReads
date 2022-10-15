@@ -5,7 +5,7 @@
 	export let bookshelf: Bookshelf;
 </script>
 
-<div id="display" class="bg-primary-3 shadow-xl mb-4">
+<div id="display" class="bg-primary-3">
 	<div id="header" class="bg-accent">
 		<div class="flex items-center ml-3 space-x-1">
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white">
@@ -28,10 +28,10 @@
 			</svg>
 		</span>
 	</div>
-	<div id="books-container" class=" items-end px-2 py-3">
+	<div id="books-container" class="px-2">
 		{#if bookshelf.books}
 			{#each bookshelf.books as book}
-				<div class=" w-28 cursor-pointer group" on:click={() => goto(`/books/${book.id}`)} >
+				<div class=" w-20 cursor-pointer group" on:click={() => goto(`/books/${book.id}`)} >
 					<img src={book.imageURL} alt="Book Cover" class="w-full"/>
 					<p id="title" class="text-primary-1 font-body text-body2 group-hover:opacity-70">{book.title}</p>
 				</div>
@@ -48,16 +48,17 @@
 		flex-direction: column;
 		justify-content: space-between;
 		border-radius: 10px;
+		box-shadow: 5px 5px 5px gray;
 	}
 
 	#header {
-		height: 15%;
+		/* height: 15%; */
 		border-radius: 10px 10px 0 0;
 		display: flex;
 		justify-content: space-between;
 		color: white;
-		padding-top: 5px;
-		padding-bottom: 5px;
+		padding-top: 3px;
+		padding-bottom: 3px;
 	}
 
 	#header-right {
@@ -69,27 +70,26 @@
 
 	#books-container {
 		display: flex;
-		justify-content: space-around;
+		justify-content: flex-start;
 		flex-wrap: wrap;
-		/* padding: 10px; */
 		overflow: hidden;
+		margin-top: 1%;
+		margin-bottom: 1%;
 	}
-/* 
-	#book {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-content: center;
-		margin-left: 2%;
-		margin-right: 2%;
-	} */
+
+	#books-container > * {
+		margin-right: 1%;
+		margin-left: 1%;
+	}
+
 
 	#title {
 		text-align: center;
-		margin-top: 5px;
+		margin-top: 2px;
 		display: -webkit-box;
 		overflow: hidden;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
+
 	}
 </style>
