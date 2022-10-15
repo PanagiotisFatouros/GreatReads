@@ -128,7 +128,8 @@
 		isPublic: true,
 		upvotes: 25,
 		user: user1,
-		book: book1,
+		numNotes: 28,
+		imgURL: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api'
 	}
 
 	let collections = [col1, col1, col1]

@@ -3,53 +3,42 @@
 	import BookshelfCard from '../../../components/BookshelfCard.svelte';
 	import AddBookshelfPanel from '../../../components/AddBookshelfPanel.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
-	import type { Bookshelf, Book } from 'src/types/book.type';
-
+	import type { Bookshelf } from 'src/types/book.type';
+	import {goto} from '$app/navigation'
+	
 
 	let addBookshelf = false;
 
-	let book: Book = {
-		id: '123',
-		title: 'The Hunger Games',
-		authors: ['Suzanne Collins'],
-		pageCount: 384,
-		avgRating: 4.3,
-		numRatings: 35,
-		description:
-			'The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.',
-		reviews: [],
-		genres: ['Dystopian', 'science fiction', 'drama', 'action'],
-		isbn: '9780440335702',
-		datePublished: '1st December 2011',
-		imageURL:
-			'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-		userNotes: [],
-		publicNotes: []
-	};
-	let books = [book, book, book, book, book, book, book];
+	/** @type {import('./$types').PageData} */
+	export let data;
 
-	let bookshelf: Bookshelf = {
-		id: 123,
-		name: "Favourites",
-		isDeletable: false,
-		creationDate: new Date(),
-		user:  {bio: "",
-				favAuthor: "",
-				favGenre: "",
-				id: "4bAKz93G",
-				name: "lucas",
-				profilePic: ""},
-		books: books
+	let bookshelves:Bookshelf[] = data.bookshelves;
+
+
+	// console.log(bookshelves)
+
+	function addBookshelfLocally(event:any) {
+		
+		bookshelves.push(event.detail.bookshelf);
+
+		bookshelves = bookshelves
 	}
 	
-	export let bookshelves: Bookshelf[] = [bookshelf, bookshelf, bookshelf, bookshelf];
-	
 	$: isOverlayOpen.set(addBookshelf);
+	$: bookshelves
+
+	$: {
+		if ($isOverlayOpen == false) {
+			addBookshelf = false;
+		}
+	}
+
 </script>
 
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading flex items-center">
-		<svg
+		<button on:click={() => goto('/library')}>
+			<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
 			viewBox="0 0 24 24"
@@ -59,6 +48,8 @@
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
 		</svg>
+		</button>
+		
 		Bookshelves
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />
@@ -84,5 +75,20 @@
 
 <!-- TODO: close panel when click outside -->
 {#if addBookshelf}
+<<<<<<< HEAD
 	<AddBookshelfPanel bind:show={addBookshelf} />
+=======
+	<div class="flex flex-col justify-start w-full">
+
+		<div class="z-20 fixed top-1/2 left-1/2" id="addBookshelf">
+			<AddBookshelfPanel bind:show={addBookshelf} on:newBookshelf={addBookshelfLocally} />
+		</div>
+	</div>
+>>>>>>> main
 {/if}
+
+<style>
+	#addBookshelf {
+		transform: translate(-50%, -50%);
+	}
+</style>

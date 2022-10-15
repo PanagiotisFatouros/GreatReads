@@ -14,7 +14,7 @@ model User {
   RefreshToken     RefreshToken[]
   name             String             @db.VarChar(70)
   bio              String             @db.VarChar(300)
-  profilePic       String             @db.VarChar(45)
+  profilePic       String?             @db.VarChar(45)
   favAuthor        String             @db.VarChar(70)
   favGenre         String             @db.VarChar(30)
   isAuthor         Boolean         

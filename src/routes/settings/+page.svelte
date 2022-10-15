@@ -1,5 +1,6 @@
 <script lang='ts'>
-import type { Client } from "src/types/book.type";
+    import type { Client } from "src/types/book.type";
+    import { goto } from '$app/navigation'
 
     /** @type {import('./$types').PageData} */
     export let data;
@@ -126,7 +127,7 @@ import type { Client } from "src/types/book.type";
     <div class="flex justify-between items-center w-full">
         <h1 class=" text-secondary">Account Settings</h1>
 
-        <button class="btn bg-secondary w-32 h-8 text-body2 text-white rounded-full">View Profile</button>
+        <button on:click={() => goto(`/profile/${user.id}`)} class="btn bg-secondary w-32 h-8 text-body2 text-white rounded-full">View Profile</button>
     </div>
 
     <div class="flex">

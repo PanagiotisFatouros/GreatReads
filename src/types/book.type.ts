@@ -21,6 +21,8 @@ export type Book = {
 
 	userNotes?: Collection[];
 	publicNotes?: Collection[];
+
+	savedBookshelfIDs?: number[];
 };
 
 export type Client = {
@@ -37,6 +39,9 @@ export type Client = {
 	bio?: string;
 	favAuthor?: string;
 	favGenre?: string;
+	favsBookshelf?: Bookshelf;
+	numBooksRead?: number;
+	avgRating?: number;
 };
 
 export type Review = {
@@ -64,8 +69,10 @@ export type Collection = {
 
 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
 	notes?: Note[];
+	numNotes?: number;
+	bookId?: string,
+	imgURL?: string
 
-	book: Book;
 };
 
 export type Note = {
@@ -81,6 +88,6 @@ export type Bookshelf = {
 	name: string;
 	isDeletable: boolean;
 	creationDate: Date;
-	user: Client;
-	books: Book[]
+	user?: Client;
+	books?: Book[]
 }

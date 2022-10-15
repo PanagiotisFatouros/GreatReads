@@ -91,7 +91,7 @@
 		<img id="profilePic" src={user1.profilePic} alt="Profile pic" />
 		<p class="text-heading1 text-secondary">{user1.name}</p>
 		<p id="bio" class="font-body">{user1.bio}</p>
-		<ProfileStatistics />
+		<ProfileStatistics user={user1}/>
 	</div>
 	<div id="right">
 		<BooksDisplay bookshelf={currentlyReading}/>
