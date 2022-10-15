@@ -1,21 +1,24 @@
 <script lang="ts">
+	import type { Book } from '../types/book.type';
+
 	export let show = false;
-	// import genres from API
-	let genres = ['Select Genre...', 'Non-fiction', 'Fantasy', 'Science Fiction'];
-	let genreSelect = genres[0];
-	let pageMin: number;
-	let pageMax: number;
-	let ratingSelect = 0;
+	export let pageMin: number = 0;
+	export let pageMax: number = 100000;
+	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
+	export let books: Book[];
+	export let booksShown: Book[];
 	let intWarn = false;
 	let pageWarn = false;
 
 	function handleClick() {
+		// check validity of page numbers
 		if (!pageMin) {
 			pageMin = 0;
 		}
 		if (!pageMax) {
-			pageMax = 0;
+			pageMax = 100000;
 		}
+
 		if (isNaN(pageMin) || isNaN(pageMax)) {
 			intWarn = true;
 			pageWarn = false;
@@ -25,6 +28,32 @@
 		} else {
 			intWarn = false;
 			pageWarn = false;
+		}
+
+		// handle filtering
+		booksShown = [];
+		for (let book of books) {
+			let p: boolean = true;
+			let r: boolean = true;
+			if (pageMin || pageMax) {
+				if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
+					p = false;
+				}
+			} 
+
+			if (ratingSelect != 0) {
+				if ((!book.avgRating) || ((ratingSelect == 1) && (book.avgRating < 4.0)) || ((ratingSelect == 2) && (book.avgRating < 3.0))) {
+					r = false;
+				}
+			}
+
+			if (p && r) {
+				booksShown.push(book);
+			}
+		}
+
+		if (!intWarn && !pageWarn) {
+			show = false;
 		}
 	}
 </script>
@@ -61,20 +90,6 @@
 	<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
 
 	<div class="mx-2">
-		<!-- genre selection box -->
-		<div class=" bg-white rounded-full border-solid border-2 border-primary-3 flex my-1">
-			<select
-				bind:value={genreSelect}
-				class="bg-transparent w-full pl-2 cursor-pointer focus:outline-none"
-			>
-				{#each genres as genre}
-					<option value={genre}>
-						{genre}
-					</option>
-				{/each}
-			</select>
-		</div>
-
 		<!-- rating filter -->
 		<input
 			type="radio"
@@ -110,7 +125,7 @@
 						/>
 					</svg>
 				{/each}
-				<p class="align-middle mx-1">& up</p>
+				<p class="align-middle">+</p>
 			</label><br />
 		</div>
 		<div class="flex">
@@ -138,7 +153,7 @@
 						/>
 					</svg>
 				{/each}
-				<p class="text-primary-3 font-body text-body2 align-middle mx-1">& up</p>
+				<p class="text-primary-3 font-body text-body2 align-middle">+</p>
 			</label><br />
 		</div>
 
@@ -169,7 +184,6 @@
 
 	<div class="flex justify-center">
 		<button
-			href="null"
 			on:click={() => handleClick()}
 			class="bg-secondary w-28 h-7 rounded-full mt-2 text-white">Filter</button
 		>

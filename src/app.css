@@ -27,6 +27,9 @@ h1 {
 	h2 {
 		@apply font-heading text-heading2;
 	}
+	p {
+		@apply font-body text-body1
+	}
 }
 
 /* define custom style to reuse for all buttons */

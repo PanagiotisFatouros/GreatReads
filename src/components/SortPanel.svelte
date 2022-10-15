@@ -1,8 +1,22 @@
 <script lang="ts">
-	export let show = false;
-	let sortOption = 0;
+	import type { Book } from '../types/book.type';
 
-	function handleClick() {}
+	export let show = false;
+	export let booksShown: Book[];
+	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
+
+	function handleClick() {
+		if (sortOption == 1) {
+			booksShown.sort(function (a, b) {return (a.title > b.title ? 1 : -1)})
+		} else if (sortOption == 2) {
+			// TODO: currently gives a warning because avgRating may be undefined
+			//booksShown.sort(function (a, b) {return (a.avgRating > b.avgRating ? 1 : -1)})
+		} else if (sortOption == 3) {
+			booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
+		}
+		booksShown = booksShown;
+		show = false;
+	}
 </script>
 
 <div
@@ -79,7 +93,6 @@
 
 	<div class="flex justify-center">
 		<button
-			href="null"
 			on:click={() => handleClick()}
 			class="bg-secondary w-28 h-7 rounded-full mt-2 text-white">Sort</button
 		>

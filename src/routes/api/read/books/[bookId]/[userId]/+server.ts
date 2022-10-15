@@ -22,10 +22,17 @@ export async function GET({ params }: RequestEvent) {
 		const restBookInfo = readJSONToBook(response);
 		// Check if book already in database
 		let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
-			where: { googleBooksId: googleBooksId }
+			where: { googleBooksId: googleBooksId },
+			include: {
+				bookshelves: {
+					where: {userId: userId},
+					select: {
+						id: true
+					}
+				}
+			}
 		});
-
-		// console.log(existingBookInDatabase);
+		
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
 		let reviews: Review[] = [];
@@ -33,6 +40,7 @@ export async function GET({ params }: RequestEvent) {
 		let publicCollections: Collection[] = [];
 		let avgRating: number;
 		let numRating: number;
+		let savedBookshelfIDs: number[] = [];
 		if (existingBookInDatabase == null) {
 			let newBookInput: Prisma.PrismaBookCreateInput = {
 				googleBooksId: googleBooksId
@@ -167,6 +175,10 @@ export async function GET({ params }: RequestEvent) {
 				};
 				publicCollections.push(publicCollection);
 			});
+
+			existingBookInDatabase.bookshelves.forEach(bookshelf => {
+				savedBookshelfIDs.push(bookshelf.id);
+			})
 		}
 
 		// creating google book object
@@ -187,7 +199,8 @@ export async function GET({ params }: RequestEvent) {
 			numRatings: numRating,
 			reviews: reviews,
 			userNotes: collections,
-			publicNotes: publicCollections
+			publicNotes: publicCollections,
+			savedBookshelfIDs: savedBookshelfIDs
 		};
 		return new Response(JSON.stringify(targetGoogleBook));
 	}

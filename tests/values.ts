@@ -87,10 +87,12 @@ let book: Book = {
     id: "Lx1hDQAAQBAJ",
     title: "The Mouse with the Question Mark Tail",
     authors: ["Richard Peck"],
+    avgRating: 3.5,
     pageCount: 256,
     description: "A very small mouse of unknown origins runs away from school in the Royal Mews of Buckingham Palace shortly before the celebration of Queen Victoria's diamond jubilee, celebrating her sixty years on the British throne.",
     genres: ["Juvenile Fiction"],
     isbn: "9780142425305",
+    numRatings: 0,
     datePublished: "2014-09-11",
     imageURL: "http://books.google.com/books/content?id=Lx1hDQAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
 };

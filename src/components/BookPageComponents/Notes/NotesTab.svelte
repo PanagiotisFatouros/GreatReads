@@ -2,8 +2,9 @@
 	import NotesCollection from './NotesCollection.svelte';
 	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
+	import { createEventDispatcher } from 'svelte';
 
-	export let collections: Collection[];
+	export let collections: Collection[] | undefined;
 
 	import { isOverlayOpen } from '../../../stores/OverlayStore.js';
 	import { page } from '$app/stores';
@@ -11,6 +12,7 @@
 
 	const baseURL: string = $page.url.origin;
 
+	const dispatch = createEventDispatcher();
 
 	let newCollection: Collection | undefined = undefined;
 	let selectedCollection: Collection | null = null;
@@ -24,7 +26,7 @@
 			
 			let deletedCollection:Collection = await response.json();
 			
-			if (deletedCollection != undefined) {
+			if (deletedCollection != undefined && collections != undefined) {
 				//successful
 				collections = collections.filter((c) => c.id !== selectedCollection!.id);
 				selectedCollection = null;
@@ -50,11 +52,17 @@
 	}
 
 	function displayNewCollection() {
-		if (newCollection != undefined) {
+		if (newCollection != undefined && collections != undefined) {
 			collections.push(newCollection);
 			
 			//trigger refresh
 			collections = collections;
+
+			if (newCollection.isPublic) {
+				dispatch('newPublicCollection', {
+					collection: newCollection
+				})
+			}
 
 			newCollection = undefined;
 		}
@@ -71,7 +79,7 @@
 
 	{:else if selectedCollection != null}
 		<!-- show selected collection -->
-		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} />
+		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} on:update />
 
 	{:else}
 		<!-- show list of collections -->
@@ -85,7 +93,7 @@
 		</div>
 
 		<div class="flex flex-col mt-1">
-			{#if collections.length == 0}
+			{#if collections == undefined || collections.length == 0}
 				<p class="mt-3">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
