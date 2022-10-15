@@ -3,7 +3,7 @@
 	import FilterPanel from '../../../../components/FilterPanel.svelte';
 	import SortPanel from '../../../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
-	import type { Bookshelf } from '../../../../types/book.type';
+	import type { Bookshelf, Book } from '../../../../types/book.type';
 	import { goto } from '$app/navigation'
 	import Confirmation from '../../../../components/Confirmation.svelte';
 	import { page } from '$app/stores';
@@ -15,9 +15,11 @@
 	export let data;
 
 	let bookshelf: Bookshelf = data.bookshelf
+	let booksShown: Book[] | undefined = bookshelf.books;
+
 	let allBookshelves: Bookshelf[] = data.bookshelves
-	let filter = false;
-	let sort = false;
+	let filterOn = false;
+	let sortOn = false;
 
 	let isDeleting:boolean = false;
 	
@@ -40,15 +42,21 @@
 
 	
 
-	$: isOverlayOpen.set(filter || sort || isDeleting);
+	$: isOverlayOpen.set(filterOn || sortOn || isDeleting);
 	$: bookshelf
 	$: {
 		if ($isOverlayOpen == false) {
-			filter = false;
-			sort = false;
+			filterOn = false;
+			sortOn = false;
 			isDeleting = false;
 		}
 	}
+
+	// store variables so values remain when opening panels again
+	let pageMin: number;
+	let pageMax: number;
+	let ratingSelect: number;
+	let sortOption: number;
 </script>
 
 <div class="mt-6 mx-8">
@@ -71,7 +79,7 @@
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
 		<!-- filter button -->
-		<div style="cursor:pointer" on:click={() => (filter = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (filterOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -89,7 +97,7 @@
 			<p class="ml-1 mr-3">Filter</p>
 		</div>
 		<!-- sort button -->
-		<div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -121,14 +129,14 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filter}
+	{#if filterOn && bookshelf.books != undefined}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} />
+			<FilterPanel bind:show={filterOn} books={bookshelf.books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sort}
+	{#if sortOn && booksShown != undefined}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sort} />
+			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 	{#if isDeleting}
