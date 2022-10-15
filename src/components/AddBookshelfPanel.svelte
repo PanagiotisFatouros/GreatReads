@@ -1,11 +1,42 @@
 <script lang="ts">
+	import {createEventDispatcher} from 'svelte';
+	import { page } from '$app/stores';
+	const baseURL = $page.url.origin;
+
+	import { getSession } from 'lucia-sveltekit/client';
+	import type { Bookshelf } from '../types/book.type';
+	const session = getSession();
+	const user_id = $session?.user.user_id;
+
+	const dispatch = createEventDispatcher();
+
 	export let show = false;
+	
 	// TODO: check if a bookshelf with same name doesn't already exist
 	let name = '';
+
+	async function createBookshelf() {
+		const response = await fetch(`${baseURL}/api/create/bookshelf`, {
+			method: 'POST',
+			body: JSON.stringify({
+				name: name,
+				userId: user_id
+			})
+		});
+
+		const bookshelf:Bookshelf = await response.json();
+		//console.log(bookshelf);
+
+		show = false;
+		dispatch('newBookshelf', {
+			bookshelf: bookshelf
+		})
+	}
+
 </script>
 
-<div
-	class="bg-white w-96 pb-3 rounded border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
+<div id="main"
+	class="bg-white w-96 pb-3 rounded-lg border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
 >
 	<svg
 		on:click={() => (show = false)}
@@ -37,10 +68,22 @@
 			type="text"
 			bind:value={name}
 			class="w-full h-6 mr-2 border-primary-3 border-2 rounded-full p-1"
+			maxlength=20
 		/>
 	</div>
 
 	<div class="flex justify-center">
-		<button href="null" class="bg-secondary w-24 h-7 rounded-full mt-3 text-white">Add</button>
+		<button on:click={createBookshelf} class="bg-secondary w-24 h-7 rounded-full mt-3 text-white">Add</button>
 	</div>
 </div>
+
+<style>
+	#main {
+		position: absolute;
+		z-index: 50;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+</style>

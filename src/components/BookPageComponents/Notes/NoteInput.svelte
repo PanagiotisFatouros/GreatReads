@@ -65,8 +65,15 @@
                 alert("Page Number must be positive");
             }
             else {
-                //TODO: update in database
-                //const newNote: Note = await response.json();
+                await fetch(`${baseURL}/api/update/note`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        id: note.id,
+                        title: title,
+                        pageNum: pageNum,
+                        content: noteContent
+                    })
+                });
 
                 note.pageNum = pageNum;
                 note.title = title;
@@ -94,7 +101,7 @@
             class="bg-primary-1 w-16 ml-3 text-center rounded-full"
         />
     </div>
-    <input type="text" bind:value={title} class="std_input" placeholder="Title..." />
+    <input type="text" bind:value={title} class="std_input" placeholder="Title..." maxlength=40/>
     <textarea
         bind:value={noteContent}
         cols="30"

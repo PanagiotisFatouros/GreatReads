@@ -10,18 +10,21 @@
 
 	const baseURL = $page.url.origin;
 
-	export let reviews: Review[];
+	export let reviews: Review[] | undefined;
 
 	let userReview: Review | undefined;
 	let otherReviews: Review[] = [];
 
-	reviews.forEach((review) => {
-		if (review.user?.id === user_id) {
-			userReview = review;
-		} else {
-			otherReviews.push(review);
-		}
-	});
+	if (reviews != undefined) {
+		reviews.forEach((review) => {
+			if (review.user?.id === user_id) {
+				userReview = review;
+			} else {
+				otherReviews.push(review);
+			}
+		});
+	}
+	
 
 	async function deleteUserReview() {
 		if (userReview != undefined) {
@@ -32,12 +35,22 @@
 			let deletedReview: Review = await response.json();
 			if (deletedReview != undefined) {
 				//successful
+				//remove from local reviews
+				reviews?.splice(reviews.indexOf(userReview), 1)
+
 				userReview = undefined;
 			}
 			else {
 				alert("Something went wrong. Review not deleted");
 			}
 		}
+	}
+
+	function pushNewReview() {
+		if (userReview != undefined) {
+			reviews?.push(userReview);
+		}
+		
 	}
 
 	let edittingReview:boolean = false;
@@ -51,7 +64,7 @@
 
 <div class=" mt-3 w-full">
 	{#if userReview === undefined || edittingReview}
-		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false}/>
+		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false} on:postReview={pushNewReview}/>
 	{:else}
 		<!-- TODO: not catching delete event for some reason -->
 		<ReviewCard review={userReview} on:delete={deleteUserReview} on:edit={handleEdit} />

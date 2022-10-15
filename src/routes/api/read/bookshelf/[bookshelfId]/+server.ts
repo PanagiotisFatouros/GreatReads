@@ -3,14 +3,22 @@ import { error } from '@sveltejs/kit';
 import type { Bookshelf, Book } from 'src/types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
+import { auth } from "$lib/lucia";
+import { readJSONToBook } from '../../../../../scripts'
 
-export async function GET({ params }: RequestEvent) {
+
+export async function GET({params, request}: RequestEvent) {
+
     const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
 
-    if (bookshelfId == -1) {
-        throw error(400, 'Book not specified/ incorrectly mapped.');
-    }
+
+	if (bookshelfId == -1) {
+		throw error(400, 'Book not specified/ incorrectly mapped.');
+	}
+    
     try {
+        
+
         const prismaBookshelf = await prismaClient.prismaBookshelf.findUnique({
             where: { id: bookshelfId },
             select: {
@@ -27,6 +35,7 @@ export async function GET({ params }: RequestEvent) {
                 books: true
             }
         });
+        console.log(prismaBookshelf?.books);
 
         if (prismaBookshelf == null) {
             throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
@@ -35,18 +44,10 @@ export async function GET({ params }: RequestEvent) {
             console.log(prismaBookshelf.books)
             let books: Book[] = []
             for await (const prismaBook of prismaBookshelf.books) {
-                const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
-                const book: Book = {
-                    id: prismaBook.googleBooksId,
-                    title: restBookInfo.volumeInfo.title,
-                    authors: restBookInfo.volumeInfo.authors,
-                    pageCount: restBookInfo.volumeInfo.pageCount,
-                    // description: restBookInfo.volumeInfo.description,
-                    genres: restBookInfo.volumeInfo.categories,
-                    isbn: restBookInfo.volumeInfo.industryIdentifiers[1].identifier,
-                    datePublished: restBookInfo.volumeInfo.publishedDate,
-                    imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
-                }
+                const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
+
+                const book: Book = readJSONToBook(restBookInfo)
+
                 books.push(book)
             };
 
@@ -63,7 +64,7 @@ export async function GET({ params }: RequestEvent) {
                 },
                 books: books
             }
-            return new Response(`Bookshelf ${bookshelfId} successfully retrieved, bookshelf: ${JSON.stringify(bookshelf)}`)
+            return new Response(JSON.stringify(bookshelf))
         }
     }
     catch (err) {
