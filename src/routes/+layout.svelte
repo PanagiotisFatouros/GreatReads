@@ -10,6 +10,7 @@
 	import { RingLoader } from 'svelte-loading-spinners';
 
 	import {getSession} from "lucia-sveltekit/client"
+	import { browser } from '$app/environment';
 
 	const session = getSession()
 	
@@ -20,7 +21,7 @@
 	handleSilentRefresh();
 
 	function disableScroll() {
-		scrollY = window.scrollY;
+		const scrollY = window.scrollY;
 		document.body.style.position = 'fixed';
 		document.body.style.top = `-${scrollY}px`;
 		document.body.style.overflow = 'hidden';
@@ -34,12 +35,15 @@
 	}
 
 	$: {
-		if ($isOverlayOpen == true) {
-			disableScroll();
+		if (browser) {
+			if ($isOverlayOpen == true) {
+				disableScroll();
+			}
+			else {
+				enableScroll()
+			}
 		}
-		else {
-			enableScroll()
-		}
+		
 	}
 </script>
 
