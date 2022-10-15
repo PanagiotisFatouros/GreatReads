@@ -4,6 +4,7 @@
 	import SortPanel from '../../../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
 	import type { Bookshelf, Book } from '../../../../types/book.type';
+
 	import { goto } from '$app/navigation'
 	import Confirmation from '../../../../components/Confirmation.svelte';
 	import { page } from '$app/stores';
@@ -21,7 +22,6 @@
 	let allBookshelves: Bookshelf[] = data.bookshelves
 	let filterOn = false;
 	let sortOn = false;
-
 
 	let isDeleting:boolean = false;
 	
@@ -43,6 +43,7 @@
 	}
 
 	
+
 
 
 	$: isOverlayOpen.set(filterOn || sortOn || isDeleting);
@@ -105,6 +106,7 @@
 		<!-- sort button -->
 
 		<div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
+
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -136,6 +138,7 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
+
 
 	{#if filterOn && bookshelf.books != undefined}
 		<div class="z-10 fixed self-center">

@@ -4,6 +4,7 @@ import type { Bookshelf, Book } from 'src/types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { auth } from '$lib/lucia';
+import { readJSONToBook } from '../../../../../../scripts';
 import { book } from 'tests/values';
 
 export async function GET({ params }: RequestEvent) {
@@ -72,18 +73,9 @@ export async function GET({ params }: RequestEvent) {
                 
                 for await (const prismaBook of prismaBookshelf.books) {
                     const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
-                    
-                    const book: Book = {
-                        id: prismaBook.googleBooksId,
-                        title: restBookInfo.volumeInfo.title,
-                        authors: restBookInfo.volumeInfo.authors,
-                        pageCount: restBookInfo.volumeInfo.pageCount,
-                        // description: restBookInfo.volumeInfo.description,
-                        genres: restBookInfo.volumeInfo.categories,
-                        isbn: restBookInfo.volumeInfo.industryIdentifiers ? restBookInfo.volumeInfo.industryIdentifiers[1].identifier : '',
-                        datePublished: restBookInfo.volumeInfo.publishedDate,
-                        imageURL: restBookInfo.volumeInfo.imageLinks.thumbnail,
-                    }
+
+                    const book: Book = readJSONToBook(restBookInfo);
+
                     books.push(book)
 
                 }

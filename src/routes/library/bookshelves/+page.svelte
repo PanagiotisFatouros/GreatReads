@@ -14,6 +14,9 @@
 
 	let bookshelves:Bookshelf[] = data.bookshelves;
 
+
+	// console.log(bookshelves)
+
 	function addBookshelfLocally(event:any) {
 		
 		bookshelves.push(event.detail.bookshelf);

@@ -115,6 +115,7 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
+
 	{#each booksShown as book}
 		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
 	{/each}
