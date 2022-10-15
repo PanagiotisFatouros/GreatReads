@@ -7,7 +7,7 @@
 	import { handleSilentRefresh } from 'lucia-sveltekit/client';
 	import { navigating } from '$app/stores';
 
-	import { Circle2, RingLoader } from 'svelte-loading-spinners';
+	import { RingLoader } from 'svelte-loading-spinners';
 
 	import {getSession} from "lucia-sveltekit/client"
 
