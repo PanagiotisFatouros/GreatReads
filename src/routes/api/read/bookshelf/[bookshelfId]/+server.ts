@@ -6,6 +6,7 @@ import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { auth } from "$lib/lucia";
 import { readJSONToBook } from '../../../../../scripts'
 
+
 export async function GET({params, request}: RequestEvent) {
 
     const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
@@ -44,7 +45,9 @@ export async function GET({params, request}: RequestEvent) {
             let books: Book[] = []
             for await (const prismaBook of prismaBookshelf.books) {
                 const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
+
                 const book: Book = readJSONToBook(restBookInfo)
+
                 books.push(book)
             };
             

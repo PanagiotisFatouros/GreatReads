@@ -14,8 +14,6 @@ export async function load({ request, url }: ServerLoadEvent) {
             const host = url.host;
             let bookshelves: Bookshelf[] = await (await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/-1`)).json()
 
-			// console.log(bookshelves);
-
 
             return {
                 bookshelves: bookshelves

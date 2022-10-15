@@ -5,7 +5,6 @@
 	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
 	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
-	import { goto } from '$app/navigation';
 
 	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
@@ -16,7 +15,7 @@
 
 	let book: Book = data.book;
 	let bookshelves: Bookshelf[] = data.bookshelves
-	
+
 	let similarBooks: Book[] = data.books;
 
 	let isSavingBook: boolean = false
@@ -106,7 +105,8 @@
 
 		<div class=" space-y-3 mt-3">
 			{#each similarBooks.slice(0,8) as book}
-				<AbbreviatedBookCard on:click={() => goto(`/books/${book.id}`)} book={book} />
+				<AbbreviatedBookCard on:click={() => 
+        (`/books/${book.id}`)} book={book} />
 			{/each}
 		</div>
 	</div>

@@ -7,11 +7,11 @@
 	import type { Book, Bookshelf, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
+	//import { handleFilter } from '../../components/FilterPanel.svelte';
     
     //let searchText = $page.params.searched ? $page.params.searched : ""
     //let searchText = decodeURI($page.url.pathname.substring(1))
 	//$: console.log($page.url.search)
-
 	
 
 	/** @type {import('./$types').PageData} */
@@ -37,13 +37,23 @@
 	$: books = data.books;
 	$: bookshelves = data.bookshelves;
 	$: users = data.users;
+	// subset of books - based on filters applied
+	
+	let booksShown: Book[];
+	$: booksShown = books;
 
 	let searchTerm: string 
-	$: searchTerm= data.searchString;
+	$: searchTerm = data.searchString;
 
-	let filter = false;
-	let sort = false;
-	$: isOverlayOpen.set(filter || sort);
+	let filterOn = false;
+	let sortOn = false;
+	$: isOverlayOpen.set(filterOn || sortOn);
+
+	// store variables so values remain when opening panels again
+	let pageMin: number;
+	let pageMax: number;
+	let ratingSelect: number;
+	let sortOption: number;
 </script>
 
 {#if isBookSearch}
@@ -52,7 +62,7 @@
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
 		<!-- filter button -->
-		<div style="cursor:pointer" on:click={() => (filter = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (filterOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -70,7 +80,7 @@
 			<p class="ml-1 mr-3">Filter</p>
 		</div>
 		<!-- sort button -->
-		<div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
+		<div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"
@@ -92,20 +102,21 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filter && $isOverlayOpen}
+	{#if filterOn && $isOverlayOpen && books != undefined}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filter} />
+			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sort && $isOverlayOpen}
+	{#if sortOn && $isOverlayOpen && booksShown != undefined}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sort} />
+			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
-	{#each books as book}
+
+	{#each booksShown as book}
 		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
 	{/each}
 </div>
