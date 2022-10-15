@@ -16,7 +16,7 @@ export async function GET({ params }: RequestEvent) {
 		client = {
 			name: prismaUser?.name || '',
 			id: prismaUser?.id || '',
-			profilePic: process.env.PROFILE_PHOTOS_URL + prismaUser?.id + "." + prismaUser?.profilePicExt || '',
+			profilePic: prismaUser?.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser?.id : 'default',
 			bio: prismaUser?.bio || ''
 		};
 		return new Response(JSON.stringify(client));

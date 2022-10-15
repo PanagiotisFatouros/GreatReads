@@ -47,7 +47,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: existingPrismaCollection.user.id,
                     name: existingPrismaCollection.user.name,
-                    profilePic: process.env.PROFILE_PHOTOS_URL + existingPrismaCollection.user.id + "." + existingPrismaCollection.user.profilePicExt
+                    profilePic: existingPrismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + existingPrismaCollection.user.id : "default"
                 }
             }
             return new Response(JSON.stringify(returnedCollection))

@@ -39,7 +39,7 @@ export async function POST({ params, request }: RequestEvent) {
 				user: {
 					id: user.id,
 					name: user.name,
-					profilePic: process.env.PROFILE_PHOTOS_URL + user.id + "." + user.profilePicExt
+					profilePic: user.profilePic ? process.env.PROFILE_PHOTOS_URL + user.id : "default"
 				}
 			}
 			return new Response(JSON.stringify(createdCollection));

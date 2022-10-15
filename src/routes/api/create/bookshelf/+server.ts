@@ -37,7 +37,7 @@ export async function POST({ request }: RequestEvent) {
 				user: {
 					id: user.id,
 					name: user.name,
-					profilePic: process.env.PROFILE_PHOTOS_URL + user.id + "." + user.profilePicExt
+					profilePic: process.env.PROFILE_PHOTOS_URL + user.id
 				},
 				books: []
 			}

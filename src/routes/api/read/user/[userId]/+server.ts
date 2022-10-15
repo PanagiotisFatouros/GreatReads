@@ -28,7 +28,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						name: prismaUser.name,
 						id: prismaUser.id,
-						profilePic: process.env.PROFILE_PHOTOS_URL + prismaUser.id + "." + prismaUser.profilePicExt
+						profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
 					}
 				};
 				clientReviews.push(clientReview);
@@ -37,7 +37,7 @@ export async function GET({ params }: RequestEvent) {
 		client = {
 			name: prismaUser?.name || '',
 			id: prismaUser?.id || '',
-			profilePic: process.env.PROFILE_PHOTOS_URL + prismaUser?.id + "." + prismaUser?.profilePicExt || '',
+			profilePic: prismaUser?.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser?.id : 'default',
 			bio: prismaUser?.bio || '',
 			reviews: clientReviews
 		};

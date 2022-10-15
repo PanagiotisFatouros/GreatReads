@@ -51,7 +51,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: existingPrismaReview.user.id,
                     name: existingPrismaReview.user.name,
-                    profilePic: process.env.PROFILE_PHOTOS_URL + existingPrismaReview.user.id + "." + existingPrismaReview.user.profilePicExt
+                    profilePic: existingPrismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + existingPrismaReview.user.id : "default"
                 }
             }
             return new Response(JSON.stringify(returnedReview))

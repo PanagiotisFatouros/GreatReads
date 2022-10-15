@@ -20,7 +20,7 @@ export const actions: Actions = {
 				user_data: {
 					name: fullName,
 					bio: '',
-					profilePicExt: null,
+					profilePic: false,
 					favAuthor: '',
 					favGenre: '',
 					isAuthor: false,

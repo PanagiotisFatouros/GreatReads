@@ -59,7 +59,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePicExt: true
+							profilePic: True
 						}
 					}
 				}
@@ -90,7 +90,7 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaReview.user.id,
 							name: prismaReview.user.name,
-							profilePic: process.env.PROFILE_PHOTOS_URL + prismaReview.user.id + "." + prismaReview.user.profilePicExt
+							profilePic: prismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id : "default"
 						}
 					};
 					avgRating += review.rating;
@@ -114,7 +114,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePicExt: true
+							profilePic: True
 						}
 					}
 				}
@@ -129,7 +129,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id + "." + prismaCollection.user.profilePicExt
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
 					}
 				};
 				collections.push(collection);
@@ -147,7 +147,7 @@ export async function GET({ params }: RequestEvent) {
 						select: {
 							id: true,
 							name: true,
-							profilePicExt: true
+							profilePic: True
 						}
 					}
 				}
@@ -163,7 +163,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id + "." + prismaCollection.user.profilePicExt
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
 					}
 				};
 				publicCollections.push(publicCollection);

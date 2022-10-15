@@ -70,7 +70,7 @@ export async function PUT({ request }: RequestEvent) {
                         select: {
                             id: true,
                             name: true,
-                            profilePicExt: true
+                            profilePic: True
                         }
                     }
                 }
@@ -101,7 +101,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: targetBookshelf.user.id,
                     name: targetBookshelf.user.name,
-                    profilePic: process.env.PROFILE_PHOTOS_URL + targetBookshelf.user.id + "." + targetBookshelf.user.profilePicExt
+                    profilePic: targetBookshelf.user.profilePic ? process.env.PROFILE_PHOTOS_URL + targetBookshelf.user.id : "default"
                 },
                 books: books
             }

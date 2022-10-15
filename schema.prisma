@@ -1,6 +1,6 @@
 datasource db {
   provider = "mysql"
-  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/profile"
+  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/production"
 }
 
 generator client {
@@ -20,7 +20,7 @@ model User {
   RefreshToken     RefreshToken[]
   name             String             @db.VarChar(70)
   bio              String             @db.VarChar(300)
-  profilePicExt    ImageExt?
+  profilePic       Boolean            @default(false)
   favAuthor        String             @db.VarChar(70)
   favGenre         String             @db.VarChar(30)
   isAuthor         Boolean

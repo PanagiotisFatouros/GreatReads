@@ -21,7 +21,7 @@ export async function GET({ params }: RequestEvent) {
                     select: {
                         id: true,
                         name: true,
-                        profilePicExt: true
+                        profilePic: True
                     }
                 },
                 books: true

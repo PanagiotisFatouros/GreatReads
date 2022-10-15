@@ -85,37 +85,30 @@
 	let fileInput: HTMLInputElement;
 	let uploadedPic: string = '';
 
-	async function updateUserProfilePic(id: String, fileType: String, profilePic) {
-		console.log(profilePic);
+	async function updateUserProfilePic(id: String, mimeType: String, profilePic: String, length: Number) {
 		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
 			method: 'POST',
 			body: JSON.stringify({
 				id: id,
-				fileType: fileType,
-				profilePic: profilePic
+				mimeType: mimeType,
+				profilePic: profilePic,
+				length: length
 			})
 		});
 	}
 
 	function handleFileSelected(event) {
 		let image = event.target?.files[0];
-		const fileType: string = image.type;
-		const fileName: string = image.name;
+		const mimeType: string = image.type;
 
-		const dotIdx = fileName.lastIndexOf('.') + 1;
-		const fileExt = fileName.substring(dotIdx, fileName.length).toLowerCase();
-
-		if (fileExt == 'jpg' || fileExt == 'jpeg' || fileExt == 'png') {
-			updateUserProfilePic(user.id, fileType, image);
+		if (mimeType == 'image/jpeg' || mimeType == 'image/png') {
 			let reader = new FileReader();
 			reader.readAsDataURL(image);
 			reader.onload = async (e) => {
-				//console.log(e);
 				let result = e.target?.result;
-
 				if (result && typeof result === 'string') {
-					console.log(fileType);
-					updateUserProfilePic(user.id, fileType, result);
+					updateUserProfilePic(user.id, mimeType, result, image.size);
+					location.reload()
 				}
 			};
 		} else {
@@ -132,7 +125,7 @@
 			>View Profile</button
 		>
 	</div>
-
+	
 	<div class="flex">
 		<!-- left side - profile pic -->
 		<div class="flex flex-col self-start justify-center items-center mt-5">
@@ -142,6 +135,8 @@
 			>
 				{#if uploadedPic != ''}
 					<img src={uploadedPic} class=" w-full h-full object-cover" alt="profile" />
+				{:else if user.profilePic != "default"}
+					<img src={user.profilePic} class=" w-full h-full object-cover" alt="profile" />
 				{:else}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
