@@ -7,11 +7,11 @@
 	export let clientID: string;
 </script>
 
-<div id="card" class="bg-primary-3">
-	<div id="header" class="bg-secondary">
-		<span id="header-left">
+<div id="card" class="bg-primary-3 shadow-xl">
+	<div id="header" class="bg-accent">
+		<h2 class=" self-center ml-3">
 			{name}'s Reviews
-		</span>
+		</h2>
 		<span id="header-right">
 			<a href="/profile/{clientID}/reviews" ><p>See all</p></a>
 			<a href="/profile/{clientID}/reviews">
@@ -28,7 +28,7 @@
 			</a>
 		</span>
 	</div>
-	<div id="reviews-container">
+	<div id="reviews-container" class=" space-y-6 my-6 px-6">
 		{#each reviews as review}
 			<BookReview {review} displayText={false}/>
 		{/each}
@@ -41,7 +41,6 @@
 		flex-direction: column;
 		justify-content: space-between;
 		width: 100%;
-		height: 55vh;
 		border-radius: 10px;
 		margin-top: 3vh;
 	}
@@ -58,10 +57,6 @@
 		font-weight: 300;
 	}
 
-	#header-left {
-		align-self: center;
-		margin-left: 10px;
-	}
 
 	#header-right {
 		display: flex;
@@ -74,8 +69,11 @@
 		justify-content: flex-start;
 		flex-direction: column;
 		align-items: center;
-		height: 90%;
-		padding-top: 10px;
-		padding-bottom: 10px;
+		/* overflow-y: auto; */
+		/* height: 90%; */
+		/* padding-top: 10px; */
+		/* padding-bottom: 10px; */
+		
+
 	}
 </style>
