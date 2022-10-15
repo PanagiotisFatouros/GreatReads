@@ -4,7 +4,7 @@
 	import FilterPanel from '../../components/FilterPanel.svelte';
 	import SortPanel from '../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../stores/OverlayStore.js';
-	import type { Book, Client } from '../../types/book.type';
+	import type { Book, Bookshelf, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
 	//import { handleFilter } from '../../components/FilterPanel.svelte';
@@ -31,14 +31,16 @@
 
 	// one will be empty list if searching for the other type
 	let books: Book[];
+	let bookshelves: Bookshelf[];
 	let users: Client[];
 
+	$: books = data.books;
+	$: bookshelves = data.bookshelves;
+	$: users = data.users;
 	// subset of books - based on filters applied
+	
 	let booksShown: Book[];
-
-	books = data.books;
-	users = data.users;
-	booksShown = books;
+	$: booksShown = books;
 
 	let searchTerm: string 
 	$: searchTerm = data.searchString;
@@ -100,12 +102,12 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filterOn && $isOverlayOpen}
+	{#if filterOn && $isOverlayOpen && books != undefined}
 		<div class="z-10 fixed self-center">
 			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sortOn && $isOverlayOpen}
+	{#if sortOn && $isOverlayOpen && booksShown != undefined}
 		<div class="z-10 fixed self-center">
 			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
@@ -114,10 +116,12 @@
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
 	{#each booksShown as book}
-		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book}/>
+		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
 	{/each}
 </div>
+
 {:else}
+
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading">Search Results for "{searchTerm}"</div>
 	<hr class=" border-1 border-primary-3 my-3" />
@@ -125,7 +129,7 @@
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
 	{#each users as user}
-		<UserCard />
+		<UserCard user={user}/>
 	{/each}
 </div>
 {/if}

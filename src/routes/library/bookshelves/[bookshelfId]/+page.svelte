@@ -3,33 +3,54 @@
 	import FilterPanel from '../../../../components/FilterPanel.svelte';
 	import SortPanel from '../../../../components/SortPanel.svelte';
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
-	import type { Book } from '../../../../types/book.type';
+	import type { Bookshelf, Book } from '../../../../types/book.type';
 	import { goto } from '$app/navigation'
+	import Confirmation from '../../../../components/Confirmation.svelte';
+	import { page } from '$app/stores';
 
-	export let bookshelfName = 'Favourites';
-	let book: Book = {
-		id: '123',
-		title: 'The Hunger Games',
-		authors: ['Suzanne Collins'],
-		pageCount: 384,
-		avgRating: 4.3,
-		numRatings: 35,
-		description:
-			'The Hunger Games is a 2008 dystopian novel by the American writer Suzanne Collins. It is written in the perspective of 16-year-old Katniss Everdeen, who lives in the future, post-apocalyptic nation of Panem in North America.',
-		reviews: [],
-		genres: ['Dystopian', 'science fiction', 'drama', 'action'],
-		isbn: '9780440335702',
-		datePublished: '1st December 2011',
-		imageURL:
-			'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-		userNotes: [],
-		publicNotes: []
-	};
-	let books = [book, book, book, book, book, book, book];
-	let booksShown: Book[] = books;
+    const baseURL = $page.url.origin;
+
+
+	/** @type {import('./$types').PageData} */
+	export let data;
+
+	let bookshelf: Bookshelf = data.bookshelf
+	let booksShown: Book[] | undefined = bookshelf.books;
+
+	let allBookshelves: Bookshelf[] = data.bookshelves
 	let filterOn = false;
 	let sortOn = false;
-	$: isOverlayOpen.set(filterOn || sortOn);
+
+	let isDeleting:boolean = false;
+	
+	function handleMaybeRemoved(event:any, bookId: string) {
+	
+		if (event.detail.bookshelfIDs.includes(bookshelf.id)) {
+			bookshelf.books = bookshelf.books?.filter(book => book.id != bookId)
+
+			bookshelf = bookshelf;
+		}
+	}
+
+	async function deleteBookshelf() {
+		await fetch(`${baseURL}/api/delete/bookshelf/${bookshelf.id}`, {
+                method: 'DELETE'
+        }) 
+
+		goto('/library/bookshelves');
+	}
+
+	
+
+	$: isOverlayOpen.set(filterOn || sortOn || isDeleting);
+	$: bookshelf
+	$: {
+		if ($isOverlayOpen == false) {
+			filterOn = false;
+			sortOn = false;
+			isDeleting = false;
+		}
+	}
 
 	// store variables so values remain when opening panels again
 	let pageMin: number;
@@ -53,7 +74,7 @@
 		</svg>
 		</button>
 		
-		{bookshelfName}
+		{bookshelf.name}
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="text-primary-3 text-heading3 font-heading flex">
@@ -93,25 +114,40 @@
 			</svg>
 			<p class="ml-1 mr-3">Sort</p>
 		</div>
+
+		{#if bookshelf.isDeletable}
+		<button on:click={() => isDeleting = true} class="flex text-accent ml-5">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+			</svg>
+			  
+			<p class="ml-1 mr-3">Delete Bookshelf</p>
+		</button>
+		{/if}
 	</div>
 </div>
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filterOn}
+	{#if filterOn && bookshelf.books != undefined}
 		<div class="z-10 fixed self-center">
-			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
+			<FilterPanel bind:show={filterOn} books={bookshelf.books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sortOn}
+	{#if sortOn && booksShown != undefined}
 		<div class="z-10 fixed self-center">
 			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
+	{#if isDeleting}
+		<Confirmation title={"Delete Bookshelf"} description={"Are you sure you want to delete this bookshelf? This can not be undone."} on:cancel={() => isDeleting = false} on:confirm={deleteBookshelf}/>
+	{/if}
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-	{#each books as book}
-		<BookCard book={book} />
-	{/each}
+	{#if bookshelf.books != undefined}
+		{#each bookshelf.books as book}
+			<BookCard on:click={() => goto(`/books/${book.id}`)} on:maybeRemoved={event => handleMaybeRemoved(event, book.id)} book={book} bookshelves={allBookshelves} />
+		{/each}
+	{/if}
 </div>

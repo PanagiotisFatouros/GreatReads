@@ -1,20 +1,20 @@
 import type { ServerLoadEvent } from '@sveltejs/kit';
 import { searchTypes } from '../../types/searchTypes.enum';
-import type { Book, Client } from '../../types/book.type'
+import type { Book, Client, Bookshelf } from '../../types/book.type'
 import { getCriteria, readGoogleBooksResponse } from '../../scripts'
 import { prismaClient } from '$lib/lucia';
+import { getSession } from 'lucia-sveltekit/load';
 
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({ request, url }: ServerLoadEvent) {
-    let books: Book[] = [];
+export async function load(event: ServerLoadEvent) {
+	const url = event.url;
+    const host = url.host
+    const session = await getSession(event);
 
-    let user1: Client = {
-        id: '123',
-        profilePic:
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8kiSH5ZSAcVoj3tAQQDoP_ux0sSricMyUg&usqp=CAU',
-		name: 'Dean Coleman'
-    };
+    let books: Book[] = [];
+    let bookshelves: Bookshelf[] = [];
+
     let users: Client[] = [];
 
     try {
@@ -35,20 +35,49 @@ export async function load({ request, url }: ServerLoadEvent) {
         })
 
         if (searchType != '') {
-            //TODO: perform search
             if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres ){
                 const searchCriteria = `${getCriteria(searchType)}:${searchString}`
                 console.log(searchCriteria)
                 const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`)).json()
                 const googleBooks = readGoogleBooksResponse(response)
 
-                const host = url.host
+                bookshelves = await (
+                    await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`)
+                ).json();
+
+                
                 // get ratings from database 
                 for await (const googleBook of googleBooks) {
                     const ratingResponse = await (await fetch(`http://${host}/api/read/books/${googleBook.id}/rating`)).json()
                     googleBook.avgRating = ratingResponse.avgRating
                     googleBook.numRatings = ratingResponse.numRatings
-                    books.push(googleBook)
+                    
+                    if (session) {
+                        let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
+                            where: { googleBooksId: googleBook.id },
+                            include: {
+                                bookshelves: {
+                                    where: {userId: session.user.user_id},
+                                    select: {
+                                        id: true
+                                    }
+                                }
+                            }
+                        });
+
+                        if (existingBookInDatabase != null) {
+                            let savedBookshelfIDs: number[] = [];
+
+                            existingBookInDatabase.bookshelves.forEach(bookshelf => {
+                                savedBookshelfIDs.push(bookshelf.id);
+                            })
+
+                            googleBook.savedBookshelfIDs = savedBookshelfIDs;
+                        }
+                    }
+
+                    books.push(googleBook);
+                    
                 }
                 // console.log(googleBooks[0])
             }
@@ -77,12 +106,12 @@ export async function load({ request, url }: ServerLoadEvent) {
                     return user
                 })
             }
-                
             
             return {
                 searchType,
                 searchString,
                 books,
+                bookshelves,
                 users
             }
         }

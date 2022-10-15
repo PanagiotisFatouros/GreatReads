@@ -2,9 +2,11 @@
 	import StarRating from '../../../components/StarRating.svelte';
 	import BookPageContent from '../../../components/BookPageComponents/BookPageContent.svelte';
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
-	import { goto } from '$app/navigation';
+	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
+	import { isOverlayOpen } from '../../../stores/OverlayStore';
+	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
-	import type { Book } from '../../../types/book.type';
+	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
 	// import { browser } from '$app/environment';
 
@@ -12,10 +14,13 @@
 	export let data;
 
 	let book: Book = data.book;
+	let bookshelves: Bookshelf[] = data.bookshelves
 	let similarBooks: Book[] = data.books;
 
+	let isSavingBook: boolean = false
 	function saveBook() {
-		//TODO: save book to user's bookshelf
+		isSavingBook = true;
+		isOverlayOpen.set(true)
 	}
 
 	function convertToString(val: any) {
@@ -24,7 +29,17 @@
 		}
 		return '';
 	}
+
+	$: {
+		if ($isOverlayOpen == false) {
+			isSavingBook = false;
+		}
+	}
 </script>
+
+{#if isSavingBook}
+<SaveToBookshelf bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
+{/if}
 
 <!-- {#await bookPromise} -->
 <!-- <h1>Loading Book</h1>  -->
@@ -36,12 +51,27 @@
 			<img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain" />
 		</div>
 
-		<!-- TODO: show popup to select which bookshelf to save it in, and change text to "saved" after -->
+		{#if book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0}
 		<button
 			on:click={saveBook}
 			class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
 			>+ Save Book</button
 		>
+		{:else}
+		<button
+			on:click={saveBook}
+			class=" bg-accent rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
+		>
+			<div class='flex space-x-2'>
+				<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+				</svg>
+				<p>Saved</p>
+			</div>
+		</button
+		>
+		{/if}
+		
 
 		<ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
 			<li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>
@@ -74,7 +104,8 @@
 
 		<div class=" space-y-3 mt-3">
 			{#each similarBooks.slice(0,8) as book}
-				<AbbreviatedBookCard on:click={() => goto(`/books/${book.id}`)} book={book} />
+				<AbbreviatedBookCard on:click={() => 
+        (`/books/${book.id}`)} book={book} />
 			{/each}
 		</div>
 	</div>
