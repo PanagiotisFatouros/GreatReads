@@ -11,7 +11,7 @@ export async function GET({ params }: RequestEvent) {
 		return new Response('User not specified/ incorrectly mapped.');
 	}
 
-	let collections: Collection[] = [];
+	
 	const prismaCollections = await prismaClient.prismaCollection.findMany({
 		where: { userId: userId},
 		select: {
@@ -35,11 +35,21 @@ export async function GET({ params }: RequestEvent) {
 	});
 	console.log(prismaCollections)
 
-	for await (const prismaCollection of prismaCollections) {
-		const googleResponse: any = await getBookInfoFromGoogleBooksAPI(prismaCollection.bookId);
+	const bookProms: any = []
 
-		const imgURL = readJSONToBook(googleResponse).imageURL;
-		
+	prismaCollections.forEach(prismaCollection => {
+		bookProms.push(getBookInfoFromGoogleBooksAPI(prismaCollection.bookId))
+	})
+
+	const bookRes = await Promise.all(bookProms);
+
+	let collections: Collection[] = [];
+
+	bookRes.forEach((book, i) => {
+		const prismaCollection = prismaCollections[i]
+
+		const imgURL = readJSONToBook(book).imageURL;
+		const prismaUser = prismaCollection.user
 
 		const collection: Collection = {
 			id: prismaCollection.id,
@@ -50,19 +60,15 @@ export async function GET({ params }: RequestEvent) {
 			user: {
 				id: prismaCollection.user.id,
 				name: prismaCollection.user.name,
-				profilePic: prismaCollection.user.profilePic
+				profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
 			},
 			numNotes: prismaCollection._count.notes,
 			bookId: prismaCollection.bookId,
 			imgURL: imgURL
-		};
+		}
 
-		//console.log(collection);
-
-		
-		collections.push(collection);
-	};
-
+		collections.push(collection)
+	})
 
 	// if (collections.length == 0) {
 	// 	return new Response(`404 There are no existing collections for ${userId} in database`);

@@ -13,11 +13,16 @@ export async function load({ request, url }: ServerLoadEvent) {
 			
             const host = url.host;
 
+			let bookshelves: Bookshelf[];
+			let collections: Collection[];
+
             //get 4 bookshelves
             //TODO: determine which 4
-            let bookshelves: Bookshelf[] = await (await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/4`)).json()
+            const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/4`).then(res => res.json());
 
-            let collections: Collection[] = await (await fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`)).json()
+            const collectionsProm = fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`).then(res => res.json());
+
+			[bookshelves, collections] = await Promise.all([bookshelvesProm, collectionsProm])
 
 			//console.log(bookshelves)
 			//console.log(collections)
@@ -30,11 +35,11 @@ export async function load({ request, url }: ServerLoadEvent) {
 
 		} else {
 			//not authenticated
-			throw redirect(307, '/authentication');
+			throw redirect(307, '/authentication/login');
 		}
 	} catch (err) {
 		console.log(err);
 		//not authenticated
-		throw redirect(307, '/authentication');
+		throw redirect(307, '/authentication/login');
 	}
 }

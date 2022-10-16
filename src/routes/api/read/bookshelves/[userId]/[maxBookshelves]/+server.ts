@@ -35,7 +35,9 @@ export async function GET({ params }: RequestEvent) {
                             profilePic: true
                         }
                     },
-                    books: true
+                    books: {
+                        take: 3
+                    }
                 }
             });
         }
@@ -55,7 +57,9 @@ export async function GET({ params }: RequestEvent) {
                             profilePic: true
                         }
                     },
-                    books: true
+                    books: {
+                        take: 3
+                    }
                 }
             });
         }
@@ -67,20 +71,30 @@ export async function GET({ params }: RequestEvent) {
         }
         else{
 
+            const bookshelfPromises:any = []
+
+            prismaBookshelves.forEach(prismaBookshelf => {
+                const bookPromises:any = []
+
+                prismaBookshelf.books.forEach(prismaBook => {
+                    bookPromises.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId))
+                })
+
+                bookshelfPromises.push(Promise.all(bookPromises))
+            })
+
+            const bookshelfRes = await Promise.all(bookshelfPromises);
+
             let bookshelves: Bookshelf[] = []
-            for await (const prismaBookshelf of prismaBookshelves) {
-                let books: Book[] = []
-                
-                for await (const prismaBook of prismaBookshelf.books) {
-                    const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
+            
+            bookshelfRes.forEach((bookshelfRes, i) => {
+                const prismaBookshelf = prismaBookshelves[i]
 
-                    const book: Book = readJSONToBook(restBookInfo);
+                const books:Book[] = []
+                bookshelfRes.forEach(bookRes => {
+                    books.push(readJSONToBook(bookRes))
+                })
 
-                    books.push(book)
-
-                }
-
-                //console.log(books)
                 const bookshelf: Bookshelf = {
                     id: prismaBookshelf.id,
                     name: prismaBookshelf.name,
@@ -95,7 +109,8 @@ export async function GET({ params }: RequestEvent) {
                 }
 
                 bookshelves.push(bookshelf);
-            }
+            })
+
             //console.log(bookshelves)
             return new Response(JSON.stringify(bookshelves))
         }
