@@ -3,7 +3,7 @@
 	import { goto } from '$app/navigation';
 	import { getSession } from 'lucia-sveltekit/client';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
-	import { BarLoader } from 'svelte-loading-spinners'
+	import { RingLoader } from 'svelte-loading-spinners'
 
 	const session = getSession();
 
@@ -20,7 +20,7 @@
 
 <div id="main">
 	<p class="text-primary font-heading text-heading2">Invalid credentials, Please try again</p>
-	<BarLoader color="rgb(255, 102, 99)" size="145" unit="px" duration="1.5s"/>
+	<RingLoader color="rgb(255, 102, 99)" size="60" unit="px" duration="1.5s"/>
 </div>
 
 <style>
