@@ -3,6 +3,14 @@
 	import { goto } from '$app/navigation'
 
 	export let bookshelf: Bookshelf;
+
+	export let isProfilePage: boolean = false;
+
+	function linkToPage() {
+		if (isProfilePage == false) {
+			goto(`/library/bookshelves/${bookshelf.id}`);
+		}
+	}
 </script>
 
 <div id="display" class="bg-primary-3">
@@ -14,7 +22,7 @@
 			<h2 id="header-left">{bookshelf.name}</h2>
 		</div>
 		
-		<span id="header-right">
+		<span on:click={linkToPage} id="header-right" class=" cursor-pointer">
 			<p>See all</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"

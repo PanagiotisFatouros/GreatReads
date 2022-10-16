@@ -1,14 +1,17 @@
 <script lang="ts">
     import type { Collection } from "../types/book.type"
+    import { goto } from '$app/navigation'
+    
     export let collection: Collection;
+    console.log(collection.bookId)
 
 </script>
 
-<div id="main" class="bg-primary-1">
+<div on:click={() => goto(`/books/${collection.bookId}`)} id="main" class="bg-primary-1 cursor-pointer group">
     <div id='left'>
         <img src={collection.imgURL} alt="Book Cover">
     </div>
-    <div id=centred>
+    <div id="centred" class=" group-hover:opacity-70">
         <div id="right">
             <p class="text-secondary text-heading3 font-heading">{collection.title}</p>
             <p class="font-body text-body2">{collection.numNotes} Notes</p>

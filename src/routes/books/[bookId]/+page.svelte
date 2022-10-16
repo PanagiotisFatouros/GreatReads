@@ -105,8 +105,7 @@
 
 		<div class=" space-y-3 mt-3">
 			{#each similarBooks.slice(0,8) as book}
-				<AbbreviatedBookCard on:click={() => 
-        (`/books/${book.id}`)} book={book} />
+				<AbbreviatedBookCard book={book} />
 			{/each}
 		</div>
 	</div>

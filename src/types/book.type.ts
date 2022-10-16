@@ -65,7 +65,7 @@ export type Collection = {
 
 	//only required if public collection
 	upvotes: number;
-	user: Client;
+	user?: Client;
 
 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
 	notes?: Note[];

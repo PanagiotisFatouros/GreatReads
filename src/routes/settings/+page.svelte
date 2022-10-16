@@ -2,7 +2,6 @@
 	import type { Client } from 'src/types/book.type';
 	import { page } from '$app/stores';
     import { goto } from '$app/navigation'
-
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -108,6 +107,7 @@
 			reader.onload = async (e) => {
 				let result = e.target?.result;
 				if (result && typeof result === 'string') {
+          uploadedPic = result;
 					updateUserProfilePic(user.id, mimeType, result, image.size);
 					location.reload()
 				}
