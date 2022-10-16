@@ -16,6 +16,8 @@
 	
 	if ($session) {
 		authenticated.set(true);
+	} else {
+		authenticated.set(false);
 	}
 
 	handleSilentRefresh();

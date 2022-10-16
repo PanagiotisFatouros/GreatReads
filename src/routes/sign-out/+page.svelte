@@ -18,7 +18,7 @@
 			authenticated.set(false)
 		} else {
 			setTimeout(function () {
-				window.location.href = '/authentication';
+				window.location.href = '/authentication/login';
 			}, 2000);
 		}
 	}

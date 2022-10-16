@@ -58,7 +58,7 @@
 		margin-left: 1rem;
 		display: flex;
 		flex-direction: column;
-		justify-content: start;
+		justify-content: flex-start;
 		width: 90%;
 		padding-bottom: 10px;
 		overflow-y: auto;
