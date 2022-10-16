@@ -6,7 +6,7 @@
     export let data;
 
     let user: Client = data.client;
-    console.log(user);
+    // console.log(user);
 
     let fullName: string = user.name;
     // TODO: get from database

@@ -5,7 +5,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import type { Bookshelf, Client, Collection } from '../types/book.type'
+	import type { Bookshelf, Client, Collection, Book } from '../types/book.type'
 	import CollectionCard from '../components/CollectionCard.svelte';
 	import MostPopular from '../components/MostPopular.svelte';
 
@@ -17,104 +17,17 @@
 		console.log($session);
 	} else {
 		if (browser) {
-			goto('/authentication');
+			goto('/authentication/login');
 		}
 	}
-
-	let user1: Client = {
-		id: "1",
-		reviews: [
-			{
-				id: 123,
-				title: 'Worst Book Ever',
-				comment:
-					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
-				date: new Date(),
-				img: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-				rating: 3,
-				upvotes: 10,
-
-				isEdited: false
-			},
-			{
-				id: 123,
-				title: 'Worst Book Ever',
-				comment:
-					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
-				date: new Date(),
-				img: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-				rating: 3,
-				upvotes: 10,
-				isEdited: false
-			},
-			{
-				id: 123,
-				title: 'Worst Book Ever',
-				comment:
-					'This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks This sucks',
-				date: new Date(),
-				img: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api',
-				rating: 3,
-				upvotes: 10,
-				isEdited: false,
-			}
-		],
-		profilePic:
-			'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRC8kiSH5ZSAcVoj3tAQQDoP_ux0sSricMyUg&usqp=CAU',
-		bio: "My name is Bob; I'm a avid reader, and lover of non-fiction. My favourite genres of book include literature and sci-fi. When I'm not reading, you will find me in the forest enjoying nature, or kayaking in the moutains.",
-		name: 'Dean Coleman'
-	};
 	
-	let currentlyReading: Bookshelf = {
-		name: "Currently Reading",
-		id: 1,
-		isDeletable: false,
-		creationDate: new Date(),
-		user: user1,
-		books: [{
-			id: "1",
-			title: "Hello",
-			authors: ["Bob Marley"],
-			pageCount: 150,
-			genres: ["Sci-fi"],
-			isbn: "9780439023481",
-			datePublished: "23/2/2021",
-			imageURL: 'https://books.google.com/books/content?id=Gts2mAEACAAJ&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE705q0MJvL4MtkdG72-Mq2MpD1KP-HqkHucn5VMuS_tADUhRe8Me286ifFq4WJXynkEMeYXuRL3f6zBHQdujnYx0d-itSdxEJKTAxFvlmIH_w4ZbRhQrtuxfxXjeA2wRaSC6xnxF&source=gbs_api',
-		},
-		{
-			id: "1",
-			title: "Hello",
-			authors: ["Bob Marley"],
-			pageCount: 150,
-			genres: ["Sci-fi"],
-			isbn: "9780439023481",
-			datePublished: "23/2/2021",
-			imageURL:'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api'
-		},
-		{
-			id: "1",
-			title: "Hello This is a very long title",
-			authors: ["Bob Marley"],
-			pageCount: 150,
-			genres: ["Sci-fi"],
-			isbn: "9780439023481",
-			datePublished: "23/2/2021",
-			imageURL: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api'
-		}],
-	};
+	/** @type {import('./$types').PageData} */
+	export let data;
 
-	let col1: Collection = {
-		id: 1,
-		title: "Chapter Summaries",
-		creationDate: new Date(),
-		isPublic: true,
-		upvotes: 25,
-		user: user1,
-		numNotes: 28,
-		imgURL: 'http://books.google.com/books/content?id=zyTCAlFPjgYC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE71m9nvyzo1NJxodp6cD1grRr1hk7wGgHSNBRhJkMVVz0-VmnqgHo5KemZGD3W7N5JHue3ZyfQ7q6TxUuzN9AIg8BVj9sibBrgsRF2TbgRojWCr7sxR0rWh2Cydv2lRG4Ppg12p_&source=gbs_api'
-	}
-
-	let collections = [col1, col1, col1]
+	const favsBookshelf: Bookshelf = data.favsBookshelf;
+	const readingBookshelf: Bookshelf = data.readingBookshelf;
+	const collections: Collection[] = data.collections;
+	const popularBooks: Book[] = data.popularBooks;
 
 </script>
 
@@ -122,10 +35,10 @@
 	<div id="left">
 		<div id="bookshelves">
 			<div class="display">
-				<BooksDisplay bookshelf={currentlyReading}/>
+				<BooksDisplay bookshelf={favsBookshelf}/>
 			</div>
 			<div class="display">
-				<BooksDisplay bookshelf={currentlyReading}/>
+				<BooksDisplay bookshelf={readingBookshelf}/>
 			</div>
 		</div>
 		<div id="notes">
@@ -133,13 +46,13 @@
 			<hr class=" border-1 border-primary-3 my-3" />
 			<div id="collections">
 				{#each collections as collection}
-					<CollectionCard collection={col1}/>
+					<CollectionCard collection={collection}/>
 				{/each}
 			</div>
 		</div>
 	</div>
 	<div id="right">
-		<MostPopular/>
+		<MostPopular mostPopular={popularBooks}/>
 	</div>
 </div>
 

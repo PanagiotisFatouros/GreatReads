@@ -28,7 +28,7 @@ export const actions: Actions = {
 				}
 			});
 			setCookie(cookies, ...userSession.cookies);
-			console.log(userSession);
+			// console.log(userSession);
 
 			// Create user profile, which has username as the user's name in database
 			return { success: true };

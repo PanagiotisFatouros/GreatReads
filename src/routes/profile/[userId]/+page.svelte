@@ -10,7 +10,7 @@
 	export let data;
 
 	let user:Client = data.user;
-	console.log(user)
+	// console.log(user)
 
 </script>
 

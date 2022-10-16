@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Book } from '../types/book.type';
-	export let book: Book;
 	import StarRating from './StarRating.svelte';
+	import { goto } from '$app/navigation'
+
+	export let book: Book;
 
 	function getRating () {
 	if (book.avgRating === undefined) {
@@ -14,9 +16,9 @@
 	let stars = getRating();
 </script>
 
-<div id="card">
+<div id="card" on:click={() => goto(`/books/${book.id}`)} class='group cursor-pointer'>
 	<div id="cover"><img src={book.imageURL} alt="" /></div>
-	<div id="text">
+	<div id="text" class=" group-hover:opacity-70">
 		<p class="text-body1 text-secondary ">{book.title}</p>
 		<p id="rating" class="text-primary-2 text-body2">
 			<!--{book.avgRating}-->

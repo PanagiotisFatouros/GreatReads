@@ -5,7 +5,7 @@
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
 	import type { Bookshelf, Book } from '../../../../types/book.type';
 
-	import { goto } from '$app/navigation'
+	import { afterNavigate, goto } from '$app/navigation'
 	import Confirmation from '../../../../components/Confirmation.svelte';
 	import { page } from '$app/stores';
 
@@ -66,7 +66,7 @@
 
 <div class="mt-6 mx-8">
 	<div class="text-primary-3 text-heading2 font-heading flex items-center">
-		<button on:click={() => goto('/library/bookshelves')}>
+		<button on:click={() => history.back()}>
 			<svg
 			xmlns="http://www.w3.org/2000/svg"
 			fill="none"
