@@ -2,6 +2,16 @@
 	import type { Book } from '../types/book.type';
 	export let book: Book;
 	import StarRating from './StarRating.svelte';
+
+	function getRating () {
+	if (book.avgRating === undefined) {
+		return 0;
+	} else {
+		return book.avgRating
+	}
+	}
+
+	let stars = getRating();
 </script>
 
 <div id="card">
@@ -10,7 +20,7 @@
 		<p class="text-body1 text-secondary ">{book.title}</p>
 		<p id="rating" class="text-primary-2 text-body2">
 			<!--{book.avgRating}-->
-			<StarRating rating={book.avgRating} showRating={true} isSmall={true} />
+			<StarRating rating={stars} showRating={true} isSmall={true} />
 		</p>
 		<p class="text-primary-3 text-body2">{book.authors}</p>
 	</div>
