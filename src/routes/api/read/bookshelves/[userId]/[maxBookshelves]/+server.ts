@@ -6,6 +6,7 @@ import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { auth } from '$lib/lucia';
 import { readJSONToBook } from '../../../../../../scripts';
 import { book } from 'tests/values';
+import type { PrismaBookshelf } from '@prisma/client';
 
 export async function GET({ params }: RequestEvent) {
 	

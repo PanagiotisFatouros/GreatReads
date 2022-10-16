@@ -28,13 +28,6 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 					name: true,
 					isDeletable: true,
 					creationDate: true,
-					user: {
-						select: {
-							id: true,
-							name: true,
-							profilePic: true
-						}
-					},
 					books: {
 						include: {
 							bookshelves: {
@@ -52,11 +45,19 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 				throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
 			}
 			else{
-				//console.log(prismaBookshelf.books)
+				const bookProms: any = []
+				
+				prismaBookshelf.books.forEach(prismaBook => {
+					bookProms.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId))
+				})
+
+				const booksRes = await Promise.all(bookProms)
+
 				let books: Book[] = []
-				for await (const prismaBook of prismaBookshelf.books) {
-					const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
-					const book: Book = readJSONToBook(restBookInfo);
+				booksRes.forEach((bookRes, i) => {
+					const prismaBook = prismaBookshelf.books[i]
+
+					const book: Book = readJSONToBook(bookRes);
 
 					let savedBookshelfIDs: number[] = []
 					prismaBook.bookshelves.forEach(bookshelf => {
@@ -65,18 +66,14 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 					book.savedBookshelfIDs = savedBookshelfIDs;
 
 					books.push(book)
-				};
-				
+				})
+
+
 				const bookshelf: Bookshelf = {
 					id: bookshelfId,
 					name: prismaBookshelf.name,
 					isDeletable: prismaBookshelf.isDeletable,
 					creationDate: prismaBookshelf.creationDate,
-					user: {
-						id: prismaBookshelf.user.id,
-						name: prismaBookshelf.user.name,
-						profilePic: prismaBookshelf.user.profilePic
-					},
 					books: books
 				}
 				//console.log(bookshelf)
