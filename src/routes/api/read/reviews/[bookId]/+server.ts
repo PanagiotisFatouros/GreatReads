@@ -16,7 +16,7 @@ export async function GET({ params }: RequestEvent) {
 				select: {
 					id: true,
 					name: true,
-					profilePic: True
+					profilePic: true
 				}
 			}
 		}

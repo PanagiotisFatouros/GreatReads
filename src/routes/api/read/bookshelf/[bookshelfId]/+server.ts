@@ -29,7 +29,7 @@ export async function GET({params, request}: RequestEvent) {
                     select: {
                         id: true,
                         name: true,
-                        profilePic: True
+                        profilePic: true
                     }
                 },
                 books: true
@@ -60,7 +60,7 @@ export async function GET({params, request}: RequestEvent) {
                 user: {
                     id: prismaBookshelf.user.id,
                     name: prismaBookshelf.user.name,
-                    profilePic: process.env.PROFILE_PHOTOS_URL + prismaBookshelf.user.id + "." + prismaBookshelf.user.profilePicExt
+                    profilePic: prismaBookshelf.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaBookshelf.user.id : "default"
                 },
                 books: books
             }

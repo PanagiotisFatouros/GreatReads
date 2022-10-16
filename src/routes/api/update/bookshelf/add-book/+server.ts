@@ -70,7 +70,7 @@ export async function PUT({ request }: RequestEvent) {
                         select: {
                             id: true,
                             name: true,
-                            profilePic: True
+                            profilePic: true
                         }
                     }
                 }
