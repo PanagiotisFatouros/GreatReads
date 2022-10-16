@@ -6,10 +6,10 @@ import type { Review } from 'src/types/book.type';
 
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }: RequestEvent) {
-	
+
     let { id } = await request.json()
     const reviewId = Number(id) ? parseInt(id) : -1
-    if (reviewId == -1 ){
+    if (reviewId == -1) {
         throw error(400, 'Review ID is not valid/specified')
     }
 
@@ -18,20 +18,20 @@ export async function PUT({ request }: RequestEvent) {
     try {
 
         const existingPrismaReview = await prismaClient.prismaReview.findUnique({
-            where:{
+            where: {
                 id: reviewId
             },
-            include:{
+            include: {
                 user: true
             }
         })
 
-        if (existingPrismaReview != null){
+        if (existingPrismaReview != null) {
             updatedPrismaReview = await prismaClient.prismaReview.update({
-                where:{
+                where: {
                     id: reviewId
                 },
-                data:{
+                data: {
                     upvotes: existingPrismaReview.upvotes - 1
                 }
             })
@@ -47,7 +47,7 @@ export async function PUT({ request }: RequestEvent) {
                 user: {
                     id: existingPrismaReview.user.id,
                     name: existingPrismaReview.user.name,
-                    profilePic: existingPrismaReview.user.profilePic
+                    profilePic: existingPrismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + existingPrismaReview.user.id : "default"
                 }
             }
             return new Response(JSON.stringify(returnedReview))
@@ -56,7 +56,7 @@ export async function PUT({ request }: RequestEvent) {
             throw error(404, "Can't find target review in database")
         }
     }
-    catch(err){
-      throw error(400, `Review not succesfully downvoted, error: ${err}`)
+    catch (err) {
+        throw error(400, `Review not succesfully downvoted, error: ${err}`)
     }
 }

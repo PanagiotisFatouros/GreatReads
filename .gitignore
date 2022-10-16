@@ -3,9 +3,6 @@ node_modules
 /build
 /.svelte-kit
 /package
-.env
 .idea
 /.vscode
-.env.*
-!.env.example
 /.nyc_output

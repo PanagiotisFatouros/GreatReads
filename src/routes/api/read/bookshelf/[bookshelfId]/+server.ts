@@ -23,8 +23,8 @@ export async function GET({params, request}: RequestEvent) {
             where: { id: bookshelfId },
             select: {
                 name: true,
-	            isDeletable: true,
-	            creationDate: true,
+                isDeletable: true,
+                creationDate: true,
                 user: {
                     select: {
                         id: true,
@@ -37,10 +37,10 @@ export async function GET({params, request}: RequestEvent) {
         });
         console.log(prismaBookshelf?.books);
 
-        if (prismaBookshelf == null){
+        if (prismaBookshelf == null) {
             throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
         }
-        else{
+        else {
             console.log(prismaBookshelf.books)
             let books: Book[] = []
             for await (const prismaBook of prismaBookshelf.books) {
@@ -50,7 +50,7 @@ export async function GET({params, request}: RequestEvent) {
 
                 books.push(book)
             };
-            
+
             console.log(books)
             const bookshelf: Bookshelf = {
                 id: bookshelfId,
@@ -60,14 +60,14 @@ export async function GET({params, request}: RequestEvent) {
                 user: {
                     id: prismaBookshelf.user.id,
                     name: prismaBookshelf.user.name,
-                    profilePic: prismaBookshelf.user.profilePic
+                    profilePic: prismaBookshelf.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaBookshelf.user.id : "default"
                 },
                 books: books
             }
             return new Response(JSON.stringify(bookshelf))
         }
     }
-    catch (err){
+    catch (err) {
         throw error(400, `Bookshelf not successfully retrevied, error: ${err}`)
-	}
+    }
 }

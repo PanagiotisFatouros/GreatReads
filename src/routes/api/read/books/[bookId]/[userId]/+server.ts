@@ -6,6 +6,7 @@ import { prismaClient } from '../../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { readJSONToBook } from '../../../../../../scripts';
 
+
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
 	const userId = params.userId || '';
@@ -97,7 +98,7 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaReview.user.id,
 							name: prismaReview.user.name,
-							profilePic: prismaReview.user.profilePic
+							profilePic: prismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id : "default"
 						}
 					};
 					avgRating += review.rating;
@@ -136,7 +137,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
 					}
 				};
 				collections.push(collection);
@@ -170,7 +171,7 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
 					}
 				};
 				publicCollections.push(publicCollection);
