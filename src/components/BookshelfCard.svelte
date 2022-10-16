@@ -83,7 +83,7 @@
 	}
 	#more {
 		position: absolute;
-		left: 80%;
+		left: 82%;
 	}
 	#Book1,
 	#Book2,

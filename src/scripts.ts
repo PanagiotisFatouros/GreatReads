@@ -47,6 +47,7 @@ export function readGoogleBooksResponse(jsonOject: any): Book[] {
 }
 
 export function readJSONToBook(jsonOject: any): Book {
+	// console.log(jsonOject)
 	let book: Book = {
 		id: jsonOject.id,
 		title: jsonOject.volumeInfo.title,
@@ -56,7 +57,9 @@ export function readJSONToBook(jsonOject: any): Book {
 		genres: jsonOject.volumeInfo.categories,
 		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
 		avgRating: jsonOject.volumeInfo.averageRating === undefined? 0 : jsonOject.volumeInfo.averageRating,
+		//avgRating: 0,
 		numRatings: jsonOject.volumeInfo.ratingsCounts === undefined? 0 : jsonOject.volumeInfo.ratingsCounts, 
+		//numRatings: 0,
 		datePublished: jsonOject.volumeInfo.publishedDate,
 		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
 			jsonOject.volumeInfo?.imageLinks?.thumbnail : missingImage
