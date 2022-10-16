@@ -34,20 +34,25 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 			let books: Book[] = [];
 			let authors: string[] = book.authors;
 			// console.log(book)
-			// console.log(authors)
+			// console.log(`AUTHORS: ${authors}`)
 
 			const similarBookProms:any = [];
 
-			for (const author of authors) {
-				similarBookProms.push(fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`).then(res => res.json()))
-			};
+			if (authors != undefined) {
+				for (const author of authors) {
+					similarBookProms.push(fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`).then(res => res.json()))
+				};
+				
+				const similarBooksRes = await Promise.all(similarBookProms);
 
-			const similarBooksRes = await Promise.all(similarBookProms);
+				for (const response of similarBooksRes) {
+					const googleBooks = readGoogleBooksResponse(response)
+					books = books.concat(googleBooks)
+				};
+			}
+			
 
-			for (const response of similarBooksRes) {
-				const googleBooks = readGoogleBooksResponse(response)
-				books = books.concat(googleBooks)
-			};
+			
 
 			// console.log(books)
 			return {
