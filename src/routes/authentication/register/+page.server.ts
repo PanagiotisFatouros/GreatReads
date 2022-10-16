@@ -29,7 +29,7 @@ export const actions: Actions = {
 				}
 			});
 			setCookie(cookies, ...userSession.cookies);
-			console.log(userSession);
+			// console.log(userSession);
 
 			const bookshelfNames = ['Favourites', 'Currently Reading', 'Want to Read', 'Finished Reading']
 

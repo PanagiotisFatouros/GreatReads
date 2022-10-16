@@ -33,7 +33,9 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 			// search for list of similar books based on author
 			let books: Book[] = [];
 			let authors: string[] = book.authors;
-			//console.log(book.authors)
+
+			// console.log(book.authors)
+
 
 			for await (let author of authors) {
                 const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`)).json()
@@ -41,7 +43,7 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 				books = books.concat(googleBooks)
 			}
 			
-			console.log(books)
+			// console.log(books)
 			return {
 				book: book,
 				bookshelves,
