@@ -5,7 +5,7 @@
 	import { isOverlayOpen } from '../../../../stores/OverlayStore.js';
 	import type { Bookshelf, Book } from '../../../../types/book.type';
 
-	import { afterNavigate, goto } from '$app/navigation'
+	import { goto } from '$app/navigation'
 	import Confirmation from '../../../../components/Confirmation.svelte';
 	import { page } from '$app/stores';
 

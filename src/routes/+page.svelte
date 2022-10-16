@@ -5,7 +5,7 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import type { Bookshelf, Client, Collection, Book } from '../types/book.type'
+	import type { Bookshelf, Collection, Book } from '../types/book.type'
 	import CollectionCard from '../components/CollectionCard.svelte';
 	import MostPopular from '../components/MostPopular.svelte';
 
