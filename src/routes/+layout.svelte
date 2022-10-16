@@ -10,6 +10,7 @@
 	import { RingLoader } from 'svelte-loading-spinners';
 
 	import {getSession} from "lucia-sveltekit/client"
+	import { browser } from '$app/environment';
 
 	const session = getSession()
 	
@@ -18,14 +19,40 @@
 	}
 
 	handleSilentRefresh();
+
+	function disableScroll() {
+		const scrollY = window.scrollY;
+		document.body.style.position = 'fixed';
+		document.body.style.top = `-${scrollY}px`;
+		document.body.style.overflow = 'hidden';
+	}
+
+	function enableScroll() {
+		document.body.style.position = '';
+		document.body.style.top = '';
+		document.body.style.overflow = '';
+		window.scrollTo(0, scrollY);
+	}
+
+	$: {
+		if (browser) {
+			if ($isOverlayOpen == true) {
+				disableScroll();
+			}
+			else {
+				enableScroll()
+			}
+		}
+		
+	}
 </script>
 
 {#if $isOverlayOpen}
 	<Overlay />
 {/if}
 
-<NavBar loggedIn={$authenticated}/>
 
+<NavBar loggedIn={$authenticated}/>
 
 {#if $navigating}
 <div class='w-full flex justify-center mt-10'>
@@ -33,5 +60,7 @@
 	<RingLoader color={'#FF6663'} />
 </div>
 {:else}
-<slot />
+	<slot />
 {/if}
+
+

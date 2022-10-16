@@ -1,7 +1,8 @@
 import { redirect } from '@sveltejs/kit';
 import type { Actions } from '@sveltejs/kit';
-import { auth } from '$lib/lucia';
+import { auth, prismaClient } from '$lib/lucia';
 import { setCookie } from 'lucia-sveltekit';
+import type { Prisma, PrismaBookshelf } from '@prisma/client';
 
 // import { createNewEntity } from "../../database/mysql";
 
@@ -29,6 +30,26 @@ export const actions: Actions = {
 			});
 			setCookie(cookies, ...userSession.cookies);
 			// console.log(userSession);
+
+			const bookshelfNames = ['Favourites', 'Currently Reading', 'Want to Read', 'Finished Reading']
+
+			const promises:any[] = []
+
+			bookshelfNames.forEach(name => {
+				const bookshelfInput: Prisma.PrismaBookshelfCreateInput = {
+					name: name,
+					isDeletable: false,
+					creationDate: new Date(),
+					user: {connect: {id: userSession.user.user_id}}
+				}
+
+				promises.push(prismaClient.prismaBookshelf.create({
+					data: bookshelfInput
+				}))
+			})
+
+			//wait for all bookshelves to be created
+			Promise.all(promises);
 
 			// Create user profile, which has username as the user's name in database
 			return { success: true };
