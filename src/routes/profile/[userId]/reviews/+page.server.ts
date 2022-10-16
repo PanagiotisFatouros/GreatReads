@@ -34,14 +34,20 @@ export async function load({params}: ServerLoadEvent) {
 			const user: Client = {
 				id: prismaUser.id,
 				name: prismaUser.name,
-				profilePic: prismaUser.profilePic || ''
+				profilePic:  prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
 			}
 
-            for await (const review of prismaUser.reviews) {
-				const googleResponse: any = await getBookInfoFromGoogleBooksAPI(review.book.googleBooksId);
+            const bookProms: any = []
 
-				
-                
+            prismaUser.reviews.forEach(review => {
+                bookProms.push(getBookInfoFromGoogleBooksAPI(review.book.googleBooksId))
+            })
+
+            const booksRes = await Promise.all(bookProms);
+
+            booksRes.forEach((book, i ) => {
+                const review = prismaUser.reviews[i]
+
                 let clientReview: Review = {
 					id: review.id,
 					title: review.title,
@@ -50,10 +56,10 @@ export async function load({params}: ServerLoadEvent) {
 					date: review.creationDate,
 					upvotes: review.upvotes,
 					isEdited: review.isEdited,
-                    img: readJSONToBook(googleResponse).imageURL
+                    img: readJSONToBook(book).imageURL
 				};
 				reviews.push(clientReview);
-			};
+            })
 
             console.log(reviews)
 
