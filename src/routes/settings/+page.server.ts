@@ -6,21 +6,21 @@ import type { Client } from '../../types/book.type';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ request }: ServerLoadEvent) {
-	try {
-		const session = await auth.validateRequestByCookie(request);
-		if (session) {
-			
+    try {
+        const session = await auth.validateRequestByCookie(request);
+        if (session) {
+
             const userID = session.user.user_id;
 
             const prismaUser = await prismaClient.user.findUnique({
-                where: {id: userID}
+                where: { id: userID }
             })
 
             if (prismaUser != undefined) {
-                const client:Client = {
+                const client: Client = {
                     name: prismaUser.name || '',
                     id: prismaUser.id || '',
-                    profilePic: prismaUser.profilePic || '',
+                    profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
                     bio: prismaUser.bio || '',
                     favAuthor: prismaUser.favAuthor || '',
                     favGenre: prismaUser.favGenre || ''
@@ -31,15 +31,15 @@ export async function load({ request }: ServerLoadEvent) {
                     client: client
                 };
             }
-            
 
-		} else {
-			//not authenticated
-			throw redirect(307, '/authentication');
-		}
-	} catch (err) {
-		console.log(err);
-		//not authenticated
-		throw redirect(307, '/authentication');
-	}
+
+        } else {
+            //not authenticated
+            throw redirect(307, '/authentication');
+        }
+    } catch (err) {
+        console.log(err);
+        //not authenticated
+        throw redirect(307, '/authentication');
+    }
 }

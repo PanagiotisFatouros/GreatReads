@@ -4,7 +4,7 @@ import { expect, test } from '@playwright/test';
 const testUser = {
 	name: 'test',
 	id: 'xdmGfNtS',
-	profilePic: '',
+	profilePic: false,
 	reviews: [],
 	bio: ''
 };
