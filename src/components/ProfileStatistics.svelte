@@ -39,6 +39,6 @@
 		overflow-x: auto;
 		overflow-y: hidden;
 		white-space: nowrap;
-		margin-top: 3rem;
+		/* margin-top: 3rem; */
 	}
 </style>

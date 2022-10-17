@@ -86,8 +86,8 @@
 	}
 
 	#books-container > * {
-		margin-right: 1%;
-		margin-left: 1%;
+		margin-right: 1.75%;
+		margin-left: 1.75%;
 	}
 
 
