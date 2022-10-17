@@ -2,6 +2,8 @@
 	import type { Client } from 'src/types/book.type';
 	import { page } from '$app/stores';
     import { goto } from '$app/navigation'
+	import { RingLoader } from 'svelte-loading-spinners';
+
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -23,6 +25,8 @@
 
 	let isEdittingAccountInfo: boolean = false;
 	let isEdittingProfileDetails: boolean = false;
+
+	let isUpdatingProfilePic: boolean = false;
 
 	function onEditAccountInfo() {
 		isEdittingAccountInfo = true;
@@ -83,7 +87,8 @@
 	}
 
 	let fileInput: HTMLInputElement;
-	let uploadedPic: string = '';
+	let uploadedPic: string;
+	$: uploadedPic = user.profilePic;
 
 	async function updateUserProfilePic(id: String, mimeType: String, profilePic: String, length: Number) {
 		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
@@ -98,18 +103,21 @@
 	}
 
 	function handleFileSelected(event) {
+		
 		let image = event.target?.files[0];
 		const mimeType: string = image.type;
 
 		if (mimeType == 'image/jpeg' || mimeType == 'image/png') {
+			isUpdatingProfilePic = true;
+
 			let reader = new FileReader();
 			reader.readAsDataURL(image);
 			reader.onload = async (e) => {
 				let result = e.target?.result;
 				if (result && typeof result === 'string') {
-          uploadedPic = result;
+					isUpdatingProfilePic = false
+          			uploadedPic = result;
 					updateUserProfilePic(user.id, mimeType, result, image.size);
-					location.reload()
 				}
 			};
 		} else {
@@ -117,6 +125,13 @@
 		}
 	}
 </script>
+
+{#if isUpdatingProfilePic}
+<div class='fixed w-full flex justify-center mt-5'>
+	<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
+	<RingLoader color={'#FF6663'} />
+</div>
+{/if}
 
 <div class="mx-5 my-4">
 	<div class="flex justify-between items-center w-full">
@@ -132,10 +147,9 @@
 			<div
 				class=" w-64 h-64 mx-24 mb-5 bg-white rounded-full overflow-hidden flex justify-center items-center"
 			>
-				{#if uploadedPic != ''}
+				
+				{#if uploadedPic != "default"}
 					<img src={uploadedPic} class=" w-full h-full object-cover" alt="profile" />
-				{:else if user.profilePic != "default"}
-					<img src={user.profilePic} class=" w-full h-full object-cover" alt="profile" />
 				{:else}
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
