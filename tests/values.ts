@@ -94,7 +94,7 @@ let book: Book = {
     isbn: "9780142425305",
     numRatings: 0,
     datePublished: "2014-09-11",
-    imageURL: "http://books.google.com/books/content?id=Lx1hDQAAQBAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+    imageURL: "https://books.google.com/books/publisher/content/images/frontcover/Lx1hDQAAQBAJ?fife=w800-h1200&source=gbs_api"
 };
 
 let expectedResponse = [book];

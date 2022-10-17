@@ -87,8 +87,10 @@
 	}
 
 	let fileInput: HTMLInputElement;
+
 	let uploadedPic: string = user.profilePic;
 	$: uploadedPic;
+
 
 	async function updateUserProfilePic(id: String, mimeType: String, profilePic: String, length: Number) {
 		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
