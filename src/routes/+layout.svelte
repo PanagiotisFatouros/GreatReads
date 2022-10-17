@@ -6,7 +6,6 @@
 	import Overlay from '../components/Overlay.svelte';
 	import { handleSilentRefresh } from 'lucia-sveltekit/client';
 	import { navigating } from '$app/stores';
-	import { page } from '$app/stores';
 	import { RingLoader } from 'svelte-loading-spinners';
 
 	import {getSession} from "lucia-sveltekit/client"
@@ -24,9 +23,10 @@
 
 	function disableScroll() {
 		const scrollY = window.scrollY;
-		document.body.style.position = 'fixed';
+		// document.body.style.position = 'fixed';
 		document.body.style.top = `-${scrollY}px`;
 		document.body.style.overflow = 'hidden';
+		
 	}
 
 	function enableScroll() {
@@ -34,11 +34,12 @@
 		document.body.style.top = '';
 		document.body.style.overflow = '';
 		window.scrollTo(0, scrollY);
+
 	}
 
 	$: {
 		if (browser) {
-			if ($isOverlayOpen == true && !$page.url.pathname.includes('authentication')) {
+			if ($isOverlayOpen == true) {
 				disableScroll();
 			}
 			else {
