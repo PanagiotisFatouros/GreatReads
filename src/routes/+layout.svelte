@@ -6,7 +6,6 @@
 	import Overlay from '../components/Overlay.svelte';
 	import { handleSilentRefresh } from 'lucia-sveltekit/client';
 	import { navigating } from '$app/stores';
-	import { page } from '$app/stores';
 	import { RingLoader } from 'svelte-loading-spinners';
 
 	import {getSession} from "lucia-sveltekit/client"
