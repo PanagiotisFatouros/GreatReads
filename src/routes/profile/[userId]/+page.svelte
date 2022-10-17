@@ -18,9 +18,9 @@
 	<div id="left">
 		<!-- TODO: change profile pic when working -->
 		<img id="profilePic" src={profilePic} alt="Profile pic" />
-		<p class="text-heading1 font-heading text-secondary">{user.name}</p>
+		<p class="text-heading1 font-heading text-secondary mt-2">{user.name}</p>
 		{#if user.bio != ''}
-		<p id="bio" class="font-body">{user.bio}</p>
+		<p id="bio" class="font-body mt-3 mb-5">{user.bio}</p>
 		{/if}
 		<ProfileStatistics user={user}/>
 	</div>
@@ -65,6 +65,6 @@
 
 	#bio {
 		overflow-y: auto;
-		height: 20%;
+		/* height: 20%; */
 	}
 </style>
