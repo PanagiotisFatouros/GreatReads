@@ -24,9 +24,10 @@
 
 	function disableScroll() {
 		const scrollY = window.scrollY;
-		document.body.style.position = 'fixed';
+		// document.body.style.position = 'fixed';
 		document.body.style.top = `-${scrollY}px`;
 		document.body.style.overflow = 'hidden';
+		
 	}
 
 	function enableScroll() {
@@ -34,11 +35,12 @@
 		document.body.style.top = '';
 		document.body.style.overflow = '';
 		window.scrollTo(0, scrollY);
+
 	}
 
 	$: {
 		if (browser) {
-			if ($isOverlayOpen == true && !$page.url.pathname.includes('authentication')) {
+			if ($isOverlayOpen == true) {
 				disableScroll();
 			}
 			else {

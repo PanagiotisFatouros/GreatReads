@@ -8,7 +8,7 @@ import type { Bookshelf } from 'src/types/book.type';
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }: RequestEvent) {
 
-	const { name, isDeletable, userId } = await request.json()
+	const { name, userId } = await request.json()
 
 	let createdPrismaBookshelf: PrismaBookshelf
 	let createdBookshelf: Bookshelf
@@ -16,7 +16,7 @@ export async function POST({ request }: RequestEvent) {
 	try {
 		const newBookshelfInput: Prisma.PrismaBookshelfCreateInput = {
 			name: name,
-			isDeletable: isDeletable,
+			isDeletable: true,
 			creationDate: new Date(),
 			user: { connect: { id: userId } }
 		}
