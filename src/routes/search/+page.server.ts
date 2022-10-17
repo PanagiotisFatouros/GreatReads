@@ -101,7 +101,7 @@ export async function load(event: ServerLoadEvent) {
                     const user: Client = {
                         id: prismaUser.id,
                         name: prismaUser.name,
-                        profilePic: prismaUser.profilePic || ''
+                        profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
                     }
                     return user
                 })

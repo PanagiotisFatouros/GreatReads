@@ -54,6 +54,10 @@ h1 {
 		@apply w-14 h-14 bg-primary-1 rounded-full overflow-hidden flex justify-center items-center;
 	}
 
+	.profile_pic_med {
+		@apply w-24 h-24 bg-primary-1 rounded-full overflow-hidden flex justify-center items-center;
+	}
+
 	.profile_pic_large {
 		@apply w-14 h-14 bg-white rounded-full overflow-hidden flex justify-center items-center;
 	}
