@@ -17,7 +17,7 @@ export async function load({request}: ServerLoadEvent) {
             const userId = session.user.user_id;
 
             //TODO: no await
-            const bookshelvesProm = await prismaClient.prismaBookshelf.findMany({
+            const bookshelvesProm = prismaClient.prismaBookshelf.findMany({
                 where: {
                     userId: userId,
                     isDeletable: false,
@@ -34,7 +34,7 @@ export async function load({request}: ServerLoadEvent) {
             })
             
 
-            const collectionsProm = await prismaClient.prismaCollection.findMany({
+            const collectionsProm = prismaClient.prismaCollection.findMany({
                 take: 3,
                 orderBy: {
                     creationDate: 'desc'
@@ -57,7 +57,7 @@ export async function load({request}: ServerLoadEvent) {
             })
             
 
-            const bookProm = await prismaClient.prismaBook.findMany({
+            const bookProm = prismaClient.prismaBook.findMany({
                 take: 5,
                 orderBy: {
                     reviews: {

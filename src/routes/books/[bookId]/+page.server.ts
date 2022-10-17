@@ -20,29 +20,40 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 
 			// console.log(request);
 			// console.log(params);
-			let book: Book = await (
-				await fetch(`http://${host}/api/read/books/${bookID}/${session.user.user_id}`)
-			).json();
+			const bookProm = fetch(`http://${host}/api/read/books/${bookID}/${session.user.user_id}`)
+			.then(res => res.json());
 
-			let bookshelves: Bookshelf[] = await (
-				await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`)
-			).json();
+			const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json());
 
-			// console.log(book);
+			let book: Book;
+			let bookshelves: Bookshelf[];
+
+			[book, bookshelves] = await Promise.all([bookProm, bookshelvesProm]);
 
 			// search for list of similar books based on author
 			let books: Book[] = [];
 			let authors: string[] = book.authors;
+			// console.log(book)
+			// console.log(`AUTHORS: ${authors}`)
 
-			// console.log(book.authors)
+			const similarBookProms:any = [];
 
+			if (authors != undefined) {
+				for (const author of authors) {
+					similarBookProms.push(fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`).then(res => res.json()))
+				};
+				
+				const similarBooksRes = await Promise.all(similarBookProms);
 
-			for await (let author of authors) {
-                const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`)).json()
-                const googleBooks = readGoogleBooksResponse(response)
-				books = books.concat(googleBooks)
+				for (const response of similarBooksRes) {
+					const googleBooks = readGoogleBooksResponse(response)
+					books = books.concat(googleBooks)
+				};
 			}
 			
+
+			
+
 			// console.log(books)
 			return {
 				book: book,
@@ -51,11 +62,11 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 			};
 		} else {
 			//not authenticated
-			throw redirect(307, '/authentication');
+			throw redirect(307, '/authentication/login');
 		}
 	} catch (err) {
 		console.log(err);
 		//not authenticated
-		throw redirect(307, '/authentication');
+		throw redirect(307, '/authentication/login');
 	}
 }

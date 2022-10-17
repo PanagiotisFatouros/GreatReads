@@ -65,7 +65,7 @@
 	#left {
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
+		justify-content: flex-start;
 		width: 70%;
 	}
 
@@ -86,6 +86,7 @@
 	#notes {
 		width: 98%;
 		align-self: center;
+		padding-top: 0.5rem;
 	}
 
 	#collections {

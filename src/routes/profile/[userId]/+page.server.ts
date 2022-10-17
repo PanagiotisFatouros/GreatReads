@@ -3,6 +3,7 @@ import type { Client, Bookshelf, Book, Review } from '../../../types/book.type';
 import { prismaClient } from '../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { readJSONToBook } from '../../../scripts';
+import type { PrismaBookshelf } from '@prisma/client';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({params}: ServerLoadEvent) {
@@ -44,40 +45,67 @@ export async function load({params}: ServerLoadEvent) {
                     include: {
                         books: {
                             take: 8
+                        },
+                        _count: {
+                            select: {books: true}
                         }
                     }
                 }
             }
 		});
 
+        const favBookProms:any = []
+        let favPrismaBookshelf: PrismaBookshelf | undefined;
+
         if (prismaUser != null) {
-            for await (const bookshelf of prismaUser.bookshelves) {
+            prismaUser.bookshelves.forEach(bookshelf => {
                 if (bookshelf.name == 'Favourites') {
+                    favPrismaBookshelf = bookshelf
                     let books: Book[] = []
 
-                    for await (const book of bookshelf.books) {
-                        const googleResponse: any = await getBookInfoFromGoogleBooksAPI(book.googleBooksId);
+                    bookshelf.books.forEach(book => {
+                        favBookProms.push(getBookInfoFromGoogleBooksAPI(book.googleBooksId))
+                    })
+                    // for await (const book of bookshelf.books) {
+                    //     const googleResponse: any = await getBookInfoFromGoogleBooksAPI(book.googleBooksId);
 
-		                books.push(readJSONToBook(googleResponse));
-                    }
+		            //     books.push(readJSONToBook(googleResponse));
+                    // }
 
-                    favsBookshelf = {
-                        id: bookshelf.id,
-                        name: bookshelf.name,
-                        isDeletable: bookshelf.isDeletable,
-                        creationDate: bookshelf.creationDate,
-                        books: books
-                    }
+                    
 
                 }
                 else if (bookshelf.name == 'Finished Reading') {
-                    numBooksRead = bookshelf.books.length;
+                    numBooksRead = bookshelf._count.books;
+                }
+            })
+
+            const reviewBookProms:any = []
+
+            prismaUser.reviews.forEach(prismaReview => {
+                reviewBookProms.push(getBookInfoFromGoogleBooksAPI(prismaReview.book.googleBooksId))
+            })
+
+            const [favBooksRes, reviewBooksRes] = await Promise.all([Promise.all(favBookProms), Promise.all(reviewBookProms)])
+
+            let books:Book[] = []
+            favBooksRes.forEach(book => {
+                books.push(readJSONToBook(book))
+            })
+            
+            if (favPrismaBookshelf) {
+                favsBookshelf = {
+                    id: favPrismaBookshelf.id,
+                    name: favPrismaBookshelf.name,
+                    isDeletable: favPrismaBookshelf.isDeletable,
+                    creationDate: favPrismaBookshelf.creationDate,
+                    books: books
                 }
             }
-
+            
             let totalRatings = 0;
-            for await (const prismaReview of prismaUser.reviews) {
-                const googleResponse: any = await getBookInfoFromGoogleBooksAPI(prismaReview.book.googleBooksId);
+            reviewBooksRes.forEach((book, i) => {
+                const prismaReview = prismaUser.reviews[i]
 
                 let review: Review = {
                     id: prismaReview.id,
@@ -87,11 +115,11 @@ export async function load({params}: ServerLoadEvent) {
                     date: prismaReview.creationDate,
                     upvotes: prismaReview.upvotes,
                     isEdited: prismaReview.isEdited,
-                    img: readJSONToBook(googleResponse).imageURL
+                    img: readJSONToBook(book).imageURL
                 }
                 reviews.push(review);
                 totalRatings += review.rating;
-            }
+            })
             avgRating = totalRatings / reviews.length;
 
             if (favsBookshelf != null) {
@@ -99,7 +127,7 @@ export async function load({params}: ServerLoadEvent) {
                     id: prismaUser.id,
                     name: prismaUser.name,
                     bio: prismaUser.bio,
-                    profilePic: prismaUser.profilePic || '',
+                    profilePic:  prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
                     favAuthor: prismaUser.favAuthor == '' ? '-' : prismaUser.favAuthor,
                     favGenre: prismaUser.favGenre  == '' ? '-' : prismaUser.favGenre,
                     favsBookshelf: favsBookshelf,
