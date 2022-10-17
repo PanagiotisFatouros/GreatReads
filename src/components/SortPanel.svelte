@@ -2,6 +2,7 @@
 	import type { Book } from '../types/book.type';
 
 	export let show = false;
+	export let books: Book[];
 	export let booksShown: Book[];
 	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
 
@@ -14,7 +15,9 @@
 		} else if (sortOption == 3) {
 			booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
 		}
-		booksShown = booksShown;
+
+		booksShown = ((sortOption == 0) ? books : booksShown)
+		
 		show = false;
 	}
 </script>
@@ -49,10 +52,8 @@
 		/>
 	</svg>
 
-	<p class="text-heading2 font-heading ml-1 mb-1">Sort</p>
-
+	<p class="text-heading2 font-heading ml-1">Sort</p>
 	<div class="mx-2">
-		<!--<input type="radio" name="sortOptions" id="default" bind:group={sortOption} value={0} class="appearance-none w-3 h-3 mt-1 mr-1 rounded-full bg-white border-2 ring-primary-3 ring-2 checked:bg-secondary align-middle">-->
 		<input
 			type="radio"
 			name="sortOptions"
