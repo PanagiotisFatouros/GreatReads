@@ -7,12 +7,6 @@
 	import type { Book, Bookshelf, Client } from '../../types/book.type';
 	import { goto } from '$app/navigation';
 	import { searchTypes } from '../../types/searchTypes.enum';
-	//import { handleFilter } from '../../components/FilterPanel.svelte';
-    
-    //let searchText = $page.params.searched ? $page.params.searched : ""
-    //let searchText = decodeURI($page.url.pathname.substring(1))
-	//$: console.log($page.url.search)
-	
 
 	/** @type {import('./$types').PageData} */
 	export let data:any;
@@ -37,10 +31,9 @@
 	$: books = data.books;
 	$: bookshelves = data.bookshelves;
 	$: users = data.users;
-	// subset of books - based on filters applied
 	
-	let booksShown: Book[];
-	$: booksShown = books;
+	// subset of books - based on filters applied
+	let booksShown: Book[] = data.books.slice();
 
 	let searchTerm: string 
 	$: searchTerm = data.searchString;
@@ -102,14 +95,14 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-	{#if filterOn && $isOverlayOpen && books != undefined}
+	{#if filterOn && $isOverlayOpen && booksShown != undefined}
 		<div class="z-10 fixed self-center">
 			<FilterPanel bind:show={filterOn} books={books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
 	{#if sortOn && $isOverlayOpen && booksShown != undefined}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
+			<SortPanel bind:show={sortOn} books={books} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 </div>
