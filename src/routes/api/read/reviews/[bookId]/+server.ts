@@ -34,7 +34,7 @@ export async function GET({ params }: RequestEvent) {
 			user: {
 				id: prismaReview.user.id,
 				name: prismaReview.user.name,
-				profilePic: prismaReview.user.profilePic
+				profilePic: prismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id : 'default',
 			}
 		};
 		reviews.push(review);
