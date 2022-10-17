@@ -8,6 +8,9 @@ const WEEK = DAY * 7;
 const MONTH = DAY * 30;
 const YEAR = DAY * 365;
 const missingImage = "https://www.lostbookproductions.com/wp-content/uploads/2019/01/logo-lost-book-lg.png"
+const BOOK_IMG_URL_PREFIX = "https://books.google.com/books/publisher/content/images/frontcover/"
+const BOOK_IMG_URL_SUFFIX = "?fife=w800-h1200&source=gbs_api"
+
 
 export function getTimeAgo(date: Date) {
 	if (typeof date === 'string') {
@@ -62,7 +65,7 @@ export function readJSONToBook(jsonOject: any): Book {
 		//numRatings: 0,
 		datePublished: jsonOject.volumeInfo.publishedDate,
 		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
-			jsonOject.volumeInfo?.imageLinks?.thumbnail : missingImage
+			(BOOK_IMG_URL_PREFIX + jsonOject.id + BOOK_IMG_URL_SUFFIX) : missingImage
 		
 	};
 	return book;
