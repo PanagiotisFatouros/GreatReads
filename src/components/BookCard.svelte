@@ -28,7 +28,7 @@
 	
 	<img src={book.imageURL} alt="Book" class="p-3 pr-4 w-34 max-h-48 float-left align-middle" />
 	<p class="text-secondary pt-3 font-heading text-xl font-bold truncate">{book.title}</p>
-	<p class="text-primary-3 font-body text-sm">{book.authors}</p>
+	<p class="text-primary-3 font-body text-sm line-clamp-1">{book.authors}</p>
 	<div class="flex items-center mt-2">
 		{#if book.avgRating != undefined}
 		<StarRating rating={book.avgRating} />
