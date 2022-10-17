@@ -21,7 +21,6 @@ export type Book = {
 
 	userNotes?: Collection[];
 	publicNotes?: Collection[];
-
 	savedBookshelfIDs?: number[];
 };
 
@@ -30,6 +29,9 @@ export type Client = {
 
 	//id type??
 	id: string;
+
+	// only for accounts setting
+	email? : string
 
 	//link to image???
 	profilePic: string;
