@@ -19,6 +19,7 @@ export async function GET({ params }: RequestEvent) {
 
 	if (response.error) {
 		throw error(400, '404 Google Book Does not Exist');
+		// throw error(400, response.error);
 	} else {
 		const restBookInfo = readJSONToBook(response);
 		// Check if book already in database
@@ -30,9 +31,34 @@ export async function GET({ params }: RequestEvent) {
 					select: {
 						id: true
 					}
+				},
+				reviews: {
+					orderBy: { upvotes: 'desc' },
+					include: {
+						user: {
+							select: {
+								id: true,
+								name: true,
+								profilePic: true
+							}
+						}
+					}
+				},
+				collections: {
+					where: {
+						userId: userId
+					},
+					select: {
+						id: true,
+						title: true,
+						creationDate: true,
+						isPublic: true,
+						upvotes: true
+					}
 				}
 			}
 		});
+		// console.log(existingBookInDatabase)
 		
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
@@ -58,20 +84,8 @@ export async function GET({ params }: RequestEvent) {
 			// 		? 0
 			// 		: Number(restBookInfo.volumeInfo.ratingsCount);
 		} else {
-			// building reviews
-			const prismaReviews = await prismaClient.prismaReview.findMany({
-				where: { bookId: googleBooksId },
-				orderBy: { upvotes: 'desc' },
-				include: {
-					user: {
-						select: {
-							id: true,
-							name: true,
-							profilePic: true
-						}
-					}
-				}
-			});
+			
+			const prismaReviews = existingBookInDatabase.reviews
 
 			if (prismaReviews.length == 0) {
 				avgRating = 0
@@ -110,35 +124,14 @@ export async function GET({ params }: RequestEvent) {
 			}
 
 			// building collections
-			const prismaCollections = await prismaClient.prismaCollection.findMany({
-				where: { userId: userId, bookId: googleBooksId },
-				select: {
-					id: true,
-					title: true,
-					creationDate: true,
-					isPublic: true,
-					upvotes: true,
-					user: {
-						select: {
-							id: true,
-							name: true,
-							profilePic: true
-						}
-					}
-				}
-			});
+			const prismaCollections = existingBookInDatabase.collections
 			prismaCollections.forEach((prismaCollection) => {
 				const collection: Collection = {
 					id: prismaCollection.id,
 					title: prismaCollection.title,
 					creationDate: prismaCollection.creationDate,
 					isPublic: prismaCollection.isPublic,
-					upvotes: prismaCollection.upvotes,
-					user: {
-						id: prismaCollection.user.id,
-						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
-					}
+					upvotes: prismaCollection.upvotes
 				};
 				collections.push(collection);
 			});
@@ -161,21 +154,24 @@ export async function GET({ params }: RequestEvent) {
 				}
 			});
 
-			prismaPublicCollections.forEach((prismaCollection) => {
-				const publicCollection: Collection = {
-					id: prismaCollection.id,
-					title: prismaCollection.title,
-					creationDate: prismaCollection.creationDate,
-					isPublic: prismaCollection.isPublic,
-					upvotes: prismaCollection.upvotes,
-					user: {
-						id: prismaCollection.user.id,
-						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
-					}
-				};
-				publicCollections.push(publicCollection);
-			});
+			if (prismaPublicCollections != undefined) {
+				prismaPublicCollections.forEach((prismaCollection) => {
+					const publicCollection: Collection = {
+						id: prismaCollection.id,
+						title: prismaCollection.title,
+						creationDate: prismaCollection.creationDate,
+						isPublic: prismaCollection.isPublic,
+						upvotes: prismaCollection.upvotes,
+						user: {
+							id: prismaCollection.user.id,
+							name: prismaCollection.user.name,
+							profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+						}
+					};
+					publicCollections.push(publicCollection);
+				});
+			}
+			
 
 			existingBookInDatabase.bookshelves.forEach(bookshelf => {
 				savedBookshelfIDs.push(bookshelf.id);
