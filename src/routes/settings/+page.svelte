@@ -192,7 +192,7 @@
 					</svg>
 				{/if}
 			</div>
-			<button on:click={() => fileInput.click()} class="std_button w-44 py-1"
+			<button on:click={() => fileInput.click()} class="std_button w-44"
 				>Upload New Photo</button
 			>
 			<input

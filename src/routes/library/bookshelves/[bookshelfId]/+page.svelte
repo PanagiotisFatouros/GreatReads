@@ -152,7 +152,7 @@
 		</div>
 	{/if}
 	{#if isDeleting}
-		<Confirmation title={"Delete Bookshelf"} description={"Are you sure you want to delete this bookshelf? This can not be undone."} on:cancel={() => isDeleting = false} on:confirm={deleteBookshelf}/>
+		<Confirmation title={"Delete Bookshelf"} description={"Are you sure you want to delete this bookshelf? <br/>This can not be undone."} on:cancel={() => isDeleting = false} on:confirm={deleteBookshelf}/>
 	{/if}
 </div>
 
