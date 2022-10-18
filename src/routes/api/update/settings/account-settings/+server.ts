@@ -6,18 +6,12 @@ import type { Client } from 'src/types/book.type';
 /** @type {import('./$types').RequestHandler} */
 export async function PUT({ request }: RequestEvent) {
 	
-    let { email, password, name, userId} = await request.json()
+    let {password, name, userId} = await request.json()
     if (userId == undefined){
         throw error(400, 'User ID not specified')
     }
 
-    let user: Client
     try {
-        // Update user email
-        if (email){
-            await auth.updateUserIdentifierToken(userId, "email", email);
-            console.log(`email succesfully updated to ${email}`)
-        }
 
         // Update user password
         if (password){
@@ -26,7 +20,7 @@ export async function PUT({ request }: RequestEvent) {
         }
 
         if (name){
-            await auth.updateUserData(userId, {name: name})
+            await auth.updateUserData(userId, {name: name});
         }
         return new Response("account setting successfully updated")
     }

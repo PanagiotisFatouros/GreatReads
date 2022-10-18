@@ -11,22 +11,14 @@ export async function PUT({ request }: RequestEvent) {
         throw error(400, 'User ID not specified')
     }
 
-    let user: Client
     try {
-        // Update user email
-        const user = await prismaClient.user.findUnique({
-            where: {
-                id: userId
-            }
+        
+        //may be empty strings
+        await auth.updateUserData(userId, {
+            favAuthor: favAuthor,
+            favGenre: favGenre,
+            bio: bio
         })
-
-        if (user){
-            await auth.updateUserData(userId, {
-                favAuthor: favAuthor? favAuthor : user.favAuthor,
-                favGenre: favGenre? favGenre : user.favGenre,
-                bio: bio? bio : user.bio
-            })
-        }
         
         return new Response("User Profile details successfully updated!")
     }
