@@ -52,6 +52,7 @@
 	#display {
 		width: 100%;
 		height: auto;
+		min-height: 222px;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
@@ -86,8 +87,8 @@
 	}
 
 	#books-container > * {
-		margin-right: 1%;
-		margin-left: 1%;
+		margin-right: 1.5%;
+		margin-left: 1.5%;
 	}
 
 

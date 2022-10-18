@@ -13,19 +13,19 @@
 </script>
 
 
-<div id="navBar" class="{$page.url.pathname === '/authentication' 
-                        || $page.url.pathname === '/authentication/login'
-                        || $page.url.pathname === '/authentication/register'
-                        || $page.url.pathname === '/authentication/success'
-                        || $page.url.pathname === '/authentication/failure' ? 
-                        'bg-primary-1 bg-opacity-25' : 'bg-primary-3'} w-full h-14  flex justify-between content-center m-0">
+<div id="navBar" class="{$page.url.pathname !== '/authentication' 
+                        && $page.url.pathname !== '/authentication/login'
+                        && $page.url.pathname !== '/authentication/register'
+                        && $page.url.pathname !== '/authentication/success'
+                        && $page.url.pathname !== '/authentication/failed' ? 
+                        'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14  flex justify-between content-center m-0">
 <a id="logo" href={loggedIn === true ? '/' : '/authentication'} class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
     {#if $page.url.pathname !== '/authentication' 
     && $page.url.pathname !== '/authentication/login'
     && $page.url.pathname !== '/authentication/register'
     && $page.url.pathname !== '/authentication/success'
-    && $page.url.pathname !== '/authentication/failure'}
+    && $page.url.pathname !== '/authentication/failed'}
         <HeaderSearchBar />
     {/if}
 

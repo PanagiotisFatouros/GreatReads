@@ -27,7 +27,7 @@
         isShowing = false;
     }
 
-    async function handleConfirm() {
+    function handleConfirm() {
         //console.log(selectedIDs)
         let addedBookshelves: number[] = []
         let removedBookshelves: number[] = []
@@ -49,7 +49,8 @@
         })
 
         if (addedBookshelves.length > 0) {
-            await fetch(`${baseURL}/api/update/bookshelf/add-books`, {
+            //no need for await since updated locally
+            fetch(`${baseURL}/api/update/bookshelf/add-books`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     bookId: bookId,
@@ -59,7 +60,7 @@
         }
 
         if (removedBookshelves.length > 0) {
-            await fetch(`${baseURL}/api/update/bookshelf/remove-books`, {
+            fetch(`${baseURL}/api/update/bookshelf/remove-books`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     bookId: bookId,
@@ -83,7 +84,7 @@
     {#if bookshelves.length > 0}
     <div class=" flex flex-col w-full space-y-3 mt-3">
         {#each bookshelves as bookshelf}
-            <label class=" bg-primary-1 font-body rounded-full w-full px-3 py-1 cursor-pointer hover:opacity-70"><input bind:group={selectedIDs} type="checkbox" value={bookshelf.id}> {bookshelf.name}</label>
+            <label class=" bg-primary-1 font-body rounded-full w-full px-3 py-1 cursor-pointer hover:opacity-70"><input bind:group={selectedIDs} type="checkbox" value={bookshelf.id} class="mr-2"> {bookshelf.name}</label>
         {/each}
     </div>
     {:else}

@@ -4,6 +4,7 @@
 	export let show = false;
 	export let books: Book[];
 	export let booksShown: Book[] | undefined;
+
 	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
 
 	function handleClick() {

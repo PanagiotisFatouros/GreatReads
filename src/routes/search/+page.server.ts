@@ -38,48 +38,75 @@ export async function load(event: ServerLoadEvent) {
             if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres ){
                 const searchCriteria = `${getCriteria(searchType)}:${searchString}`
                 console.log(searchCriteria)
-                const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`)).json()
-                const googleBooks = readGoogleBooksResponse(response)
-
-                bookshelves = await (
-                    await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`)
-                ).json();
-
                 
+                const searchProm = fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`).then(res => res.json())
+
+                const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json())
+
+                let searchRes;
+
+                [searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
+                
+                const googleBooks = readGoogleBooksResponse(searchRes);
+
                 // get ratings from database 
-                for await (const googleBook of googleBooks) {
-                    const ratingResponse = await (await fetch(`http://${host}/api/read/books/${googleBook.id}/rating`)).json()
-                    googleBook.avgRating = ratingResponse.avgRating
-                    googleBook.numRatings = ratingResponse.numRatings
-                    
-                    if (session) {
-                        let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
-                            where: { googleBooksId: googleBook.id },
-                            include: {
-                                bookshelves: {
-                                    where: {userId: session.user.user_id},
-                                    select: {
-                                        id: true
-                                    }
-                                }
+                const bookIds:string[] = []
+                googleBooks.forEach(googleBook => {
+                    bookIds.push(googleBook.id)
+                })
+
+                const prismaBooks = await prismaClient.prismaBook.findMany({
+                    where: {
+                        googleBooksId: {in: bookIds}
+                    },
+                    select: {
+                        googleBooksId: true,
+                        bookshelves: {
+                            where: {userId: session.user.user_id},
+                            select: {
+                                id: true
                             }
-                        });
-
-                        if (existingBookInDatabase != null) {
-                            let savedBookshelfIDs: number[] = [];
-
-                            existingBookInDatabase.bookshelves.forEach(bookshelf => {
-                                savedBookshelfIDs.push(bookshelf.id);
-                            })
-
-                            googleBook.savedBookshelfIDs = savedBookshelfIDs;
+                        },
+                        reviews: {
+                            select: {
+                                rating: true
+                            }
                         }
                     }
+                })
+                console.log(prismaBooks)
 
-                    books.push(googleBook);
-                    
-                }
-                // console.log(googleBooks[0])
+                googleBooks.forEach(book => {
+                    const prismaBook = prismaBooks.find(pBook => pBook.googleBooksId == book.id)
+
+                    if (prismaBook == undefined) {
+                        book.avgRating = 0;
+                        book.numRatings = 0;
+                        book.savedBookshelfIDs = [];
+                    }
+                    else {
+                        const numRatings:number = prismaBook.reviews.length;
+                        let avgRating:number = 0;
+
+                        if (numRatings > 0){
+                            const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
+                            avgRating = sum / numRatings 
+                        } 
+                        book.avgRating = avgRating;
+                        book.numRatings = numRatings;
+
+                        let savedBookshelfIDs: number[] = [];
+
+                        prismaBook.bookshelves.forEach(bookshelf => {
+                            savedBookshelfIDs.push(bookshelf.id);
+                        })
+
+                        book.savedBookshelfIDs = savedBookshelfIDs;
+                    }
+
+                    books.push(book);
+                })
+                console.log(books);
             }
             else {
 
@@ -101,7 +128,7 @@ export async function load(event: ServerLoadEvent) {
                     const user: Client = {
                         id: prismaUser.id,
                         name: prismaUser.name,
-                        profilePic: prismaUser.profilePic || ''
+                        profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
                     }
                     return user
                 })

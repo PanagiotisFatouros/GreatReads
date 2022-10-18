@@ -11,9 +11,6 @@
 	console.log(user);
 
 	let fullName: string = user.name;
-	// TODO: get from database
-	let email: string = 'user@gmail.com';
-
 	const baseURL: String = $page.url.origin;
 	const hiddenPassword = '************';
 	let password: string = hiddenPassword;
@@ -34,8 +31,6 @@
 
 	function onCancelEditAccountInfo() {
 		fullName = user.name;
-		// TODO: get from database
-		email = 'user@gmail.com';
 
 		password = hiddenPassword;
 		confirmPassword = hiddenPassword;
@@ -43,19 +38,38 @@
 		isEdittingAccountInfo = false;
 	}
 
-	function updateAccountInfo() {
-		if (fullName != '' && email != '' && password != '') {
+	async function updateAccountInfo() {
+		if (fullName != ''  && password != '') {
 			//TODO: save name and email changes to database
+
+			const body:any = {
+				userId: user.id
+			}
 
 			if (password != hiddenPassword) {
 				if (password == confirmPassword) {
-					//TODO: save new password to database
+					body.password = password;
 				} else {
 					alert('Passwords do not match.');
+					return;
 				}
 			}
 
+			if (fullName != user.name) {
+				body.name = fullName
+			}
+			console.log(body);
+			
+			await fetch(`${baseURL}/api/update/settings/account-settings`, {
+				method: 'PUT',
+				body: JSON.stringify(body)
+			});
+
+			user.name = fullName;
+			password = hiddenPassword;
+			confirmPassword = hiddenPassword;
 			isEdittingAccountInfo = false;
+
 		} else {
 			alert('Fields cannot be left empty.');
 		}
@@ -78,10 +92,21 @@
 		isEdittingProfileDetails = false;
 	}
 
-	function updateProfileDetails() {
+	async function updateProfileDetails() {
 		//fields can be left empty
+		await fetch(`${baseURL}/api/update/settings/profile-details`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				userId: user.id,
+				favAuthor: favAuthor,
+				favGenre: favGenre,
+				bio: bio
+			})
+		})
 
-		//TODO: save to database
+		user.favAuthor = favAuthor;
+		user.favGenre = favGenre;
+		user.bio = bio;
 
 		isEdittingProfileDetails = false;
 	}
@@ -236,54 +261,21 @@
 						/>
 					</div>
 
-					<div class=" w-1/2">
-						<div class="flex text-accent ml-3 mb-1 space-x-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="w-6 h-6"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-								/>
-							</svg>
-
-							<p>Email</p>
-						</div>
-						<input
-							type="text"
-							bind:value={email}
-							disabled={!isEdittingAccountInfo}
-							class=" bg-primary-1 rounded-full px-3 py-2 w-full disabled:opacity-50"
-						/>
+					<!-- to keep space even -->
+					<div class=" w-1/2 ">
+						
 					</div>
+
 				</div>
 
 				<!-- row -->
 				<div class=" flex space-x-5 w-full">
 					<!-- input and label pair -->
-					<div class=" w-1/2">
+					<div class=" w-1/2 ">
 						<div class="flex text-accent ml-3 mb-1 space-x-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="w-6 h-6"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-								/>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
 							</svg>
-
 							<p>Password</p>
 						</div>
 						<input
@@ -297,20 +289,10 @@
 
 					<div class=" w-1/2">
 						<div class="flex text-accent ml-3 mb-1 space-x-2">
-							<svg
-								xmlns="http://www.w3.org/2000/svg"
-								fill="none"
-								viewBox="0 0 24 24"
-								stroke-width="1.5"
-								stroke="currentColor"
-								class="w-6 h-6"
-							>
-								<path
-									stroke-linecap="round"
-									stroke-linejoin="round"
-									d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-								/>
-							</svg>
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+							  </svg>
+							  
 
 							<p>Confirm Password</p>
 						</div>
