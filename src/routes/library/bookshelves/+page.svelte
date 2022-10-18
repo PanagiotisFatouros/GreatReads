@@ -60,7 +60,7 @@
 			<button
 				href="null"
 				on:click={() => (addBookshelf = true)}
-				class="bg-secondary w-44 h-7 rounded-full mx-3 text-white text-center font-body"
+				class="std_button bg-secondary w-44 h-7 rounded-full mx-3 text-white text-center font-body"
 				>+ Add Bookshelf</button
 			>
 		</div>
