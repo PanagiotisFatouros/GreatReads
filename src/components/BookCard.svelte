@@ -21,7 +21,7 @@
 </script>
 
 {#if isSavingBook}
-<SaveToBookshelf on:maybeRemoved bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
+	<SaveToBookshelf on:maybeRemoved bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
 {/if}
 
 <div on:click id="bookCard" class="bg-primary-1 w-96 h-52 m-4 p-2 pr-4 rounded-2xl cursor-pointer">
@@ -31,7 +31,7 @@
 	<p class="text-primary-3 font-body text-sm">{book.authors}</p>
 	<div class="flex items-center mt-2">
 		{#if book.avgRating != undefined}
-		<StarRating rating={book.avgRating} />
+			<StarRating bind:rating={book.avgRating} />
 		{/if}
 		<p class="text-primary-3 ml-2 font-body text-sm">{book.numRatings} Reviews</p>
 	</div>

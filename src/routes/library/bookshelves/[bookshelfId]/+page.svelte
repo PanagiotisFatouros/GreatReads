@@ -11,7 +11,6 @@
 
     const baseURL = $page.url.origin;
 
-
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -36,7 +35,7 @@
 
 	async function deleteBookshelf() {
 		await fetch(`${baseURL}/api/delete/bookshelf/${bookshelf.id}`, {
-                method: 'DELETE'
+            method: 'DELETE'
         }) 
 
 		goto('/library/bookshelves');
