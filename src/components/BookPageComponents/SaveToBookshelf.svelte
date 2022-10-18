@@ -27,8 +27,9 @@
         isShowing = false;
     }
 
-    function handleConfirm() {
-        //console.log(selectedIDs)
+    async function handleConfirm() {
+        // console.log(savedBookshelfIDs)
+        // console.log(selectedIDs)
         let addedBookshelves: number[] = []
         let removedBookshelves: number[] = []
 
@@ -43,6 +44,9 @@
                 removedBookshelves.push(id);
             }
         })
+
+        // console.log(addedBookshelves)
+        // console.log(removedBookshelves)
 
         dispatch('maybeRemoved', {
             bookshelfIDs: removedBookshelves

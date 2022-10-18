@@ -22,11 +22,11 @@ export async function PUT({ request }: RequestEvent) {
 
     try {
         // Check if Book already exists in database, if not then add it
-        const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(bookId);
+        // const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(bookId);
 
-        if (restBookInfo.error) {
-            throw error(400, '404 Google Book Does not Exist')
-        }
+        // if (restBookInfo.error) {
+        //     throw error(400, '404 Google Book Does not Exist')
+        // }
 
 
         targetBook = await prismaClient.prismaBook.findUnique({
@@ -51,35 +51,42 @@ export async function PUT({ request }: RequestEvent) {
                 books: true
             }
         })
+        // console.log(bookshelves)
 
         const updateProms:any = []
         bookshelves.forEach(bookshelf => {
             const currentBooksInBookshelf: PrismaBook[] = bookshelf.books     
-                
+              
+            //skip bookshelf if it already has book
             for (const book of currentBooksInBookshelf) {
                 if (book.googleBooksId == bookId){
-                    //ignore this book
+                    //ignore this bookshelf
+                    // console.log("ALREADY IN BOOKSHELF")
                     return;
                 }
-                const updateProm =  prismaClient.prismaBookshelf.update({
-                    where:{
-                        id: bookshelf.id
-                    },
-                    data:{
-                        books:{
-                            connect:{googleBooksId: bookId}
-                        }
-                    }
-                })
-                updateProms.push(updateProm)
+                
             }
+
+            const updateProm = prismaClient.prismaBookshelf.update({
+                where:{
+                    id: bookshelf.id
+                },
+                data:{
+                    books:{
+                        connect:{googleBooksId: bookId}
+                    }
+                }
+            })
+            updateProms.push(updateProm)
         })
 
         const responses = await Promise.all(updateProms);
 
         responses.forEach(bookshelf => {
+            // console.log(bookshelf)
             addedBookshelfIds.push(bookshelf.id)
         })
+        // console.log(addedBookshelfIds)
 
         return new Response(JSON.stringify({addedBookshelfIds: addedBookshelfIds}))
     }
