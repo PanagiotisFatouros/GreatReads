@@ -6,7 +6,7 @@
 	export let pageMax: number = 100000;
 	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
 	export let books: Book[];
-	export let booksShown: Book[];
+	export let booksShown: Book[] | undefined;
 	let intWarn = false;
 	let pageWarn = false;
 

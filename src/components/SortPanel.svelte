@@ -3,17 +3,19 @@
 
 	export let show = false;
 	export let books: Book[];
-	export let booksShown: Book[];
+	export let booksShown: Book[] | undefined;
 	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
 
 	function handleClick() {
-		if (sortOption == 1) {
-			booksShown.sort(function (a, b) {return (a.title > b.title ? 1 : -1)})
-		} else if (sortOption == 2) {
-			// TODO: currently gives a warning because avgRating may be undefined
-			//booksShown.sort(function (a, b) {return (a.avgRating > b.avgRating ? 1 : -1)})
-		} else if (sortOption == 3) {
-			booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
+		if (booksShown) {
+			if (sortOption == 1) {
+				booksShown.sort(function (a, b) {return (a.title > b.title ? 1 : -1)})
+			} else if (sortOption == 2) {
+				// TODO: currently gives a warning because avgRating may be undefined
+				//booksShown.sort(function (a, b) {return (a.avgRating > b.avgRating ? 1 : -1)})
+			} else if (sortOption == 3) {
+				booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
+			}
 		}
 
 		booksShown = ((sortOption == 0) ? books : booksShown)
