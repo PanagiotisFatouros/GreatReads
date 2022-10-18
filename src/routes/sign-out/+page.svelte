@@ -2,6 +2,7 @@
 	import { signOut, getSession } from 'lucia-sveltekit/client';
 	import { browser } from '$app/environment';
 	import { authenticated } from '../../stores/AuthenticatedStore';
+	import {goto } from '$app/navigation'
 	const session = getSession();
 
 	if (browser) {
@@ -9,7 +10,7 @@
 			const signOutUser = async () => {
 				try {
 					await signOut();
-					window.location.href = '/';
+					goto('/authentication');
 				} catch (err) {
 					console.log(err);
 				}
@@ -18,8 +19,8 @@
 			authenticated.set(false)
 		} else {
 			setTimeout(function () {
-				window.location.href = '/authentication/login';
-			}, 2000);
+				goto('/authentication/login');
+			}, 1000);
 		}
 	}
 </script>
