@@ -33,11 +33,7 @@
 	$: users = data.users;
 	
 	// subset of books - based on filters applied
-	let booksShown: Book[] = []
-	if (data.books) {
-		booksShown = data.books.slice();
-	}
-	
+	let booksShown: Book[] = data.books.slice();
 
 	let searchTerm: string 
 	$: searchTerm = data.searchString;
