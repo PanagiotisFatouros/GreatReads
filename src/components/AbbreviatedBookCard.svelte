@@ -19,12 +19,12 @@
 <div id="card" on:click={() => goto(`/books/${book.id}`)} class='group cursor-pointer'>
 	<div id="cover"><img src={book.imageURL} alt="" /></div>
 	<div id="text" class=" group-hover:opacity-70">
-		<p class="text-body1 text-secondary ">{book.title}</p>
+		<p class="text-body1 text-secondary line-clamp-2">{book.title}</p>
 		<p id="rating" class="text-primary-2 text-body2">
 			<!--{book.avgRating}-->
 			<StarRating rating={stars} showRating={true} isSmall={true} />
 		</p>
-		<p class="text-primary-3 text-body2">{book.authors}</p>
+		<p class="text-primary-3 text-body2 line-clamp-2">{book.authors}</p>
 	</div>
 </div>
 
