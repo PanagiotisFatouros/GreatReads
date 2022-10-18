@@ -24,11 +24,11 @@
 <SaveToBookshelf on:maybeRemoved bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
 {/if}
 
-<div on:click id="bookCard" class="bg-primary-1 w-96 h-52 m-4 p-2 pr-4 rounded-2xl cursor-pointer">
+<div on:click style="width: 26rem;" id="bookCard" class="bg-primary-1 h-52 m-4 p-2 pr-4 rounded-2xl cursor-pointer">
 	
 	<img src={book.imageURL} alt="Book" class="p-3 pr-4 w-34 max-h-48 float-left align-middle" />
 	<p class="text-secondary pt-3 font-heading text-xl font-bold truncate">{book.title}</p>
-	<p class="text-primary-3 font-body text-sm">{book.authors}</p>
+	<p class="text-primary-3 font-body text-sm line-clamp-1">{book.authors}</p>
 	<div class="flex items-center mt-2">
 		{#if book.avgRating != undefined}
 		<StarRating rating={book.avgRating} />

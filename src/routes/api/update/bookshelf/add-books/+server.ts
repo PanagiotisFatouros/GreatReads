@@ -41,32 +41,29 @@ export async function PUT({ request }: RequestEvent) {
             targetBook = await prismaClient.prismaBook.create({data: newBookInput})
         }
 
-        for await (const bookshelfId of bookshelfIds) {
-            // Add Book to Bookshelf
-            targetBookshelf = await prismaClient.prismaBookshelf.findUnique({
-                where:{
-                    id: bookshelfId
-                },
-                include: {
-                    books: true
+        const bookshelves = await prismaClient.prismaBookshelf.findMany({
+            where: {
+                id: {
+                    in: bookshelfIds
                 }
-            })
+            },
+            include: {
+                books: true
+            }
+        })
 
-            if (targetBookshelf){
-                const currentBooksInBookshelf: PrismaBook[] = targetBookshelf.books     
+        const updateProms:any = []
+        bookshelves.forEach(bookshelf => {
+            const currentBooksInBookshelf: PrismaBook[] = bookshelf.books     
                 
-                for (const book of currentBooksInBookshelf) {
-                    if (book.googleBooksId == bookId){
-                        //throw error(400, `Book is already in Bookshelf!`)
-                        
-                        //ignore this book
-                        continue;
-                    }
+            for (const book of currentBooksInBookshelf) {
+                if (book.googleBooksId == bookId){
+                    //ignore this book
+                    return;
                 }
-                
-                targetBookshelf = await prismaClient.prismaBookshelf.update({
+                const updateProm =  prismaClient.prismaBookshelf.update({
                     where:{
-                        id: targetBookshelf.id
+                        id: bookshelf.id
                     },
                     data:{
                         books:{
@@ -74,24 +71,16 @@ export async function PUT({ request }: RequestEvent) {
                         }
                     }
                 })
-
-                addedBookshelfIds.push(targetBookshelf.id);
-    
-                // returnedBookshelf = {
-                //     id: targetBookshelf.id,
-                //     name: targetBookshelf.name,
-                //     isDeletable: targetBookshelf.isDeletable,
-                //     creationDate: targetBookshelf.creationDate,
-                //     user: {
-                //         id: targetBookshelf.user.id,
-                //         name: targetBookshelf.user.name,
-                //         profilePic: targetBookshelf.user.profilePic
-                //     },
-                //     books: books
-                // }
-                // return new Response(JSON.stringify(returnedBookshelf));
+                updateProms.push(updateProm)
             }
-        }
+        })
+
+        const responses = await Promise.all(updateProms);
+
+        responses.forEach(bookshelf => {
+            addedBookshelfIds.push(bookshelf.id)
+        })
+
         return new Response(JSON.stringify({addedBookshelfIds: addedBookshelfIds}))
     }
     catch(err){
