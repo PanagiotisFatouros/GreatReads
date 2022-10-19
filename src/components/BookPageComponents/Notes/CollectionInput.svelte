@@ -28,7 +28,8 @@
     async function createNewCollection() {
 		//TODO: check string is not empty and add to database
 		// alert(`Title: ${collectionTitle}, isPublic: ${isPublic}`);
-
+        console.log(user_id)
+        console.log(session)
 		//remove overlay
 		isOverlayOpen.set(false);
 
@@ -40,6 +41,7 @@
 				isPublic: isPublic
 			})
 		});
+        console.log(response)
 
 		//reset
 		collectionTitle = '';
