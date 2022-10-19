@@ -43,10 +43,16 @@
 			//check if in public collection, remove if it is
 			let index = book.publicNotes?.findIndex(publicCollection => collection.id == publicCollection.id);
 
-			if (index != -1 && index) {
+			if (index != undefined && index != -1) {
 				book.publicNotes?.splice(index, 1);
 			}
 		}
+	}
+	function deleteCollection(event:any) {
+		if (book.publicNotes != undefined) {
+			book.publicNotes = book.publicNotes.filter(collection => collection.id != event.detail.collection.id)
+		}
+		
 	}
 </script>
 
@@ -56,7 +62,7 @@
 	{#if selectedTab === Tabs.reviews}
 		<ReviewsTab bind:reviews={book.reviews} />
 	{:else if selectedTab === Tabs.notes}
-		<NotesTab bind:collections={book.userNotes} on:newPublicCollection={addToPublicCollections} on:update={updateCollection}/>
+		<NotesTab bind:collections={book.userNotes} on:newPublicCollection={addToPublicCollections} on:update={updateCollection} on:delete={deleteCollection}/>
 	{:else}
 		<PublicNotesTab bind:collections={book.publicNotes} />
 	{/if}

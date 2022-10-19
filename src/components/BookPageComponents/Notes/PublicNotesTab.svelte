@@ -11,6 +11,8 @@
 
 	export let collections: Collection[] | undefined;
 
+	console.log(collections)
+
 	let filteredCollections: Collection[] | undefined = collections;
 	let searchText: string = '';
 
@@ -19,9 +21,10 @@
 		let titleCheck: boolean = collection.title
 			.toLocaleLowerCase()
 			.startsWith(searchText.toLocaleLowerCase());
-		let authorCheck: boolean = collection.user.name
+		let authorCheck: boolean = collection.user ? collection.user.name
 			.toLocaleLowerCase()
-			.startsWith(searchText.toLocaleLowerCase());
+			.startsWith(searchText.toLocaleLowerCase())
+			: false;
 
 		return titleCheck || authorCheck;
 	}) : [];
@@ -90,7 +93,9 @@
 								<p class="text-secondary">{collection.title}</p>
 
 								<div class="text-body2 flex">
+									{#if collection.user}
 									<p class=" text-primary-2 mr-1">{collection.user.name}</p>
+									{/if}
 									<!-- TODO: maybe change to last edited -->
 									<p>- Created {getTimeAgo(collection.creationDate)}</p>
 								</div>
