@@ -9,9 +9,11 @@
 
 	let reviews: Review[] = data.reviews;
 	let user: Client = data.user;
+    let reviewsShown: Review[] = data.reviews.slice();
 
-    let sort = false;
-    $: isOverlayOpen.set(sort);
+    let sortOn = false;
+    let sortOption: number;
+    $: isOverlayOpen.set(sortOn);
 </script>
 
     <div class="mt-6 mx-8" id="header">
@@ -27,7 +29,7 @@
         <hr class=" border-1 border-primary-3 my-3" />
         <div class="text-primary-3 text-heading3 font-heading flex">
             <!-- sort button -->
-            <div style="cursor:pointer" on:click={() => (sort = true)} class="flex">
+            <div style="cursor:pointer" on:click={() => (sortOn = true)} class="flex">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -46,18 +48,25 @@
             </div>
         </div>
     </div>
-    
+<br/>
+    {#each reviews as rv}
+		{rv.title}
+	{/each}<br/><br/>
+    {#each reviewsShown as rv}
+		{rv.title}
+	{/each}<br/>
+    <!--TODO: set default as upvoted-->
     <div class="flex flex-col justify-start w-full">
-        {#if sort}
+        {#if sortOn && $isOverlayOpen && reviewsShown != undefined}
             <div class="z-10 fixed self-center">
-                <SortPanel bind:show={sort} />
+                <SortPanel bind:show={sortOn} sortReviews={true} reviews={reviews} bind:reviewsShown={reviewsShown} bind:sortOption={sortOption} />
             </div>
-        {/if}
+	    {/if}
     </div>
 
 <div id="container">
     <div id="main" class=' space-y-6 px-4'>
-        {#each reviews as rev}
+        {#each reviewsShown as rev}
             <BookReview review={rev} displayText={true}/>
         {/each}
     </div>

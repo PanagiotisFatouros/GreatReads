@@ -1,25 +1,46 @@
 <script lang="ts">
-	import type { Book } from '../types/book.type';
+	import type { Book, Review } from '../types/book.type';
 
-	export let show = false;
-	export let books: Book[];
-	export let booksShown: Book[] | undefined;
+	export let show: boolean = false;
+	export let sortReviews: boolean = false;
+	export let books: Book[] = [];
+	export let booksShown: Book[] = [];
+	export let reviews: Review[] = [];
+	export let reviewsShown: Review[] = [];
 
 	export let sortOption = 0; // 0 = none, 1 = alphabetically, 2 = by rating, 3 = by date
 
 	function handleClick() {
-		if (booksShown) {
+		if (!sortReviews) {
 			if (sortOption == 1) {
 				booksShown.sort(function (a, b) {return (a.title > b.title ? 1 : -1)})
 			} else if (sortOption == 2) {
-				// TODO: currently gives a warning because avgRating may be undefined
-				//booksShown.sort(function (a, b) {return (a.avgRating > b.avgRating ? 1 : -1)})
+				booksShown.sort(function (a, b) {return ((a.avgRating ? a.avgRating : -1) < (b.avgRating ? b.avgRating : -1) ? 1 : -1)})
 			} else if (sortOption == 3) {
 				booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
 			}
-		}
 
-		booksShown = ((sortOption == 0) ? books : booksShown)
+			if (sortOption == 0) {
+				let defaultBooks: Book[] = [];
+				for (let book of books) {
+					if (booksShown.includes(book)) {
+						defaultBooks.push(book);
+					}
+				}
+				booksShown = defaultBooks;
+			} else {
+				booksShown = booksShown;
+			}
+		} else {
+			if (sortOption == 1) {
+				reviewsShown.sort(function (a, b) {return (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)})
+			} else if (sortOption == 2) {
+				reviewsShown.sort(function (a, b) {return (a.rating < b.rating ? 1 : -1)})
+			} else if (sortOption == 3) {
+				reviewsShown.sort(function (a, b) {return (a.date > b.date ? 1 : -1)})
+			}
+			reviewsShown = ((sortOption == 0) ? reviews : reviewsShown)
+		}
 		
 		show = false;
 	}
@@ -59,11 +80,15 @@
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 		</svg>
-
-		
 	</div>
-	
-	
+<br/>
+	{#each reviews as rv}
+		{rv.title}
+	{/each}<br/><br/>
+	{#each reviewsShown as rv}
+		{rv.title}
+	{/each}<br/>
+
 	<div class="mx-2">
 		<input
 			type="radio"
