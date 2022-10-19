@@ -43,7 +43,7 @@
 			//check if in public collection, remove if it is
 			let index = book.publicNotes?.findIndex(publicCollection => collection.id == publicCollection.id);
 
-			if (index != -1) {
+			if (index != -1 && index) {
 				book.publicNotes?.splice(index, 1);
 			}
 		}
