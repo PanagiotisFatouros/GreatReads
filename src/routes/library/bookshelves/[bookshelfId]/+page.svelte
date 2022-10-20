@@ -149,8 +149,8 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-	{#if bookshelf.books != undefined}
-		{#each bookshelf.books as book}
+	{#if booksShown != undefined}
+		{#each booksShown as book}
 			<BookCard on:click={() => goto(`/books/${book.id}`)} on:maybeRemoved={event => handleMaybeRemoved(event, book.id)} book={book} bookshelves={allBookshelves} />
 		{/each}
 	{/if}
