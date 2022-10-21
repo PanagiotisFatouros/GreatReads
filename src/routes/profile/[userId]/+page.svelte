@@ -74,11 +74,6 @@
 		width: 65%;
 		
 	}
-	#profilePic {
-		height: 30%;
-		width: auto;
-		border-radius: 50%;
-	}
 
 	#bio {
 		overflow-y: auto;
