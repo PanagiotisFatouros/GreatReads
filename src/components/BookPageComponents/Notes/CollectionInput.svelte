@@ -28,7 +28,8 @@
     async function createNewCollection() {
 		//TODO: check string is not empty and add to database
 		// alert(`Title: ${collectionTitle}, isPublic: ${isPublic}`);
-
+        console.log(user_id)
+        console.log(session)
 		//remove overlay
 		isOverlayOpen.set(false);
 
@@ -40,6 +41,7 @@
 				isPublic: isPublic
 			})
 		});
+        console.log(response)
 
 		//reset
 		collectionTitle = '';
@@ -105,18 +107,18 @@
             />
         </div>
 
-        <div class="">
+        <div class=" mt-1">
             
             <button
                 on:click={handleCancel}
-                class=" btn bg-primary-1 rounded-full px-2"><p>Cancel</p></button
+                class=" btn bg-primary-1 rounded-full px-3 py-0.5"><p>Cancel</p></button
             >
             {#if collection == undefined}
-            <button on:click={createNewCollection} class="btn bg-accent text-white rounded-full px-2"
+            <button on:click={createNewCollection} class="btn bg-accent text-white rounded-full px-3 py-0.5"
                 ><p>Create</p></button
             >
             {:else}
-            <button on:click={updateCollection} class="btn bg-accent text-white rounded-full px-2"
+            <button on:click={updateCollection} class="btn bg-accent text-white rounded-full px-3 py-0.5"
                 ><p>Update</p></button
             >
             {/if}

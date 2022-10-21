@@ -15,7 +15,7 @@
 
 	let book: Book = data.book;
 	let bookshelves: Bookshelf[] = data.bookshelves
-	let similarBooks: Book[] = data.books;
+	let similarBooks: Book[] = data.similarBooks;
 
 	let isSavingBook: boolean = false
 	function saveBook() {

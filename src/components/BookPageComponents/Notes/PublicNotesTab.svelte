@@ -11,6 +11,8 @@
 
 	export let collections: Collection[] | undefined;
 
+	console.log(collections)
+
 	let filteredCollections: Collection[] | undefined = collections;
 	let searchText: string = '';
 
@@ -19,9 +21,10 @@
 		let titleCheck: boolean = collection.title
 			.toLocaleLowerCase()
 			.startsWith(searchText.toLocaleLowerCase());
-		let authorCheck: boolean = collection.user.name
+		let authorCheck: boolean = collection.user ? collection.user.name
 			.toLocaleLowerCase()
-			.startsWith(searchText.toLocaleLowerCase());
+			.startsWith(searchText.toLocaleLowerCase())
+			: false;
 
 		return titleCheck || authorCheck;
 	}) : [];
@@ -54,24 +57,6 @@
 
 			<!-- don't need to handle on:click since search happens automatically -->
 			<SearchBar bind:searchText placeholder="Search by title or author..." />
-
-			<!-- TODO: add filter options -->
-			<button class=" ml-3">
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					fill="none"
-					viewBox="0 0 24 24"
-					stroke-width="1.5"
-					stroke="currentColor"
-					class="w-6 h-6 text-accent"
-				>
-					<path
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						d="M6 13.5V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 010 3m0-3a1.5 1.5 0 000 3m0 9.75V10.5"
-					/>
-				</svg>
-			</button>
 		</div>
 
 		<div>
@@ -108,7 +93,9 @@
 								<p class="text-secondary">{collection.title}</p>
 
 								<div class="text-body2 flex">
+									{#if collection.user}
 									<p class=" text-primary-2 mr-1">{collection.user.name}</p>
+									{/if}
 									<!-- TODO: maybe change to last edited -->
 									<p>- Created {getTimeAgo(collection.creationDate)}</p>
 								</div>

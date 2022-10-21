@@ -2,7 +2,7 @@
 	export let searchText: string = '';
 </script>
 
-<div class="flex rounded-full w-1/3 border-solid border-primary-3 border-2 font-body text-body1">
+<div style="border-width: 1px;" class="flex rounded-full w-1/3 border-solid border-primary-3 font-body text-body1">
 	<input
 		type="text"
 		bind:value={searchText}
