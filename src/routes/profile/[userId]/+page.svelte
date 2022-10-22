@@ -37,13 +37,13 @@
 		</div>
 		<p class="text-heading1 font-heading text-secondary mt-2">{user.name}</p>
 		{#if user.bio != ''}
-		<p id="bio" class="font-body mt-3 mb-5">{user.bio}</p>
+			<p id="bio" class="font-body mt-3 mb-5">{user.bio}</p>
 		{/if}
 		<ProfileStatistics user={user}/>
 	</div>
 	<div id="right">
 		{#if user.favsBookshelf}
-		<BooksDisplay bookshelf={user.favsBookshelf}/>
+			<BooksDisplay bookshelf={user.favsBookshelf}/>
 		{/if}
 		
 		{#if user.reviews}
@@ -73,11 +73,6 @@
 		align-items: center;
 		width: 65%;
 		
-	}
-	#profilePic {
-		height: 30%;
-		width: auto;
-		border-radius: 50%;
 	}
 
 	#bio {

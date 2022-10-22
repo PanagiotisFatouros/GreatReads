@@ -3,9 +3,14 @@
 	export let showRating: boolean = true;
 	export let isSmall: boolean = false;
 
-	let numStars: number = Math.floor(rating);
-	let fraction: number = rating - numStars;
-	let lastStarSize: number = fraction * 25;
+	let numStars: number;
+	$: numStars = (rating ? Math.floor(rating): 0);
+
+	let fraction: number;
+	$: fraction = rating - numStars;
+
+	let lastStarSize: number;
+	$: lastStarSize = fraction * 25;
 </script>
 
 <div class="text-primary-2 font-body flex content-center space-x-1/2">
@@ -14,9 +19,7 @@
 	{:else if showRating && !isSmall}
 		<p class="pr-2 text-body1">{rating.toFixed(1)}</p>
 	{/if}
-
-	<!-- TODO: add small variant -->
-
+	
 	<!-- whole stars -->
 	{#each Array(numStars) as _}
 		{#if isSmall}
@@ -74,6 +77,4 @@
 		</svg>
 	</div>
 	{/if}
-	
-	
 </div>

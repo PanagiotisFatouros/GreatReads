@@ -11,13 +11,12 @@
 
     const baseURL = $page.url.origin;
 
-
 	/** @type {import('./$types').PageData} */
 	export let data;
 
 	let bookshelf: Bookshelf = data.bookshelf
 
-	let booksShown: Book[] | undefined = bookshelf.books;
+	let booksShown: Book[] | undefined = bookshelf.books?.slice();
 
 	let allBookshelves: Bookshelf[] = data.bookshelves
 	let filterOn = false;
@@ -36,15 +35,11 @@
 
 	async function deleteBookshelf() {
 		await fetch(`${baseURL}/api/delete/bookshelf/${bookshelf.id}`, {
-                method: 'DELETE'
+            method: 'DELETE'
         }) 
 
 		goto('/library/bookshelves');
 	}
-
-	
-
-
 
 	$: isOverlayOpen.set(filterOn || sortOn || isDeleting);
 	$: bookshelf
@@ -138,27 +133,24 @@
 
 <!-- filter and sort panels -->
 <div class="flex flex-col justify-start w-full">
-
-
 	{#if filterOn && bookshelf.books != undefined}
 		<div class="z-10 fixed self-center">
 			<FilterPanel bind:show={filterOn} books={bookshelf.books} bind:booksShown={booksShown} bind:pageMin={pageMin} bind:pageMax={pageMax} bind:ratingSelect={ratingSelect} />
 		</div>
 	{/if}
-	{#if sortOn && booksShown != undefined}
+	{#if sortOn && bookshelf.books != undefined}
 		<div class="z-10 fixed self-center">
-			<SortPanel bind:show={sortOn} bind:booksShown={booksShown} bind:sortOption={sortOption} />
-
+			<SortPanel bind:show={sortOn} books={bookshelf.books} bind:booksShown={booksShown} bind:sortOption={sortOption} />
 		</div>
 	{/if}
 	{#if isDeleting}
-		<Confirmation title={"Delete Bookshelf"} description={"Are you sure you want to delete this bookshelf? This can not be undone."} on:cancel={() => isDeleting = false} on:confirm={deleteBookshelf}/>
+		<Confirmation title={"Delete Bookshelf"} description={"Are you sure you want to delete this bookshelf? <br/>This can not be undone."} on:cancel={() => isDeleting = false} on:confirm={deleteBookshelf}/>
 	{/if}
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-	{#if bookshelf.books != undefined}
-		{#each bookshelf.books as book}
+	{#if booksShown != undefined}
+		{#each booksShown as book}
 			<BookCard on:click={() => goto(`/books/${book.id}`)} on:maybeRemoved={event => handleMaybeRemoved(event, book.id)} book={book} bookshelves={allBookshelves} />
 		{/each}
 	{/if}

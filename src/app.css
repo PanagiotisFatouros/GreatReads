@@ -39,7 +39,7 @@ h1 {
 	}
 
 	.std_button {
-		@apply bg-accent w-24 text-white rounded-full btn;
+		@apply bg-accent w-24 px-3 py-0.5 text-white rounded-full btn;
 	}
 
 	.std_input {

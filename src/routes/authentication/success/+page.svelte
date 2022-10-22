@@ -10,8 +10,9 @@
 	if ($session) {
 		if (browser) {
 			setTimeout(function () {
+				isOverlayOpen.set(false)
 				goto('/');
-			}, 2000);
+			}, 1000);
 		}
 	}
 

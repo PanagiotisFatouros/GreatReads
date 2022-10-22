@@ -29,7 +29,12 @@
 			if (deletedCollection != undefined && collections != undefined) {
 				//successful
 				collections = collections.filter((c) => c.id !== selectedCollection!.id);
+				
+				dispatch('delete', {
+					collection: selectedCollection
+				})
 				selectedCollection = null;
+
 			}
 			else {
 				alert("Something went wrong. Collection not deleted");

@@ -1,6 +1,5 @@
 <script>
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import { authenticated } from '../stores/AuthenticatedStore';
 	import '../app.css';
 	import NavBar from '../components/NavBar.svelte';
 	import Overlay from '../components/Overlay.svelte';
@@ -12,12 +11,6 @@
 	import { browser } from '$app/environment';
 
 	const session = getSession()
-	
-	if ($session) {
-		authenticated.set(true);
-	} else {
-		authenticated.set(false);
-	}
 
 	handleSilentRefresh();
 
@@ -54,8 +47,7 @@
 	<Overlay />
 {/if}
 
-
-<NavBar loggedIn={$authenticated}/>
+<NavBar loggedIn={$session}/>
 
 {#if $navigating}
 <div class='w-full flex justify-center mt-10'>

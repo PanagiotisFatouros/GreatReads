@@ -12,7 +12,7 @@ export const actions: Actions = {
 		const email = data.get('email')?.toString() || '';
 		const fullName = data.get('fullName')?.toString() || '';
 		const password = data.get('password')?.toString() || '';
-		console.log(email, password);
+		// console.log(email, password);
 
 		try {
 			// Create user credentials, tokens and set cookies
