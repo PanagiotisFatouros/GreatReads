@@ -14,7 +14,7 @@ const validBookId = 'zyTCAlFPjgYC';
 
 test('Valid Book Page (Not Logged In)', async ({ page, baseURL }) => {
 	await page.goto(`${baseURL}/books/${validBookId}`);
-	await page.waitForURL('**/authentication/login');
+	await page.waitForURL('**/authentication');
 });
 
 test('Valid Book Page (Logged In)', async ({ page, baseURL }) => {

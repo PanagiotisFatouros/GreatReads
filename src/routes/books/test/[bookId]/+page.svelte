@@ -64,7 +64,7 @@
 		}
 		// Not authenticated, redirect back to login page
 		else {
-			goto('/authentication/login');
+			goto('/authentication');
 		}
 	}
 </script>

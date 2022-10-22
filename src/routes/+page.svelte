@@ -17,7 +17,7 @@
 		console.log($session);
 	} else {
 		if (browser) {
-			goto('/authentication/login');
+			goto('/authentication');
 		}
 	}
 	

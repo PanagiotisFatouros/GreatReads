@@ -1,8 +1,8 @@
 <script>
 	import { signOut, getSession } from 'lucia-sveltekit/client';
 	import { browser } from '$app/environment';
-	import { authenticated } from '../../stores/AuthenticatedStore';
 	import {goto } from '$app/navigation'
+
 	const session = getSession();
 
 	if (browser) {
@@ -16,10 +16,9 @@
 				}
 			};
 			signOutUser();
-			authenticated.set(false)
 		} else {
 			setTimeout(function () {
-				goto('/authentication/login');
+				goto('/authentication');
 			}, 1000);
 		}
 	}
