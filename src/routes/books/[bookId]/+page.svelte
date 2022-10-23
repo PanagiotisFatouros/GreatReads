@@ -4,7 +4,6 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
-	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
 	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
