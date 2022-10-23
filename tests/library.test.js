@@ -51,7 +51,8 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button');
     await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button').click();
     await page.reload();
-    await page.waitForSelector('#bookshelves');
+    console.log(page.url())
+    await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div.px-2 > div > p:has-text("The Google Story (2018 Updated Edition)")');
     await expect(page.locator('#bookshelves > div:nth-child(1) > div > div.px-2 > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(0);
     await page.goto('/sign-out')
     await page.waitForURL('**/authentication')
