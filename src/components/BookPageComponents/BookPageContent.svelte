@@ -14,7 +14,7 @@
 	let selectedTab: Tabs = Tabs.reviews;
 
 	onMount(() => {
-		if (book.userNotes != undefined && book.userNotes != undefined) {
+		if (book.userNotes != undefined && book.publicNotes != undefined) {
 			book.userNotes.forEach(collection => {
 				if (collection.isPublic) {
 					//remove duplicate object
@@ -24,13 +24,22 @@
 					book.publicNotes?.push(collection);
 				}
 			})
+
+			sortPublicCollections()
 		}
 	})
+
+	function sortPublicCollections() {
+		if (book.publicNotes) {
+			book.publicNotes.sort((a,b) => b.upvotes - a.upvotes)
+		}
+	}
 
 	
 
 	function addToPublicCollections(event:any) {
 		book.publicNotes?.push(event.detail.collection);
+		sortPublicCollections()
 	}
 
 	function updateCollection(event:any) {
@@ -42,6 +51,7 @@
 
 			if (index == -1) {
 				book.publicNotes?.push(collection);
+				sortPublicCollections()
 			}
 		}
 		else {
