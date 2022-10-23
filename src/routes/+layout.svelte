@@ -13,8 +13,9 @@
 
 	let session = getSession()
 	$: $session;
-	
+
 	handleSilentRefresh();
+	
 
 	function disableScroll() {
 		const scrollY = window.scrollY;
@@ -48,11 +49,13 @@
 	<Overlay />
 {/if}
 
+
 {#if $session}
 	<NavBar/>
 {:else}
 	<NavBarLanding/>
 {/if}
+
 
 {#if $navigating}
 <div class='w-full flex justify-center mt-10'>
