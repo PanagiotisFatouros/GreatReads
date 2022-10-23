@@ -5,6 +5,13 @@
     let background = "../../../../images/login.jpeg";
 
     let session = getSession();
+    $: {
+        if ($session) {
+            if (browser) {
+                goto('/')
+            }
+        }
+    }
 </script>
 
 <!-- svelte-ignore a11y-img-redundant-alt -->

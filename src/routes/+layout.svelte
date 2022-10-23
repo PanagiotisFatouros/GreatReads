@@ -10,20 +10,9 @@
 
 	import {getSession} from "lucia-sveltekit/client"
 	import { browser } from '$app/environment';
-	import { goto } from '$app/navigation';
 
 	let session = getSession()
 	$: $session;
-
-	if ($session) {
-		if (browser) {
-			goto('/');
-		}
-	} else {
-		if (browser) {
-			goto('/authentication');
-		}
-	}
 	
 	handleSilentRefresh();
 

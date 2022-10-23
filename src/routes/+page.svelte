@@ -13,13 +13,13 @@
 
 	const session = getSession();
 
-	// if ($session) {
-	// 	console.log($session);
-	// } else {
-	// 	if (browser) {
-	// 		goto('/authentication');
-	// 	}
-	// }
+	if ($session) {
+		console.log($session);
+	} else {
+		if (browser) {
+			goto('/authentication');
+		}
+	}
 	
 	/** @type {import('./$types').PageData} */
 	export let data;
