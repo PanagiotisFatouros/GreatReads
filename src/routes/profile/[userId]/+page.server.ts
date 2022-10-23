@@ -12,7 +12,7 @@ export async function load({params}: ServerLoadEvent) {
 
     try {
         let user: Client
-        let favsBookshelf: Bookshelf | null = null
+        let favsBookshelf: Bookshelf | undefined
         let numBooksRead: number = 0;
         let reviews: Review[] = []
         let avgRating: number = 0;
@@ -122,25 +122,25 @@ export async function load({params}: ServerLoadEvent) {
             })
             avgRating = totalRatings / reviews.length;
 
-            if (favsBookshelf != null) {
-                user = {
-                    id: prismaUser.id,
-                    name: prismaUser.name,
-                    bio: prismaUser.bio,
-                    profilePic:  prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
-                    favAuthor: prismaUser.favAuthor == '' ? '-' : prismaUser.favAuthor,
-                    favGenre: prismaUser.favGenre  == '' ? '-' : prismaUser.favGenre,
-                    favsBookshelf: favsBookshelf,
-                    numBooksRead: numBooksRead,
-                    reviews: reviews,
-                    avgRating: avgRating
-                }
-                // console.log(user)
-
-                return {
-                    user
-                }
+            
+            user = {
+                id: prismaUser.id,
+                name: prismaUser.name,
+                bio: prismaUser.bio,
+                profilePic:  prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
+                favAuthor: prismaUser.favAuthor == '' ? '-' : prismaUser.favAuthor,
+                favGenre: prismaUser.favGenre  == '' ? '-' : prismaUser.favGenre,
+                favsBookshelf: favsBookshelf,
+                numBooksRead: numBooksRead,
+                reviews: reviews,
+                avgRating: avgRating
             }
+            // console.log(user)
+
+            return {
+                user
+            }
+            
 
         }
 
