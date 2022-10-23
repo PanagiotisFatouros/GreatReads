@@ -12,7 +12,8 @@
 
     let bookshelves: Bookshelf[] = data.bookshelves;
     let collections: Collection[] = data.collections;
-    let addBookshelf = false;
+    let addBookshelf: boolean = false;
+    let searchText: string = '';
 
     $: isOverlayOpen.set(addBookshelf);
 	$: bookshelves
@@ -66,11 +67,13 @@
     </p>
     <hr class=" border-1 border-primary-3 my-3">
 
-    <SearchBarMini />
+    <SearchBarMini bind:searchText />
 
     <div class="flex flex-row flex-wrap grow justify-items-center items-center">
         {#each collections as collection}
-            <NotesPreview collection={collection}/>
+            {#if (collection.title.toLowerCase().includes(searchText.toLowerCase()))}
+                <NotesPreview collection={collection}/>
+            {/if}
         {/each}
     </div>
 </div>
