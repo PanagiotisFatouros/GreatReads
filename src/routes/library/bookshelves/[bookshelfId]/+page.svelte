@@ -28,8 +28,10 @@
 	
 		if (event.detail.bookshelfIDs.includes(bookshelf.id)) {
 			bookshelf.books = bookshelf.books?.filter(book => book.id != bookId)
+			booksShown = booksShown?.filter(book => book.id != bookId)
 
 			bookshelf = bookshelf;
+			booksShown = booksShown;
 		}
 	}
 
@@ -43,6 +45,7 @@
 
 	$: isOverlayOpen.set(filterOn || sortOn || isDeleting);
 	$: bookshelf
+	$: booksShown
 	$: {
 		if ($isOverlayOpen == false) {
 			filterOn = false;

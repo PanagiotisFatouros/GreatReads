@@ -11,6 +11,7 @@
 	import {getSession} from "lucia-sveltekit/client"
 	import { browser } from '$app/environment';
 
+
 	handleSilentRefresh();
 	const session = getSession()
 	

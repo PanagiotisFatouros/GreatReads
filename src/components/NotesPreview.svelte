@@ -7,7 +7,7 @@
 
 <button on:click={() => goto(`/books/${collection.bookId}`)} class="bg-primary-1 w-84 h-40 m-3 rounded-md flex items-center hover:opacity-70">
 	<img src={collection.imgURL} alt="Book" class="p-3 pr-4 w-28 max-h-40 float-left align-middle" />
-	<div>
+	<div class="flex flex-col items-start">
 		<p class="text-secondary font-body font-bold text-body1">{collection.title}</p>
 		{#if collection.numNotes != undefined}
 		<p class="text-primary-3 font-body text-body2">{collection.numNotes} Notes</p>
