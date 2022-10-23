@@ -1,5 +1,10 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
+    import { browser } from '$app/environment';
+	import { getSession } from "lucia-sveltekit/client";
     let background = "../../../../images/login.jpeg";
+
+    let session = getSession();
 </script>
 
 <!-- svelte-ignore a11y-img-redundant-alt -->
