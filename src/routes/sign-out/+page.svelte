@@ -9,17 +9,17 @@
 		if ($session) {
 			const signOutUser = async () => {
 				try {
-					await signOut();
-					goto('/authentication');
+					await signOut('/authentication');
+					authenticated.set(false)
 				} catch (err) {
 					console.log(err);
 				}
 			};
 			signOutUser();
-			authenticated.set(false)
 		} else {
 			setTimeout(function () {
-				goto('/authentication/login');
+				authenticated.set(false);
+				goto('/authentication');
 			}, 1000);
 		}
 	}

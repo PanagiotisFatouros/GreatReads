@@ -11,15 +11,9 @@
 	import {getSession} from "lucia-sveltekit/client"
 	import { browser } from '$app/environment';
 
+	handleSilentRefresh();
 	const session = getSession()
 	
-	if ($session) {
-		authenticated.set(true);
-	} else {
-		authenticated.set(false);
-	}
-
-	handleSilentRefresh();
 
 	function disableScroll() {
 		const scrollY = window.scrollY;
@@ -39,6 +33,12 @@
 
 	$: {
 		if (browser) {
+			console.log($session)
+			if ($session) {
+				authenticated.set(true);
+			} else {
+				authenticated.set(false);
+			}
 			if ($isOverlayOpen == true) {
 				disableScroll();
 			}

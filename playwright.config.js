@@ -1,7 +1,7 @@
 /** @type {import('@playwright/test').PlaywrightTestConfig} */
 const config = {
 	testDir: 'tests',
-	timeout: 15000,
+	timeout: 30000,
 	webServer: {
 		command: 'npm run preview',
 		port: 3000,
