@@ -28,7 +28,18 @@
 	
 	<img src={book.imageURL} alt="Book" class="p-3 pr-4 w-34 max-h-48 float-left align-middle" />
 	<p class="text-secondary pt-3 font-heading text-xl font-bold truncate">{book.title}</p>
-	<p class="text-primary-3 font-body text-sm line-clamp-1">{book.authors}</p>
+	<p class="text-primary-3 font-body text-sm line-clamp-1">
+		{#if (book.authors)}
+			{#if (book.authors.length >= 1)}
+				{#each book.authors.slice(0, book.authors.length - 2) as author}
+					{author},&nbsp;
+				{/each}
+			{/if}
+			{book.authors[book.authors.length - 1]}
+		{:else}
+			Unknown
+		{/if}
+	</p>
 	<div class="flex items-center mt-2">
 		{#if book.avgRating != undefined}
 			<StarRating bind:rating={book.avgRating} />
