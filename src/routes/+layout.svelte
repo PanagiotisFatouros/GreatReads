@@ -11,6 +11,7 @@
 	import { browser } from '$app/environment';
 
 	const session = getSession()
+	console.log($session)
 
 	handleSilentRefresh();
 

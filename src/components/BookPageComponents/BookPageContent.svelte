@@ -6,23 +6,28 @@
 	import ReviewsTab from './Reviews/ReviewsTab.svelte';
 	import NotesTab from './Notes/NotesTab.svelte';
 	import PublicNotesTab from './Notes/PublicNotesTab.svelte';
+	import { onMount } from 'svelte';
 
 	export let book: Book;
 
 	// TODO: changed based on if book is already saved or not
 	let selectedTab: Tabs = Tabs.reviews;
 
-	if (book.userNotes != undefined && book.userNotes != undefined) {
-		book.userNotes.forEach(collection => {
-			if (collection.isPublic) {
-				//remove duplicate object
-				book.publicNotes?.splice(book.publicNotes.findIndex(publicCollection => collection.id == publicCollection.id), 1);
+	onMount(() => {
+		if (book.userNotes != undefined && book.userNotes != undefined) {
+			book.userNotes.forEach(collection => {
+				if (collection.isPublic) {
+					//remove duplicate object
+					book.publicNotes?.splice(book.publicNotes.findIndex(publicCollection => collection.id == publicCollection.id), 1);
 
-				//replace with original object so both are updated when changed
-				book.publicNotes?.push(collection);
-			}
-		})
-	}
+					//replace with original object so both are updated when changed
+					book.publicNotes?.push(collection);
+				}
+			})
+		}
+	})
+
+	
 
 	function addToPublicCollections(event:any) {
 		book.publicNotes?.push(event.detail.collection);
