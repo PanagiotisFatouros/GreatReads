@@ -56,40 +56,40 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     await page.waitForURL('**/authentication')
 });
 
-test('Add and delete bookshelf', async ({ page, baseURL }) => {
+// test('Add and delete bookshelf', async ({ page, baseURL }) => {
 
-    await page.goto(`${baseURL}/authentication/login`);
-	await page.fill('input[name="email"]', 'librarytest@testing.com');
-	await page.fill('input[name="password"]', 'test');
-	await page.click('button >> text=Submit');
-	await page.waitForURL('**/success');
+//     await page.goto(`${baseURL}/authentication/login`);
+// 	await page.fill('input[name="email"]', 'librarytest@testing.com');
+// 	await page.fill('input[name="password"]', 'test');
+// 	await page.click('button >> text=Submit');
+// 	await page.waitForURL('**/success');
 
 
-    await page.goto(`${baseURL}/library/bookshelves`);
-    await page.waitForURL(`**/bookshelves`);
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.mb-3.flex > div.flex.justify-center > button');
-    await page.locator('body > div > div.mt-6.mx-8 > div.mb-3.flex > div.flex.justify-center > button').click();
-    await page.waitForSelector('#main > div.flex > input');
-    await page.fill('#main > div.flex > input', 'New Test Bookshelf');
-    await page.waitForSelector('#main > div.flex.justify-center.space-x-3 > button:nth-child(2)');
-    await page.locator('#main > div.flex.justify-center.space-x-3 > button:nth-child(2)').click();
+//     await page.goto(`${baseURL}/library/bookshelves`);
+//     await page.waitForURL(`**/bookshelves`);
+//     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.mb-3.flex > div.flex.justify-center > button');
+//     await page.locator('body > div > div.mt-6.mx-8 > div.mb-3.flex > div.flex.justify-center > button').click();
+//     await page.waitForSelector('#main > div.flex > input');
+//     await page.fill('#main > div.flex > input', 'New Test Bookshelf');
+//     await page.waitForSelector('#main > div.flex.justify-center.space-x-3 > button:nth-child(2)');
+//     await page.locator('#main > div.flex.justify-center.space-x-3 > button:nth-child(2)').click();
 
-    // Check created
-    await page.reload();
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")');
-    await expect(page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")')).toHaveCount(1);
+//     // Check created
+//     await page.reload();
+//     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")');
+//     await expect(page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")')).toHaveCount(1);
     
-    // Then Delete 
-    await page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")').click();
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p');
-    await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p').click();
-    await page.waitForSelector('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p');
-    await page.locator('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p').click();
+//     // Then Delete 
+//     await page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")').click();
+//     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p');
+//     await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p').click();
+//     await page.waitForSelector('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p');
+//     await page.locator('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p').click();
 
-    // Check 
-    await page.reload();
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz');
-    await expect(page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")')).toHaveCount(0);
-    await page.goto('/sign-out')
-    await page.waitForURL('**/authentication')
-})
+//     // Check 
+//     await page.reload();
+//     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz');
+//     await expect(page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div.flex.items-center.space-x-1.svelte-wtmzbz > p:has-text("New Test Bookshelf")')).toHaveCount(0);
+//     await page.goto('/sign-out')
+//     await page.waitForURL('**/authentication')
+// })
