@@ -20,7 +20,6 @@
 			signOutUser();
 		} else {
 			setTimeout(function () {
-				authenticated.set(false);
 				goto('/authentication');
 			}, 1000);
 		}
