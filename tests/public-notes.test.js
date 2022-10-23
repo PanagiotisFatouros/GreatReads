@@ -32,7 +32,7 @@ test('Create, Edit and Delete Public Collections and Notes', async ({ page, base
     await page.locator('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div:nth-child(5) > div > div.flex.flex-col.mt-1 > div').click();
 
     // Refresh page then check whether public notes updated
-    page.reload;
+    await page.reload();
     await page.locator('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div.text-secondary.flex.justify-center.space-x-5 > div:nth-child(3) > button > h2').click();
     await page.waitForSelector('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div:nth-child(5) > div > div:nth-child(2)');
     expect(await page.innerHTML('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div:nth-child(5) > div > div:nth-child(2)')).toContain('test Public test Collection');
