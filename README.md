@@ -62,23 +62,42 @@ sed -i "s/0.0.0.0/::/" ./build/index.js
 
 # Functionality Available:
 
+Note all functionality is linked together and can be accessed by navigating the webpage clicking links.
+
 ## View the application
 
-Visit https://greatreads.azurewebsites.net/ to view the application
+Visit https://greatreads.azurewebsites.net/ to view the application - Recommend.
 
-## Logging in / Registering (minimal fields: will be improved)
+To test locally - Not recommended, view the readme for more information.
+
+Clone the git repository
+
+Run the following commands
+
+
+npm install
+npm run build
+npm run dev
+
+Note in this release we have allowed access to the database from all IP addresses so any user with the username and password can run the application locally.
+
+## Logging in / Registering
 
 …/authentication
 
 From here to register an account enter a username and password. Click register and this will create an account.
 
-You can then login with these account details.
+You can then in future login with these account details.
+
+../authentication/login for login
+
+../authentication/register to register
 
 ../sign-out to log out of an account.
 
-log in test: you can log in with username/password both empty as this is set as a test user.
+## Viewing a book - Only while logged in.
 
-## Viewing a book, given a Google Books ID (connected to Google Books API)
+To search for a book, change the dropdown on the search bar to book/author/genre and search.
 
 …/books/[googleBooksID] eg. “tPxdHRmXsiMC” (must be logged in)
 
@@ -86,19 +105,32 @@ log in test: you can log in with username/password both empty as this is set as 
 
 Go to view a book as in the above dot-point and all the entering a review functionality is now working.
 
-## Viewing dummy profile (not connected to database)
+## Viewing profile.
 
-../profile/userID
-Not currently connected to database, can type anything and it will work.
+To search for a user, change the dropdown on the search bar to user and search and then click on the profile
 
-## Viewing Library and Bookshelf (not connected to database)
-Not currently connected to database, can type anything and it will work.
+../profile/[userID]
 
-…/library/123/bookshelves
+## Viewing Library and Bookshelf
 
-…/library/123/bookshelves/bookshelf1
+Click “My Library”
 
-## Search results page (not connected to database)
+Click on “View All” to see a list of all bookshelves
 
-Not currently connected to database, can type anything and it will work.
-…/search
+Click on a bookshelf to open it
+
+Click on a notes collection to open the page for the book where the collection is written
+
+Adding to library and bookshelf.
+
+Click on a book and click “save book” following that save to whatever library you would like.
+
+## Creating a new bookshelf.
+
+Click “My Library” → “View All” → “New Bookshelf”
+
+## View your dashboard at the home page
+
+## Update your details (profile pic, name, password, bio, etc) in the settings page
+
+Hover over user icon in top right of nav bar → select ‘Settings’
