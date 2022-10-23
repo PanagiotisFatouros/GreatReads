@@ -62,7 +62,7 @@
 		border-radius: 10px;
 		height: 270px;
 		width: 200px;
-		margin-right: 2.9%;
+		margin-right: 2%;
 		margin-bottom: 1.5%;
 		display: flex;
 		flex-direction: column;
