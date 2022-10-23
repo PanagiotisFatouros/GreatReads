@@ -1,7 +1,8 @@
-<script>
+<script lang="ts">
 	import { isOverlayOpen } from '../stores/OverlayStore';
 	import '../app.css';
 	import NavBar from '../components/NavBar.svelte';
+	import NavBarLanding from '../components/NavBarLanding.svelte';
 	import Overlay from '../components/Overlay.svelte';
 	import { handleSilentRefresh } from 'lucia-sveltekit/client';
 	import { navigating } from '$app/stores';
@@ -10,9 +11,9 @@
 	import {getSession} from "lucia-sveltekit/client"
 	import { browser } from '$app/environment';
 
-	const session = getSession()
-	console.log($session)
-
+	let session = getSession()
+	$: $session;
+	
 	handleSilentRefresh();
 
 	function disableScroll() {
@@ -40,7 +41,6 @@
 				enableScroll()
 			}
 		}
-		
 	}
 </script>
 
@@ -48,7 +48,11 @@
 	<Overlay />
 {/if}
 
-<NavBar loggedIn={$session}/>
+{#if $session}
+	<NavBar/>
+{:else}
+	<NavBarLanding/>
+{/if}
 
 {#if $navigating}
 <div class='w-full flex justify-center mt-10'>

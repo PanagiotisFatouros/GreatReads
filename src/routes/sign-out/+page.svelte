@@ -3,14 +3,14 @@
 	import { browser } from '$app/environment';
 	import {goto } from '$app/navigation'
 
-	const session = getSession();
+	let session = getSession();
+	$: $session;
 
 	if (browser) {
 		if ($session) {
 			const signOutUser = async () => {
 				try {
-					await signOut();
-					goto('/authentication');
+					await signOut('/authentication');
 				} catch (err) {
 					console.log(err);
 				}
