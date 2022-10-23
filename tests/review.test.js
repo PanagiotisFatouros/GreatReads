@@ -52,7 +52,7 @@ test('Create, Edit and Delete review', async ({ page, baseURL }) => {
     // Check Review no longer exists
     await page.reload;
     await expect(page.locator(newReviewSelectorH2)).toHaveCount(0);
-
-
+    await page.goto('/sign-out')
+    await page.waitForURL('**/authentication')
 });
 

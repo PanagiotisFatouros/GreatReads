@@ -59,5 +59,7 @@ test('Create, Edit and Delete Private Collections', async ({ page, baseURL }) =>
     await page.locator('#confirmation > div > button.btn.bg-accent.text-white.rounded-full').click();
     // Check Collection no longer exists
     await expect(page.locator('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div:nth-child(5) > div > div.flex.flex-col.mt-1 > div')).toHaveCount(0);
+    await page.goto('/sign-out')
+    await page.waitForURL('**/authentication')
 });
 

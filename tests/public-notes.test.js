@@ -49,6 +49,7 @@ test('Create, Edit and Delete Public Collections and Notes', async ({ page, base
 
     // Check note longer exists
     await expect(page.locator('body > div > div.grid.grid-cols-10.text-body1.font-body.text-primary-3.mt-1 > div.col-span-5.mt-5.mr-3 > div:nth-child(5) > div > div.flex.flex-col.mt-1 > div > div > p.text-secondary:has-text("test Public test Collection")')).toHaveCount(0);  
-    
+    await page.goto('/sign-out')
+    await page.waitForURL('**/authentication')
 });
 
