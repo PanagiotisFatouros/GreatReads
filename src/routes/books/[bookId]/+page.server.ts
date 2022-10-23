@@ -12,6 +12,7 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 		const session = await auth.validateRequestByCookie(request);
 		if (session) {
 			// authenticated
+			console.log(session)
 
 			const host = url.host;
 			// console.log(baseURL);

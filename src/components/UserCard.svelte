@@ -5,7 +5,7 @@
     export let user: Client;
 </script>
 
-<div on:click={() => goto(`/profile/${user.id}`)} class="w-40 h-52 m-4 flex flex-col justify-center items-center cursor-pointer bg-primary-1 rounded-2xl shadow-lg">
+<div on:click={() => goto(`/profile/${user.id}`)} class="w-40 h-52 m-4 flex flex-col justify-center items-center cursor-pointer bg-primary-1 rounded-2xl shadow-lg overflow-hidden">
 	
     <div class=" profile_pic_med  mb-3">
         {#if user.profilePic != 'default'}
@@ -26,6 +26,6 @@
         {/if}
     </div>
 	
-	<p class="text-secondary font-heading text-body1 font-bold truncate">{user.name}</p>
+	<p class="w-36 text-secondary font-heading text-body1 font-bold break-normal text-center">{user.name}</p>
 	
 </div>

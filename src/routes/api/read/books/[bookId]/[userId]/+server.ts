@@ -53,7 +53,14 @@ export async function GET({ params }: RequestEvent) {
 						title: true,
 						creationDate: true,
 						isPublic: true,
-						upvotes: true
+						upvotes: true,
+						user: {
+							select: {
+								id: true,
+								name: true,
+								profilePic: true
+							}
+						}
 					}
 				}
 			}
@@ -131,7 +138,12 @@ export async function GET({ params }: RequestEvent) {
 					title: prismaCollection.title,
 					creationDate: prismaCollection.creationDate,
 					isPublic: prismaCollection.isPublic,
-					upvotes: prismaCollection.upvotes
+					upvotes: prismaCollection.upvotes,
+					user: {
+						name: prismaCollection.user.name,
+						id: prismaCollection.user.id,
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+					}
 				};
 				collections.push(collection);
 			});
