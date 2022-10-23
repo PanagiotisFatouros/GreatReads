@@ -1,17 +1,19 @@
 <script lang="ts">
-    import { getSession } from 'lucia-sveltekit/client';
-    import { browser } from '$app/environment';
-    import { goto } from '$app/navigation';
-
-    const session = getSession()
-    let background = "../../../../images/login.jpeg";
+	import { goto } from '$app/navigation';
+  import { browser } from '$app/environment';
+	import { getSession } from "lucia-sveltekit/client";
     
-    if (browser){
+    let background = "../../../../images/login.jpeg";
+
+    let session = getSession();
+    $: {
         if ($session) {
-            goto('/')
+            if (browser) {
+                goto('/')
+            }
         }
     }
-    
+
 </script>
 
 <!-- svelte-ignore a11y-img-redundant-alt -->

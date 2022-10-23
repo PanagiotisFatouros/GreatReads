@@ -1,16 +1,18 @@
 <script>
 	import { signOut, getSession } from 'lucia-sveltekit/client';
 	import { browser } from '$app/environment';
-	import { authenticated } from '../../stores/AuthenticatedStore';
-	import {goto } from '$app/navigation'
-	const session = getSession();
+	import { goto } from '$app/navigation'
+
+	let session = getSession();
+	$: $session;
+
 
 	if (browser) {
 		if ($session) {
 			const signOutUser = async () => {
 				try {
 					await signOut('/authentication');
-					authenticated.set(false)
+
 				} catch (err) {
 					console.log(err);
 				}

@@ -13,7 +13,7 @@
 	export let data;
 
 	let bookshelves:Bookshelf[] = data.bookshelves;
-
+	let searchText: string = '';
 
 	// console.log(bookshelves)
 
@@ -54,7 +54,7 @@
 	</div>
 	<hr class=" border-1 border-primary-3 my-3" />
 	<div class="mb-3 flex">
-		<SearchBarMini />
+		<SearchBarMini bind:searchText />
 		<!-- add bookshelf button -->
 		<div class="flex justify-center">
 			<button
@@ -68,7 +68,9 @@
 
 	<div class="flex flex-row flex-wrap grow justify-items-center items-center">
 		{#each bookshelves as bookshelf}
-			<BookshelfCard bookshelf={bookshelf}/>
+			{#if (bookshelf.name.toLowerCase().includes(searchText.toLowerCase()))}
+				<BookshelfCard bookshelf={bookshelf}/>
+			{/if}
 		{/each}
 	</div>
 </div>
