@@ -47,6 +47,7 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // Back To Home Page, Check no more book in favourites
     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button');
     await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button').click();
+    page.reload;
     await page.waitForSelector('#bookshelves');
     await expect(page.locator('#bookshelves > div:nth-child(1) > div > #books-container > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(0);
 
