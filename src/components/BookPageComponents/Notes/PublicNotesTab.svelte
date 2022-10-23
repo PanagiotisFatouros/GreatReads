@@ -11,7 +11,7 @@
 
 	export let collections: Collection[] | undefined;
 
-	console.log(collections)
+	// console.log(collections)
 
 	let filteredCollections: Collection[] | undefined = collections;
 	let searchText: string = '';
@@ -45,6 +45,27 @@
 
 		selectedCollection = collection;
 	}
+
+	async function handleVoteChange(event:any, collectionId: number) {
+		// console.log(event.detail.change)
+
+		const voteChange = event.detail.change
+
+		await fetch(`${baseURL}/api/update/collection/vote`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    id: collectionId,
+					voteChange: voteChange
+                })
+            })
+		console.log(collectionId)
+		let collection: Collection | undefined = collections?.find(c => c.id == collectionId)
+		console.log(collection)
+
+		if (collection) {
+			collection.upvotes += voteChange
+		}
+	}
 </script>
 
 <div class="flex flex-col w-full mt-4">
@@ -68,7 +89,7 @@
 						on:click={() => getCollectionNotes(collection)}
 						class=" bg-primary-1 my-4 rounded-3xl pl-2 pr-1 py-2 flex items-center cursor-pointer hover:bg-opacity-70"
 					>
-						<VoteButtons />
+						<VoteButtons voteCount={collection.upvotes} on:change={e => handleVoteChange(e, collection.id)}/>
 
 						<div class="flex ml-3 space-x-3 items-center">
 							<div class="profile_pic_small">

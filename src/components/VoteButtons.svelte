@@ -1,5 +1,6 @@
 <script lang="ts">
-	//TODO: pass in voteCount from parent component and dispatch event when changed
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher();
 
 	let colourUp: string = 'text-primary-3';
 	let colourDown: string = 'text-primary-3';
@@ -7,7 +8,7 @@
 	let hoverDown: string = 'hover:text-accent';
 	let clickedUp: boolean = false;
 	let clickedDown: boolean = false;
-	let voteCount: number = 0; // get from database
+	export let voteCount: number = 0; // get from database
 
 	// User can vote at most once in either direction, and can change their vote
 	function handleClickUp() {
@@ -18,11 +19,17 @@
 			clickedDown = false;
 			hoverUp = '';
 			hoverDown = 'hover:text-accent';
+			dispatch('change', {
+				change: 1
+			})
 		} else if (clickedUp && !clickedDown) { // already upvoted; undo upvote
 			voteCount--;
 			colourUp = 'text-primary-3';
 			clickedUp = false;
 			hoverUp = 'hover:text-accent';
+			dispatch('change', {
+				change: -1
+			})
 		} else if (!clickedUp && clickedDown) { // was downvoted, now upvoted
 			voteCount += 2;
 			colourUp = 'text-accent';
@@ -31,6 +38,9 @@
 			clickedDown = false;
 			hoverUp = '';
 			hoverDown = 'hover:text-accent';
+			dispatch('change', {
+				change: 2
+			})
 		}
 	}
 	function handleClickDown() {
@@ -41,11 +51,17 @@
 			clickedDown = true;
 			hoverUp = 'hover:text-accent';
 			hoverDown = '';
+			dispatch('change', {
+				change: -1
+			})
 		} else if (!clickedUp && clickedDown) { // already downvoted; undo downvote
 			voteCount++;
 			colourDown = 'text-primary-3';
 			clickedDown = false;
 			hoverDown = 'hover:text-accent';
+			dispatch('change', {
+				change: 1
+			})
 		} else if (clickedUp && !clickedDown) { // was upvoted, now downvoted
 			voteCount -= 2;
 			colourUp = 'text-primary-3';
@@ -54,6 +70,9 @@
 			clickedDown = true;
 			hoverUp = 'hover:text-accent';
 			hoverDown = '';
+			dispatch('change', {
+				change: -2
+			})
 		}
 	}
 </script>
