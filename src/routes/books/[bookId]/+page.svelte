@@ -103,7 +103,7 @@
 		<hr class=" border-1 border-primary-3" />
 
 		<div class=" space-y-3 mt-3">
-			{#each similarBooks.slice(0,8) as book}
+			{#each ((similarBooks) && (similarBooks.length >= 8) ? similarBooks.slice(0,8) : similarBooks) as book}
 				<AbbreviatedBookCard book={book} />
 			{/each}
 		</div>
