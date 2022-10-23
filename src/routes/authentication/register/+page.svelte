@@ -1,17 +1,18 @@
-<script>
+<script lang="ts">
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 
-
     /** @type {import('./$types').ActionData} */
     export let form;
+    const pwRE = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+    let pw: string = "";
+    let pwConfirm: string = "";
 
     if (form) {
         if (browser) {
             goto('/')
         }
     }
-
 </script>
 
 <div id="panel">
@@ -33,18 +34,23 @@
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>                            
-            <input class="bg-primary-1 font-heading" name="password" type="password" placeholder="Password" required>
+            <input class="bg-primary-1 font-heading" name="password" type="password" placeholder="Password" bind:value={pw} required>
         </div>
+        {#if (pw && !pwRE.test(pw))}
+			<p class="text-accent text-body2 w-2/3">Password must contain at least 8 characters including a number, a lowercase letter, and an uppercase letter</p>
+		{/if}
         <div class="input-container bg-primary-1">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
-            <input class="bg-primary-1 font-heading" name="confirmPassword" type="password" placeholder="Confirm Password" required>
+            <input class="bg-primary-1 font-heading" name="confirmPassword" type="password" placeholder="Confirm Password" bind:value={pwConfirm} required>
         </div>
-        <button class="btn font-heading bg-accent text-white">Submit</button>
+        {#if (pwConfirm && !(pw === pwConfirm))}
+			<p class="text-accent text-body2 w-2/3">Passwords do not match</p>
+		{/if}
+        <button class="btn font-heading bg-accent text-white place-self-center" disabled="{!pwRE.test(pw) || !(pw === pwConfirm)}">Submit</button>
     </form>
 </div>
-
 
 <style>
     #title {
@@ -80,7 +86,8 @@
     .input-container {
         border-radius: 20px;
         width: 70%;
-        margin-bottom: 20px;
+        margin-top: 10px;
+        margin-bottom: 10px;
     }
 
     button {

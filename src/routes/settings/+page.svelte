@@ -12,9 +12,10 @@
 
 	let fullName: string = user.name;
 	const baseURL: String = $page.url.origin;
-	const hiddenPassword = '************';
+	const hiddenPassword = '';
 	let password: string = hiddenPassword;
 	let confirmPassword: string = hiddenPassword;
+	const pwRE = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
 
 	let bio: string = user.bio || '';
 	let favAuthor: string = user.favAuthor || '';
@@ -47,7 +48,10 @@
 			}
 
 			if (password != hiddenPassword) {
-				if (password == confirmPassword) {
+				if (!pwRE.test(password)) {
+					alert('Password must contain at least 8 characters including a number, a lowercase letter, and an uppercase letter.');
+					return
+				} else if (password === confirmPassword) {
 					body.password = password;
 				} else {
 					alert('Passwords do not match.');
@@ -115,7 +119,6 @@
 
 	let uploadedPic: string = user.profilePic;
 	$: uploadedPic;
-
 
 	async function updateUserProfilePic(id: String, mimeType: String, profilePic: String, length: Number) {
 		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
@@ -262,10 +265,7 @@
 					</div>
 
 					<!-- to keep space even -->
-					<div class=" w-1/2 ">
-						
-					</div>
-
+					<div class=" w-1/2 "></div>
 				</div>
 
 				<!-- row -->
@@ -276,11 +276,12 @@
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
 							</svg>
-							<p>Password</p>
+							<p>New Password</p>
 						</div>
 						<input
-							type="text"
+							type="password"
 							bind:value={password}
+							placeholder="********"
 							disabled={!isEdittingAccountInfo}
 							on:click={onChangePassword}
 							class=" bg-primary-1 rounded-full px-3 py-2 w-full disabled:opacity-50"
@@ -292,13 +293,12 @@
 							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
 								<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
 							  </svg>
-							  
-
 							<p>Confirm Password</p>
 						</div>
 						<input
-							type="text"
+							type="password"
 							bind:value={confirmPassword}
+							placeholder="********"
 							disabled={!isEdittingAccountInfo}
 							on:click={onChangePassword}
 							class=" bg-primary-1 rounded-full px-3 py-2 w-full items-center disabled:opacity-50"
