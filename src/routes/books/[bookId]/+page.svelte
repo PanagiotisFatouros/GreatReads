@@ -4,7 +4,6 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
-	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
 
 	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
@@ -103,7 +102,7 @@
 		<hr class=" border-1 border-primary-3" />
 
 		<div class=" space-y-3 mt-3">
-			{#each similarBooks.slice(0,8) as book}
+			{#each ((similarBooks) && (similarBooks.length >= 8) ? similarBooks.slice(0,8) : similarBooks) as book}
 				<AbbreviatedBookCard book={book} />
 			{/each}
 		</div>

@@ -8,6 +8,9 @@
 
 	import { getTimeAgo } from '../../../scripts';
 	import { getSession } from 'lucia-sveltekit/client';
+	import { page } from '$app/stores';
+
+	const baseURL = $page.url.origin;
 
 	const dispatch = createEventDispatcher();
 
@@ -40,6 +43,18 @@
 	}
 
 	// $: console.log($isOverlayOpen);
+
+	function handleVoteChange(event:any) {
+		// console.log(event.detail.change)
+
+		fetch(`${baseURL}/api/update/review/vote`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    id: review.id,
+					voteChange: event.detail.change
+                })
+            })
+	}
 
 </script>
 
@@ -120,7 +135,7 @@
 			</div>
 			
 		{:else}
-			<VoteButtons />
+			<VoteButtons voteCount={review.upvotes} on:change={handleVoteChange}/>
 		{/if}
 	</div>
 	<p class="text-primary-3 pb-3">{review.comment}</p>

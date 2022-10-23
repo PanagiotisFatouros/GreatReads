@@ -6,6 +6,8 @@ test('Login-Good-Credentials', async ({ page, baseURL }) => {
 	await page.fill('input[name="password"]', 'test');
 	await page.click('button >> text=Submit');
 	await page.waitForURL('**/success');
+	await page.goto('/sign-out')
+	await page.waitForURL('**/authentication')
 });
 
 test('Login-Bad-Credentials', async ({ page, baseURL }) => {

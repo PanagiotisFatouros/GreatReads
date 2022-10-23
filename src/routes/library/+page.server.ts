@@ -16,9 +16,7 @@ export async function load({ request, url }: ServerLoadEvent) {
 			let bookshelves: Bookshelf[];
 			let collections: Collection[];
 
-            //get 4 bookshelves
-            //TODO: determine which 4
-            const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/4`).then(res => res.json());
+            const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/-1`).then(res => res.json());
 
             const collectionsProm = fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`).then(res => res.json());
 

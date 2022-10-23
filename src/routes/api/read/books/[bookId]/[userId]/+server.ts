@@ -46,14 +46,22 @@ export async function GET({ params }: RequestEvent) {
 				},
 				collections: {
 					where: {
-						userId: userId
+						userId: userId,
+						isPublic: false
 					},
 					select: {
 						id: true,
 						title: true,
 						creationDate: true,
 						isPublic: true,
-						upvotes: true
+						upvotes: true,
+						user:{
+							select:{
+								id: true,
+								name: true,
+								profilePic: true
+							}
+						}
 					}
 				}
 			}
@@ -131,7 +139,12 @@ export async function GET({ params }: RequestEvent) {
 					title: prismaCollection.title,
 					creationDate: prismaCollection.creationDate,
 					isPublic: prismaCollection.isPublic,
-					upvotes: prismaCollection.upvotes
+					upvotes: prismaCollection.upvotes,
+					user:{
+						id: prismaCollection.user.id,
+						name: prismaCollection.user.name,
+						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+					}
 				};
 				collections.push(collection);
 			});
@@ -154,7 +167,7 @@ export async function GET({ params }: RequestEvent) {
 				}
 			});
 
-			if (prismaPublicCollections != undefined) {
+			if (prismaPublicCollections != null) {
 				prismaPublicCollections.forEach((prismaCollection) => {
 					const publicCollection: Collection = {
 						id: prismaCollection.id,
@@ -177,6 +190,12 @@ export async function GET({ params }: RequestEvent) {
 				savedBookshelfIDs.push(bookshelf.id);
 			})
 		}
+		
+		// console.log(publicCollections)
+
+		// Add public collection of user to collection
+		collections = collections.concat(publicCollections
+			.filter((publicCollection) => publicCollection.user?.id === userId))
 
 		// creating google book object
 		targetGoogleBook = {
@@ -199,6 +218,7 @@ export async function GET({ params }: RequestEvent) {
 			publicNotes: publicCollections,
 			savedBookshelfIDs: savedBookshelfIDs
 		};
+		// console.log(JSON.stringify(targetGoogleBook))
 		return new Response(JSON.stringify(targetGoogleBook));
 	}
 }
