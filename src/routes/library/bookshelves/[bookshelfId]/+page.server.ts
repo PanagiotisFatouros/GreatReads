@@ -35,6 +35,11 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 								select: {
 									id: true
 								}
+							},
+							reviews: {
+								select: {
+									rating: true
+								}
 							}
 						}
 					}
@@ -64,6 +69,16 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 						savedBookshelfIDs.push(bookshelf.id);
 					})
 					book.savedBookshelfIDs = savedBookshelfIDs;
+
+					const numRatings:number = prismaBook.reviews.length;
+                    let avgRating:number = 0;
+
+					if (numRatings > 0){
+						const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
+						avgRating = sum / numRatings 
+					} 
+					book.avgRating = avgRating;
+					book.numRatings = numRatings;
 
 					books.push(book)
 				})
