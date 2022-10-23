@@ -39,7 +39,7 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div#header > span');
     await page.locator('#bookshelves > div:nth-child(1) > div > div#header > span').click();
     await page.waitForURL('**/bookshelves/179')
-    console.log(page.url);
+    console.log(page.url());
     await page.waitForSelector('#bookCard > button > div > p:has-text("Saved")');
     await page.locator('#bookCard > button > div > p:has-text("Saved")').click();
     await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
