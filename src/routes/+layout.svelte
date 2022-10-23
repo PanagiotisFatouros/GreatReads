@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import { authenticated } from '../stores/AuthenticatedStore';
 	import '../app.css';
 	import NavBar from '../components/NavBar.svelte';
 	import NavBarLanding from '../components/NavBarLanding.svelte';
@@ -16,7 +15,6 @@
 	$: $session;
 
 	handleSilentRefresh();
-	const session = getSession()
 	
 
 	function disableScroll() {
@@ -37,12 +35,6 @@
 
 	$: {
 		if (browser) {
-			console.log($session)
-			if ($session) {
-				authenticated.set(true);
-			} else {
-				authenticated.set(false);
-			}
 			if ($isOverlayOpen == true) {
 				disableScroll();
 			}
