@@ -4,6 +4,9 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
+	import { getSession } from 'lucia-sveltekit/client';
+
+	const session = getSession();
 
 	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
@@ -50,13 +53,13 @@
 			<img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain" />
 		</div>
 
-		{#if book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0}
+		{#if $session && (book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0)}
 		<button
 			on:click={saveBook}
 			class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
 			>+ Save Book</button
 		>
-		{:else}
+		{:else if $session}
 		<button
 			on:click={saveBook}
 			class=" bg-accent rounded-3xl text-white text-body1 font-body px-4 py-1 btn"

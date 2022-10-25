@@ -3,6 +3,9 @@
 	import type { Collection } from 'src/types/book.type';
 	import { getTimeAgo } from '../../../scripts';
 	import { createEventDispatcher } from 'svelte';
+	import { getSession } from 'lucia-sveltekit/client';
+
+	const session = getSession();
 
 	export let collections: Collection[] | undefined;
 
@@ -90,15 +93,19 @@
 		<!-- show list of collections -->
 		<div class=" mt-3 flex">
 			<h2 class=" text-accent mr-3">Collections</h2>
+			{#if $session}
 			<button
 				on:click={() => isOverlayOpen.set(true)}
 				class="btn rounded-full w-6 h-6 text-white bg-accent self-center"
 				><p class=" text-xl leading-none">+</p></button
 			>
+			{/if}
 		</div>
 
 		<div class="flex flex-col mt-1">
-			{#if collections == undefined || collections.length == 0}
+			{#if !$session}
+			<p class="my-3"><a href="/authentication/login" class="text-accent">Log in</a> or <a href="/authentication/register" class="text-accent">Register</a> to write a review</p>
+			{:else if collections == undefined || collections.length == 0}
 				<p class="mt-3">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
