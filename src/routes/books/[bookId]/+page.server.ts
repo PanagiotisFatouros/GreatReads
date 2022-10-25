@@ -56,7 +56,9 @@ export async function load({ request, url, params }: ServerLoadEvent) {
 				//make list of ids
 				const similarBookIds: string[] = []
 				similarBooks.forEach(book => {
-					similarBookIds.push(book.id)
+					if (book.id != bookID) {
+						similarBookIds.push(book.id);
+					}
 
 					book.avgRating = 0;
 					book.numRatings = 0;

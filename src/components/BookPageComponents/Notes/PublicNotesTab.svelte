@@ -82,7 +82,7 @@
 
 		<div>
 			{#if filteredCollections == undefined || filteredCollections.length == 0}
-				<p>No Collections Found</p>
+				<p class='mt-3'>No Collections Found</p>
 			{:else}
 				{#each filteredCollections as collection}
 					<div

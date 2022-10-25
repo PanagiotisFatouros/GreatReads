@@ -33,20 +33,23 @@
 </script>
 
 <div class="mt-6 mx-8">
-    <p class="text-primary-3 text-heading2 font-heading flex items-center">         
-        My Library
-    </p>
-    <hr class=" border-1 border-primary-3 my-3">
+    <div class='flex items-center space-x-3'>
+        <p class="text-primary-3 text-heading2 font-heading flex items-center">         
+            My Library
+        </p>
 
-    <!-- add bookshelf button -->
-	<button
-		href="null"
-		on:click={() => (addBookshelf = true)}
-		class="std_button bg-secondary w-44 h-7 rounded-full mb-3 text-white text-center font-body"
-		>+ Add Bookshelf</button
-	>
+        <!-- add bookshelf button -->
+        <button
+            href="null"
+            on:click={() => (addBookshelf = true)}
+            class="std_button bg-secondary w-44 h-7 rounded-full text-white text-center font-body"
+            >+ Add Bookshelf</button
+        >
+    </div>
+    
+    <hr class=" border-1 border-primary-3 my-4">
 
-    <div class="flex flex-row flex-wrap grow justify-items-center items-center">
+    <div class="mt-2 flex flex-row flex-wrap grow justify-items-center items-center">
         {#each ((bookshelves.length >= 6) ? bookshelves.slice(0,6) : bookshelves) as bookshelf}
             <BookshelfCard bookshelf={bookshelf}/>
         {/each}
