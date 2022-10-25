@@ -3,7 +3,7 @@
 	export let placeholder: string = '';
 </script>
 
-<div class="flex bg-primary-1 rounded-full w-full py-1 px-2 opacity-80">
+<form class="flex bg-primary-1 rounded-full w-full py-1 px-2 opacity-80">
 	<input
 		type="text"
 		bind:value={searchText}
@@ -28,4 +28,4 @@
 			/>
 		</svg>
 	</button>
-</div>
+</form>

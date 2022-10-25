@@ -3,6 +3,9 @@
 	import StarRating from '../components/StarRating.svelte';
 	import { isOverlayOpen } from '../stores/OverlayStore';
 	import SaveToBookshelf from './BookPageComponents/SaveToBookshelf.svelte';
+	import { getSession } from 'lucia-sveltekit/client';
+
+	const session = getSession();
 
 	export let book: Book;
 	export let bookshelves: Bookshelf[];
@@ -51,13 +54,14 @@
 		<span class="text-secondary">Genres: </span>{book.genres}
 	</p>
 	
-	{#if book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0}
+
+	{#if $session && (book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0)}
 		<button
 			on:click|stopPropagation={saveBook}
 			class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
 			>+ Save Book</button
 		>
-	{:else}
+	{:else if $session}
 		<button
 			on:click|stopPropagation={saveBook}
 			class=" bg-accent rounded-3xl text-white text-body1 font-body px-4 py-1 btn"

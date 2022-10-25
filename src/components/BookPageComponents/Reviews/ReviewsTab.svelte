@@ -63,11 +63,13 @@
 </script>
 
 <div class=" mt-3 w-full">
-	{#if userReview === undefined || edittingReview}
+	{#if $session && userReview === undefined || edittingReview}
 		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false} on:postReview={pushNewReview}/>
-	{:else}
+	{:else if $session && userReview != undefined}
 		<!-- TODO: not catching delete event for some reason -->
 		<ReviewCard review={userReview} on:delete={deleteUserReview} on:edit={handleEdit} />
+	{:else}
+	<p class="my-3"><a href="/authentication/login" class="text-accent">Log in</a> or <a href="/authentication/register" class="text-accent">Register</a> to write a review</p>
 	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />
