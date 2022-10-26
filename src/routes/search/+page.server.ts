@@ -41,12 +41,17 @@ export async function load(event: ServerLoadEvent) {
                 
                 const searchProm = fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`).then(res => res.json())
 
-                const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json())
-
                 let searchRes;
 
-                [searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
-                
+                if (session) {
+                    const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json());
+
+                    [searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
+                }
+                else {
+                    searchRes = await searchProm;
+                }
+
                 const googleBooks = readGoogleBooksResponse(searchRes);
 
                 // get ratings from database 
@@ -55,25 +60,45 @@ export async function load(event: ServerLoadEvent) {
                     bookIds.push(googleBook.id)
                 })
 
-                const prismaBooks = await prismaClient.prismaBook.findMany({
-                    where: {
-                        googleBooksId: {in: bookIds}
-                    },
-                    select: {
-                        googleBooksId: true,
-                        bookshelves: {
-                            where: {userId: session.user.user_id},
-                            select: {
-                                id: true
-                            }
+                let prismaBooks:any;
+
+                if (session) {
+                    prismaBooks = await prismaClient.prismaBook.findMany({
+                        where: {
+                            googleBooksId: {in: bookIds}
                         },
-                        reviews: {
-                            select: {
-                                rating: true
+                        select: {
+                            googleBooksId: true,
+                            bookshelves: {
+                                where: {userId: session.user.user_id},
+                                select: {
+                                    id: true
+                                }
+                            },
+                            reviews: {
+                                select: {
+                                    rating: true
+                                }
                             }
                         }
-                    }
-                })
+                    })
+                }
+                else {
+                    prismaBooks = await prismaClient.prismaBook.findMany({
+                        where: {
+                            googleBooksId: {in: bookIds}
+                        },
+                        select: {
+                            googleBooksId: true,
+                            reviews: {
+                                select: {
+                                    rating: true
+                                }
+                            }
+                        }
+                    })
+                }
+                
                 console.log(prismaBooks)
 
                 googleBooks.forEach(book => {
@@ -97,10 +122,11 @@ export async function load(event: ServerLoadEvent) {
 
                         let savedBookshelfIDs: number[] = [];
 
-                        prismaBook.bookshelves.forEach(bookshelf => {
-                            savedBookshelfIDs.push(bookshelf.id);
-                        })
-
+                        if (session) {
+                            prismaBook.bookshelves.forEach(bookshelf => {
+                                savedBookshelfIDs.push(bookshelf.id);
+                            })
+                        }
                         book.savedBookshelfIDs = savedBookshelfIDs;
                     }
 
