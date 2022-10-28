@@ -61,12 +61,22 @@ export async function GET({ params }: RequestEvent) {
 								name: true,
 								profilePic: true
 							}
+						},
+						_count: {
+							select: {notes: true}
+						},
+						notes: {
+							take: 1,
+							orderBy: {
+								creationDate: 'desc'
+							},
+							select: { creationDate: true }
 						}
 					}
 				}
 			}
 		});
-		// console.log(existingBookInDatabase)
+		// console.log(existingBookInDatabase?.collections)
 		
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
@@ -144,8 +154,13 @@ export async function GET({ params }: RequestEvent) {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
 						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
-					}
+					},
+					numNotes: prismaCollection._count.notes
 				};
+				if (prismaCollection.notes.length > 0) {
+					collection.lastUpdateDate = prismaCollection.notes[0].creationDate;
+				}
+
 				collections.push(collection);
 			});
 
@@ -163,6 +178,16 @@ export async function GET({ params }: RequestEvent) {
 							name: true,
 							profilePic: true
 						}
+					},
+					_count: {
+						select: {notes: true}
+					},
+					notes: {
+						take: 1,
+						orderBy: {
+							creationDate: 'desc'
+						},
+						select: { creationDate: true }
 					}
 				}
 			});
@@ -179,8 +204,12 @@ export async function GET({ params }: RequestEvent) {
 							id: prismaCollection.user.id,
 							name: prismaCollection.user.name,
 							profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
-						}
+						},
+						numNotes: prismaCollection._count.notes
 					};
+					if (prismaCollection.notes.length > 0) {
+						publicCollection.lastUpdateDate = prismaCollection.notes[0].creationDate;
+					}
 					publicCollections.push(publicCollection);
 				});
 			}

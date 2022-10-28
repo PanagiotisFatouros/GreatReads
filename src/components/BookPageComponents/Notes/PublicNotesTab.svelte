@@ -4,6 +4,7 @@
 	import SearchBar from '../../SearchBar.svelte';
 	import VoteButtons from '../../VoteButtons.svelte';
 	import PublicCollection from './PublicCollection.svelte';
+	import { getNoteText } from '../../../scripts'
 
 	import { page } from '$app/stores';
 
@@ -113,12 +114,20 @@
 							<div>
 								<p class="text-secondary">{collection.title}</p>
 
-								<div class="text-body2 flex">
+								<div class="flex items-center">
 									{#if collection.user}
 									<p class=" text-primary-2 mr-1">{collection.user.name}</p>
 									{/if}
-									<!-- TODO: maybe change to last edited -->
-									<p>- Created {getTimeAgo(collection.creationDate)}</p>
+
+									{#if collection.numNotes != undefined}
+									<p class="text-body2 mr-1">- {collection.numNotes | 0} {getNoteText(collection.numNotes | 0)},</p>
+									{/if}
+									
+									{#if collection.lastUpdateDate}
+									<p class="text-body2">Updated {getTimeAgo(collection.lastUpdateDate)}</p>
+									{:else}
+									<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+									{/if}
 								</div>
 							</div>
 						</div>

@@ -35,10 +35,10 @@ export async function load({request}: ServerLoadEvent) {
             
 
             const collectionsProm = prismaClient.prismaCollection.findMany({
-                take: 3,
-                orderBy: {
-                    creationDate: 'desc'
-                },
+                // take: 3,
+                // orderBy: {
+                //     creationDate: 'desc'
+                // },
                 where: {
                     userId: userId
                 },
@@ -51,8 +51,14 @@ export async function load({request}: ServerLoadEvent) {
                     bookId: true,
                     _count: {
                         select: {notes: true}
-                    }
-
+                    },
+                    notes: {
+						take: 1,
+						orderBy: {
+							creationDate: 'desc'
+						},
+						select: { creationDate: true }
+					}
                 }
             })
             
@@ -89,9 +95,38 @@ export async function load({request}: ServerLoadEvent) {
                 bookshelfBooksProms.push(Promise.all(bookProms))
             })
 
+            let collections:Collection[] = []
             const collectionBookProms:any = []
+
+
             prismaCollections.forEach(prismaCollection => {
-                collectionBookProms.push(getBookInfoFromGoogleBooksAPI(prismaCollection.bookId))
+                
+                const collection:Collection = {
+                    id: prismaCollection.id,
+                    title: prismaCollection.title,
+                    creationDate: prismaCollection.creationDate,
+                    isPublic: prismaCollection.isPublic,
+                    upvotes: prismaCollection.upvotes,
+                    numNotes: prismaCollection._count.notes,
+                    bookId: prismaCollection.bookId,
+                    
+                }
+                if (prismaCollection.notes.length > 0) {
+                    collection.lastUpdateDate = prismaCollection.notes[0].creationDate;
+                }
+                collections.push(collection)
+            })
+            collections.sort((a:Collection, b:Collection) => {
+                const aDate:Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
+                const bDate:Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
+
+                return aDate > bDate ? -1 : 1;
+            })
+
+            collections = collections.slice(0, 3);
+            collections.forEach(collection => {
+                // console.log(collection.bookId)
+                collectionBookProms.push(getBookInfoFromGoogleBooksAPI(collection.bookId || ''))
             })
 
             const popBooksProms:any = []
@@ -102,7 +137,7 @@ export async function load({request}: ServerLoadEvent) {
             //get everything from google books api
             const [bookshelfBooks, collectionBooks, popBooksRes] = await Promise.all([Promise.all(bookshelfBooksProms), Promise.all(collectionBookProms), Promise.all(popBooksProms)])
 
-            // console.log(bookshelfBooks)
+            // console.log(collectionBooks)
 
             const bookshelves: Bookshelf[] = []
 
@@ -133,22 +168,14 @@ export async function load({request}: ServerLoadEvent) {
             // console.log(favsBookshelf)
             // console.log(readingBookshelf)
 
-            const collections:Collection[] = []
+            
 
             collectionBooks.forEach((bookRes, i) => {
-                const prismaCollection = prismaCollections[i]
+                const collection = collections[i]
+                // console.log(bookRes)
 
-                const collection:Collection = {
-                    id: prismaCollection.id,
-                    title: prismaCollection.title,
-                    creationDate: prismaCollection.creationDate,
-                    isPublic: prismaCollection.isPublic,
-                    upvotes: prismaCollection.upvotes,
-                    numNotes: prismaCollection._count.notes,
-                    bookId: prismaCollection.bookId,
-                    imgURL: readJSONToBook(bookRes).imageURL
-                }
-                collections.push(collection)
+                collection.imgURL = readJSONToBook(bookRes).imageURL;
+
             })
             // console.log(collections)
 
