@@ -11,7 +11,7 @@
 	<div class="flex flex-col items-start text-primary-3">
 		<p class="text-secondary font-body font-bold text-body1">{collection.title}</p>
 		{#if collection.numNotes != undefined}
-		<p class=" font-body text-body2">{collection.numNotes} Notes</p>
+		<p class=" font-body text-body2">{collection.numNotes | 0} {getNoteText(collection.numNotes | 0)}</p>
 		{/if}
 
 		{#if collection.lastUpdateDate}
