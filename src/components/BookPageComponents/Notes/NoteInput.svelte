@@ -78,6 +78,7 @@
                 note.pageNum = pageNum;
                 note.title = title;
                 note.content = noteContent;
+                note.creationDate = new Date();
                 dispatch('update');
 
                 //reset

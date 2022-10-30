@@ -43,6 +43,9 @@
 		if (savedNote != undefined && collection != null && collection!.notes) {
 			collection.notes?.push(savedNote);
 
+			collection.lastUpdateDate = savedNote.creationDate;
+			collection.numNotes = collection.notes.length;
+
 			triggerRefresh();
 
 			savedNote = undefined;
@@ -74,6 +77,7 @@
 			if (deletedNote != undefined) {
 				//successful - remove note from local collection
 				collection!.notes = collection!.notes.filter((n) => n.id !== deletedNote!.id);
+				collection!.numNotes = collection?.notes.length;
 			}
 			else {
 				alert("Something went wrong. Collection not deleted");
@@ -108,6 +112,11 @@
 		dispatch('update', {
 			collection: collection
 		})
+	}
+
+	function onUpdateNote(note:Note) {
+		collection!.lastUpdateDate = note.creationDate;
+		triggerRefresh();
 	}
 
 	// to update the ui when a note is added
@@ -214,7 +223,7 @@
 		{#if collection != null}
 			{#if collection.notes}
 				{#each collection.notes as note}
-					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} on:update={triggerRefresh}/>
+					<NoteCard {note} on:click={() => showDeleteNoteConfirmation(note)} on:update={() => onUpdateNote(note)}/>
 				{/each}
 			{/if}
 		{/if}

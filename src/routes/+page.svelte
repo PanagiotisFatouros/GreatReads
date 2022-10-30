@@ -44,7 +44,7 @@
 		<div id="notes">
 			<h2 class="font-body font-body2 text-heading2">Recent Notes</h2>
 			<hr class=" border-1 border-primary-3 my-3" />
-			<div id="collections">
+			<div id="collections" class=" space-x-3">
 				{#each collections as collection}
 					<CollectionCard collection={collection}/>
 				{/each}

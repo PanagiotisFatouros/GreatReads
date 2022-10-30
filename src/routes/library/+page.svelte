@@ -64,7 +64,7 @@
     </div>
 </div>
 
-<div class="mt-6 mx-8">
+<div class="mt-6 mx-8 mb-3">
     <p class="text-primary-3 text-heading2 font-heading flex items-center">         
         My Notes
     </p>

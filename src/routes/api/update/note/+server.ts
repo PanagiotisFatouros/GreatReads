@@ -31,7 +31,8 @@ export async function PUT({ request }: RequestEvent) {
                 data:{
                     title: title !== undefined? title: existingPrismaNote.title,
                     content: content !== undefined? content: existingPrismaNote.content,
-                    pageNum: pageNum !== undefined? pageNum: existingPrismaNote.pageNum
+                    pageNum: pageNum !== undefined? pageNum: existingPrismaNote.pageNum,
+                    creationDate: new Date()
                 }
             })
 
