@@ -30,10 +30,16 @@ export async function GET({ params }: RequestEvent) {
 			_count: {
 				select: {notes: true}
 			},
+			notes: {
+				take: 1,
+				orderBy: {
+					creationDate: 'desc'
+				},
+				select: { creationDate: true }
+			},
 			bookId: true
 		}
 	});
-	console.log(prismaCollections)
 
 	const bookProms: any = []
 
@@ -66,8 +72,17 @@ export async function GET({ params }: RequestEvent) {
 			bookId: prismaCollection.bookId,
 			imgURL: imgURL
 		}
+		if (prismaCollection.notes.length > 0) {
+			collection.lastUpdateDate = prismaCollection.notes[0].creationDate;
+		}
 
 		collections.push(collection)
+	})
+	collections.sort((a:Collection, b:Collection) => {
+		const aDate:Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
+		const bDate:Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
+
+		return aDate > bDate ? -1 : 1;
 	})
 
 	// if (collections.length == 0) {

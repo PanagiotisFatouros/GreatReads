@@ -103,3 +103,12 @@ export function getCriteria(searchType: searchTypes): string{
 			return "intitle";
 	}
 }
+
+export function getNoteText(numNotes:number) {
+	if (numNotes == 1) {
+		return "Note"
+	}
+	else {
+		return "Notes"
+	}
+}

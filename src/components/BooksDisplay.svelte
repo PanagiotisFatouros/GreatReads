@@ -23,7 +23,7 @@
 		</div>
 		
 		<span on:click={linkToPage} id="header-right" class=" cursor-pointer">
-			<p>See all</p>
+			<p class="text-white">See all</p>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				fill="none"

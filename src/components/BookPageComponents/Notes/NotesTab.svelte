@@ -4,6 +4,7 @@
 	import { getTimeAgo } from '../../../scripts';
 	import { createEventDispatcher } from 'svelte';
 	import { getSession } from 'lucia-sveltekit/client';
+	import { getNoteText } from '../../../scripts'
 
 	const session = getSession();
 
@@ -48,9 +49,9 @@
 	async function getCollectionNotes(collection: Collection) {
 		if (collection.notes === undefined) {
 			const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
-			console.log(response.body);
+			// console.log(response.body);
 			const returnedCollection: Collection = await response.json();
-			console.log(returnedCollection);
+			// console.log(returnedCollection);
 
 			//replace collection with one that has its notes loaded
 			collection.notes = returnedCollection.notes;
@@ -62,6 +63,7 @@
 	function displayNewCollection() {
 		if (newCollection != undefined && collections != undefined) {
 			collections.push(newCollection);
+			newCollection.numNotes = 0;
 			
 			//trigger refresh
 			collections = collections;
@@ -77,6 +79,7 @@
 	}
 
 	$: collections;
+
 </script>
 
 <div class="flex flex-col justify-start w-full mb-5">
@@ -116,7 +119,19 @@
 						<div>
 							<p class="text-secondary">{collection.title}</p>
 							<!-- TODO: maybe change to last edited -->
-							<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+							<div class="flex space-x-1 items-center">
+								{#if collection.numNotes != undefined}
+								<p class="text-body2">{collection.numNotes | 0} {getNoteText(collection.numNotes | 0)}</p>
+								{/if}
+								<p>-</p>
+
+								{#if collection.lastUpdateDate}
+								<p class="text-body2">Updated {getTimeAgo(collection.lastUpdateDate)}</p>
+								{:else}
+								<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+								{/if}
+							</div>
+							
 						</div>
 
 						<svg
