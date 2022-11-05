@@ -195,7 +195,7 @@
 					</svg>
 				{/if}
 			</div>
-			<button on:click={() => fileInput.click()} class="std_button w-44"
+			<button on:click={() => fileInput.click()} class="std_button w-44 h-8"
 				>Upload New Photo</button
 			>
 			<input

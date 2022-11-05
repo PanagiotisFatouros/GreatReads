@@ -34,7 +34,7 @@
     #main {
         display: flex;
         justify-content: space-around;
-        /* width: 30%; */
+        max-width: 33%;
         border-radius: 10px;
         padding: 5px;
         /* margin-left: 1%;
