@@ -32,6 +32,7 @@
 		return '';
 	}
 
+
 	$: {
 		if ($isOverlayOpen == false) {
 			isSavingBook = false;
@@ -77,7 +78,13 @@
 
 		<ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
 			<li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>
-			<li><p><span class=" text-secondary">Genres: </span>{convertToString(book.genres)}</p></li>
+			<li><p><span class=" text-secondary">Genres: </span>
+			<div class="flex flex-col">
+				{#each book.genres as genre}
+						<a class="hover:underline" href="/search?Genres={genre}">{genre}</a>
+				{/each}
+			</div>
+			</li>
 			<li><p><span class=" text-secondary">Number of Pages: </span>{book.pageCount}</p></li>
 			<li><p><span class=" text-secondary">ISBN: </span>{book.isbn}</p></li>
 		</ul>
@@ -111,5 +118,6 @@
 		</div>
 	</div>
 </div>
+
 
 <!-- {/await} -->
