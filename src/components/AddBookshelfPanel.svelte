@@ -1,10 +1,12 @@
 <script lang="ts">
-	import {createEventDispatcher} from 'svelte';
+	import {createEventDispatcher, onMount} from 'svelte';
+	import { isOverlayOpen } from '../stores/OverlayStore.js';
 	import { page } from '$app/stores';
 	const baseURL = $page.url.origin;
 
 	import { getSession } from 'lucia-sveltekit/client';
 	import type { Bookshelf } from '../types/book.type';
+
 	const session = getSession();
 	const user_id = $session?.user.user_id;
 
@@ -12,8 +14,18 @@
 
 	export let show = false;
 	
+	//for updating name
+	export let bookshelf: Bookshelf | null = null;
+	
 	// TODO: check if a bookshelf with same name doesn't already exist
 	let name = '';
+
+	onMount(() => {
+		if (bookshelf != null) {
+			name = bookshelf.name;
+		}
+	})
+	
 
 	async function createBookshelf() {
 		const response = await fetch(`${baseURL}/api/create/bookshelf`, {
@@ -31,6 +43,24 @@
 		dispatch('newBookshelf', {
 			bookshelf: bookshelf
 		})
+	}
+
+	function updateBookshelf() {
+		if (bookshelf != null) {
+			fetch(`${baseURL}/api/update/bookshelf/name`, {
+				method: 'PUT',
+				body: JSON.stringify({
+					name: name,
+					bookshelfId: bookshelf.id
+				})
+			})
+
+			bookshelf.name = name;
+
+			isOverlayOpen.set(false);
+            dispatch('update');
+		}
+		
 	}
 
 </script>
@@ -67,7 +97,12 @@
 
 	<div class="flex justify-center space-x-3">
 		<button on:click={() => show = false} class="std_button bg-primary-3 w-24 h-7 rounded-full mt-3 text-white">Cancel</button>
+
+		{#if bookshelf == null}
 		<button on:click={createBookshelf} class="std_button w-24 h-7 mt-3 text-white">Add</button>
+		{:else}
+		<button on:click={updateBookshelf} class="std_button w-24 h-7 mt-3 text-white">Update</button>
+		{/if}
 		
 	</div>
 </div>
