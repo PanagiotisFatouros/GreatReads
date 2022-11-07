@@ -48,20 +48,16 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
-    await page.waitForSelector('#bookCard');
     await page.locator('button:has-text("Saved")').click();
-    await page.waitForSelector('#save > div ');
     await page.locator('label:has-text("Favourites")').click();
-    await page.locator('#save > div > button.btn.bg-accent.text-white').click();
+    await page.locator('button:has-text("Confirm")').click();
     
     // Back To Home Page, Check no more book in favourites
     console.log(page.url())
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button');
-    await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading2.font-heading.flex.items-center > button').click();
+    await page.locator('#logo').click();
     console.log(page.url())
     await page.waitForSelector('#bookshelves');
     await page.reload();
-    await page.waitForSelector('#bookshelves');
     await expect(page.locator('#bookshelves > div:nth-child(1) > div > div.px-2 > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(0);
     await page.goto('/sign-out')
     await page.waitForURL('**/authentication')
