@@ -96,7 +96,7 @@
 				</div>
 				<div class="flex items-center space-x-1">
 					{#if review.user != undefined}
-						<p class=" text-primary-2">{review.user.name}</p>
+						<a href="/profile/{review.user?.id}"class="hover:underline text-primary-2">{review.user.name}</a>
 					{/if}
 					
 					<p class="text-primary-3 text-body2 font-body">- {diff}</p>
