@@ -56,9 +56,9 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     console.log(page.url())
     await page.locator('#logo').click();
     console.log(page.url())
+    await page.waitForNavigation({url: baseURL, waitUntil: "domcontentloaded"});
     await page.waitForSelector('#bookshelves');
-    await page.reload();
-    await expect(page.locator('#bookshelves > div:nth-child(1) > div > div.px-2 > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(0);
+    await expect(page.locator('p', {hasText: "The Google Story (2018 Updated Edition)"})).toHaveCount(0);
     await page.goto('/sign-out')
     await page.waitForURL('**/authentication')
 });
