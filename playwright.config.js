@@ -9,8 +9,7 @@ const config = {
 	},
 	use: {
 		baseURL: 'http://127.0.0.1:3000',
-		channel: 'chrome',
-		headless: false
+		channel: 'chrome'
 	},
 	workers: 1
 };
