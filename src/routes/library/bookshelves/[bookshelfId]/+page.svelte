@@ -178,6 +178,6 @@
 			<BookCard on:click={() => goto(`/books/${book.id}`)} on:maybeRemoved={event => handleMaybeRemoved(event, book.id)} book={book} bookshelves={allBookshelves} />
 		{/each}
 	{:else}
-	<h2 class=" ml-3 mt-5">No Books Found</h2>
+	<h2 class=" text-primary-3 ml-3 mt-5">No Books Found</h2>
 	{/if}
 </div>

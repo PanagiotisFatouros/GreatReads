@@ -12,7 +12,7 @@
 
 	const dispatch = createEventDispatcher();
 
-	export let show = false;
+	export let show: boolean = false;
 	
 	//for updating name
 	export let bookshelf: Bookshelf | null = null;
