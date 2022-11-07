@@ -43,11 +43,16 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     console.log(page.url());
     
     
-    await page.waitForSelector('body > div > div.mx-6.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > button');
-    await page.locator('body > div > div.mx-6.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > button').click();
-    await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
-    await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
-    await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
+    // await page.waitForSelector('body > div > div.mx-6.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > button');
+    // await page.locator('body > div > div.mx-6.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > button').click();
+    // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
+    // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
+    // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
+    await page.waitForSelector('button:has-text("Saved")');
+    await page.locator('button:has-text("Saved")').click();
+    await page.waitForSelector('#save > div > label:has-text("Favourites")');
+    await page.locator('#save > div > label:has-text("Favourites")').click();
+    await page.locator('#save > div > button.btn.bg-accent.text-white').click();
     
     // Back To Home Page, Check no more book in favourites
     console.log(page.url())
@@ -81,6 +86,7 @@ test('Add and delete bookshelf', async ({ page, baseURL }) => {
     await page.locator('#main > div.flex.justify-center.space-x-3 > button:nth-child(2)').click();
 
     // Check created
+    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div');
     await page.reload();
     await page.waitForSelector('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div > p:has-text("New Test Bookshelf")');
     await expect(page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div > p:has-text("New Test Bookshelf")')).toHaveCount(1);
