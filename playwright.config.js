@@ -8,8 +8,11 @@ const config = {
 		reuseExistingServer: !process.env.CI
 	},
 	use: {
-		baseURL: 'http://127.0.0.1:3000'
-	}
+		baseURL: 'http://127.0.0.1:3000',
+		channel: 'chrome',
+		headless: false
+	},
+	workers: 1
 };
 
 export default config;
