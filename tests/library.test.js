@@ -48,9 +48,9 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
-    await page.locator('button:has-text("Saved")').click();
-    await page.locator('label:has-text("Favourites")').click();
-    await page.locator('button:has-text("Confirm")').click();
+    await page.locator('button', {hasText: "Saved"}).click();
+    await page.locator('label', {hasText: "Favourites"}).click();
+    await page.locator('button', {hasText: "Confirm"}).click();
     
     // Back To Home Page, Check no more book in favourites
     console.log(page.url())
