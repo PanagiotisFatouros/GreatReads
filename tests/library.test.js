@@ -39,7 +39,6 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // See all Books in Favourites then remove 
     await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div#header > span');
     await page.locator('#bookshelves > div:nth-child(1) > div > div#header > span').click();
-    await page.waitForURL('**/bookshelves/179')
     console.log(page.url());
     
     
@@ -48,7 +47,7 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
-    await page.waitForNavigation({waitUntil: "domcontentloaded"});
+    await page.waitForNavigation({url:'**/bookshelves/179', waitUntil: "domcontentloaded"});
     await page.locator('button', {hasText: "Saved"}).click();
     await page.locator('label', {hasText: "Favourites"}).click();
     await page.locator('button', {hasText: "Confirm"}).click();
