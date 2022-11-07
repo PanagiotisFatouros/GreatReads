@@ -1,6 +1,11 @@
 import { expect, test } from '@playwright/test';
 
 const validBookId = 'zyTCAlFPjgYC';
+function delay(time) {
+    return new Promise(function(resolve) { 
+        setTimeout(resolve, time)
+    });
+ }
 
 
 test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => {
@@ -27,17 +32,18 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
+    await delay(5000);
 
     // Check whether Book added to Favourites bookshelf
     await page.locator('#logo').click();
-    // await page.goto(`${baseURL}`);
-    await page.waitForSelector('#bookshelves > div:nth-child(1)')
-    // await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div#books-container');
-    // await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div#books-container > div > p:has-text("The Google Story (2018 Updated Edition)")');
-    // await expect(page.locator('#bookshelves > div:nth-child(1) > div > div#books-container > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(1);
+    await page.waitForNavigation({url:baseURL, waitUntil: "domcontentloaded"});
+    await page.reload();
+    await delay(5000);
+    await page.waitForSelector('#bookshelves');
+    await expect(page.locator('#bookshelves > div:nth-child(1) > div > #books-container > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(1);
+    await delay(2000);
 
     // See all Books in Favourites then remove 
-    await page.waitForSelector('#bookshelves > div:nth-child(1) > div > div#header > span');
     await page.locator('#bookshelves > div:nth-child(1) > div > div#header > span').click();
     console.log(page.url());
     
@@ -47,20 +53,24 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
-    await page.waitForNavigation({url:'**/bookshelves/179', waitUntil: "networkidle"});
+    await page.waitForNavigation({url:'**/bookshelves/179', waitUntil: "domcontentloaded"});
+    await delay(10000);
     await page.locator('button', {hasText: "Saved"}).click();
     await page.locator('label', {hasText: "Favourites"}).click();
     await page.locator('button', {hasText: "Confirm"}).click();
+    await delay(5000);
     
     // Back To Home Page, Check no more book in favourites
     console.log(page.url())
     await page.locator('#logo').click();
     console.log(page.url())
     await page.waitForNavigation({url: baseURL, waitUntil: "domcontentloaded"});
+    await page.reload();
+    await delay(5000);
     await page.waitForSelector('#bookshelves');
-    await expect(page.locator('p', {hasText: "The Google Story (2018 Updated Edition)"})).toHaveCount(0);
-    await page.goto('/sign-out')
-    await page.waitForURL('**/authentication')
+    await expect(page.locator('#bookshelves > div:nth-child(1) > div > #books-container > div > p:has-text("The Google Story (2018 Updated Edition)")')).toHaveCount(0);
+    await page.goto('/sign-out');
+    await page.waitForURL('**/authentication');
 });
 
 // test('Add and delete bookshelf', async ({ page, baseURL }) => {
