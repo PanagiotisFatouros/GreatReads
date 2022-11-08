@@ -9,7 +9,7 @@ test('Create, Edit and Delete Private Collections', async ({ page, baseURL }) =>
 	const h1ClassName = `h1.text-heading1.font-heading.text-secondary.mr-5`;
 	await page.goto(`${baseURL}/authentication/login`);
 	await page.fill('input[name="email"]', 'notestest@testing.com');
-	await page.fill('input[name="password"]', 'test');
+	await page.fill('input[name="password"]', '06UyM4hQ');
 	await page.click('button >> text=Submit');
 	await page.waitForURL('**/success');
 	await page.goto(`${baseURL}/books/${validBookId}`);

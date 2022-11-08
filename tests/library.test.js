@@ -15,7 +15,7 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
 	const h1ClassName = `h1.text-heading1.font-heading.text-secondary.mr-5`;
 	await page.goto(`${baseURL}/authentication/login`);
 	await page.fill('input[name="email"]', 'librarytest@testing.com');
-	await page.fill('input[name="password"]', 'test');
+	await page.fill('input[name="password"]', '06UyM4hQ');
 	await page.click('button >> text=Submit');
 	await page.waitForURL('**/success');
     await page.waitForSelector('#bookshelves');
@@ -53,7 +53,7 @@ test('Add book to & Remove book from bookshelves', async ({ page, baseURL }) => 
     // await page.waitForSelector('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")');
     // await page.locator('#save > div.flex.flex-col.w-full.space-y-3.mt-3 > label:has-text("Favourites")').click();
     // await page.locator('#save > div.mt-3.self-end.space-x-2 > button.btn.bg-accent.text-white.rounded-full.px-4.py-1').click();
-    await page.waitForNavigation({url:'**/bookshelves/179', waitUntil: "domcontentloaded"});
+    await page.waitForNavigation({url:'**/bookshelves/282', waitUntil: "domcontentloaded"});
     await delay(10000);
     await page.locator('button', {hasText: "Saved"}).click();
     await page.locator('label', {hasText: "Favourites"}).click();
@@ -77,7 +77,7 @@ test('Add and delete bookshelf', async ({ page, baseURL }) => {
 
     await page.goto(`${baseURL}/authentication/login`);
 	await page.fill('input[name="email"]', 'librarytest@testing.com');
-	await page.fill('input[name="password"]', 'test');
+	await page.fill('input[name="password"]', '06UyM4hQ');
 	await page.click('button >> text=Submit');
 	await page.waitForURL('**/success');
 
@@ -103,8 +103,7 @@ test('Add and delete bookshelf', async ({ page, baseURL }) => {
     // Then Delete
     await delay(5000);
     await page.locator('body > div > div.mt-6.mx-8 > div.flex.flex-row.flex-wrap.grow.justify-items-center.items-center > div > div#Header > div > p:has-text("New Test Bookshelf")').click();
-    await page.waitForSelector('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p');
-    await page.locator('body > div > div.mt-6.mx-8 > div.text-primary-3.text-heading3.font-heading.flex > button > p').click();
+    await page.locator('button:has-text("Delete Bookshelf")').click();
     await page.waitForSelector('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p');
     await page.locator('#confirmation > div > button.btn.bg-accent.text-white.rounded-full > p').click();
     await delay(5000);

@@ -81,13 +81,13 @@
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 		</svg>
 	</div>
-<br/>
+
 	{#each reviews as rv}
 		{rv.title}
-	{/each}<br/><br/>
+	{/each}
 	{#each reviewsShown as rv}
 		{rv.title}
-	{/each}<br/>
+	{/each}
 
 	<div class="mx-2">
 		<input
