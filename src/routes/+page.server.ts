@@ -186,11 +186,22 @@ export async function load({request}: ServerLoadEvent) {
 
                 if (prismaBook.reviews) {
                     const numRatings = prismaBook.reviews?.length
-                    const avgRating = prismaBook.reviews?.reduce((total, rev) => total + rev.rating, 0) / numRatings;
+
+                    let avgRating;
+                    if (numRatings > 0) {
+                        avgRating = prismaBook.reviews?.reduce((total, rev) => total + rev.rating, 0) / numRatings;
+                    }
+                    else {
+                        avgRating = 0;
+                    }
 
                     book.numRatings = numRatings;
                     book.avgRating = avgRating;
 
+                }
+                else {
+                    book.numRatings = 0;
+                    book.avgRating = 0;
                 }
                 
                 
