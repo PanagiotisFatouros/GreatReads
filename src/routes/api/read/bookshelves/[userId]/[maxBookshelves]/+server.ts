@@ -4,12 +4,12 @@ import type { Bookshelf, Book } from 'src/types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { auth } from '$lib/lucia';
-import { readJSONToBook } from '../../../../../../scripts';
+import { readJSONToBook } from '../../../../../../lib/scripts';
 import { book } from 'tests/values';
 import type { PrismaBookshelf } from '@prisma/client';
 
 export async function GET({ params }: RequestEvent) {
-	
+
     try {
         //console.log(request)
 
@@ -66,16 +66,16 @@ export async function GET({ params }: RequestEvent) {
         }
         //console.log(prismaBookshelves);
 
-        if (prismaBookshelves == null){
+        if (prismaBookshelves == null) {
             throw error(400, `Bookshelves not found!`)
             //return new Response(JSON.stringify([]));
         }
-        else{
+        else {
 
-            const bookshelfPromises:any = []
+            const bookshelfPromises: any = []
 
             prismaBookshelves.forEach(prismaBookshelf => {
-                const bookPromises:any = []
+                const bookPromises: any = []
 
                 prismaBookshelf.books.forEach(prismaBook => {
                     bookPromises.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId))
@@ -87,11 +87,11 @@ export async function GET({ params }: RequestEvent) {
             const bookshelfRes = await Promise.all(bookshelfPromises);
 
             let bookshelves: Bookshelf[] = []
-            
+
             bookshelfRes.forEach((bookshelfRes, i) => {
                 const prismaBookshelf = prismaBookshelves[i]
 
-                const books:Book[] = []
+                const books: Book[] = []
                 bookshelfRes.forEach(bookRes => {
                     books.push(readJSONToBook(bookRes))
                 })
@@ -116,7 +116,7 @@ export async function GET({ params }: RequestEvent) {
             return new Response(JSON.stringify(bookshelves))
         }
     }
-    catch (err){
+    catch (err) {
         throw error(400, `Bookshelves not successfully retrieved, error: ${err}`)
-	}
+    }
 }

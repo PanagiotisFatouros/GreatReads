@@ -5,26 +5,26 @@ import type { Bookshelf, Book } from '../../../../types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { error } from '@sveltejs/kit';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
-import { readJSONToBook } from '../../../../scripts'
+import { readJSONToBook } from '../../../../lib/scripts'
 import { getSession } from 'lucia-sveltekit/load';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-	const {request, url, params} = event
+	const { request, url, params } = event
 
 	const session = await getSession(event);
-	
+
 	try {
-		const bookshelfId:number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
-		
-		
+		const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
+
+
 		if (bookshelfId == -1) {
 			throw error(400, 'Book not specified/ incorrectly mapped.');
 		}
 
 		let prismaBookshelf: any;
 		let bookshelves: Bookshelf[] = []
-			
+
 		if (session) {
 			const user = session.user
 			const prismaBookshelfProm = prismaClient.prismaBookshelf.findUnique({
@@ -36,7 +36,7 @@ export async function load(event: ServerLoadEvent) {
 					books: {
 						include: {
 							bookshelves: {
-								where: {userId: user.user_id},
+								where: { userId: user.user_id },
 								select: {
 									id: true
 								}
@@ -74,14 +74,14 @@ export async function load(event: ServerLoadEvent) {
 				}
 			});
 		}
-		
 
-		if (prismaBookshelf == null){
+
+		if (prismaBookshelf == null) {
 			throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
 		}
-		else{
+		else {
 			const bookProms: any = []
-			
+
 			prismaBookshelf.books.forEach(prismaBook => {
 				bookProms.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId))
 			})
@@ -103,13 +103,13 @@ export async function load(event: ServerLoadEvent) {
 				}
 				book.savedBookshelfIDs = savedBookshelfIDs;
 
-				const numRatings:number = prismaBook.reviews.length;
-				let avgRating:number = 0;
+				const numRatings: number = prismaBook.reviews.length;
+				let avgRating: number = 0;
 
-				if (numRatings > 0){
+				if (numRatings > 0) {
 					const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-					avgRating = sum / numRatings 
-				} 
+					avgRating = sum / numRatings
+				}
 				book.avgRating = avgRating;
 				book.numRatings = numRatings;
 
@@ -130,9 +130,9 @@ export async function load(event: ServerLoadEvent) {
 				bookshelf: bookshelf,
 				bookshelves
 			}
-			
+
 		}
-		
+
 	} catch (err) {
 		console.log(err);
 		//not authenticated
