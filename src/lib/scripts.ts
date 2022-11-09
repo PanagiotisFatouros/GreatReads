@@ -53,7 +53,7 @@ export function readJSONToBook(jsonOject: any): Book {
 	// console.log(jsonOject)
 	let book: Book = {
 		id: jsonOject.id,
-		title: jsonOject.volumeInfo.title,
+		title: jsonOject.volumeInfo.title === undefined ? '-' : jsonOject.volumeInfo.title,
 		authors: jsonOject.volumeInfo.authors,
 		pageCount: jsonOject.volumeInfo.pageCount,
 		description: jsonOject.volumeInfo.description || '',
