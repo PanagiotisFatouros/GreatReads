@@ -106,7 +106,7 @@
 					<a href="/authentication/register" class="text-accent">Register</a> to write a review
 				</p>
 			{:else if collections == undefined || collections.length == 0}
-				<p class="mt-3">No Collections Found</p>
+				<p class="mt-5 mx-auto">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
 					<div
