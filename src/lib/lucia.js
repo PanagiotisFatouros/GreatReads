@@ -7,6 +7,5 @@ export const prismaClient = new PrismaClient();
 export const auth = lucia({
 	adapter: prisma(prismaClient),
 	secret: ')J@NcRfUjXn2r5u7x!A%D*G-KaPdSgVk',
-	// env: dev ? "DEV" : "PROD",
-	env: 'DEV'
+	env: (process.env.NODE_ENV === 'production') ? "DEV" : "PROD",
 });
