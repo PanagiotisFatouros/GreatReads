@@ -169,7 +169,7 @@
 	}
 
 	async function deleteAccount() {
-		const res = await fetch(`${baseURL}/api/delete/user`, {
+		await fetch(`${baseURL}/api/delete/user`, {
 			method: 'DELETE',
 			body: JSON.stringify({
 				userId: user.id
