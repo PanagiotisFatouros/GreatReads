@@ -1,6 +1,6 @@
 datasource db {
   provider = "mysql"
-  url      = "mysql://team0:EvXg91q6%25Xc0@great-reads.mysql.database.azure.com:3306/production"
+  url      = env("DATABASE_CONNECTION_STRING")
 }
 
 generator client {
