@@ -6,7 +6,7 @@
 	import Confirmation from '../../Confirmation.svelte';
 	import { createEventDispatcher } from 'svelte';
 
-	import { getTimeAgo } from '../../../scripts';
+	import { getTimeAgo } from '../../../lib/scripts';
 	import { getSession } from 'lucia-sveltekit/client';
 	import { page } from '$app/stores';
 
@@ -44,18 +44,17 @@
 
 	// $: console.log($isOverlayOpen);
 
-	function handleVoteChange(event:any) {
+	function handleVoteChange(event: any) {
 		// console.log(event.detail.change)
 
 		fetch(`${baseURL}/api/update/review/vote`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    id: review.id,
-					voteChange: event.detail.change
-                })
-            })
+			method: 'PUT',
+			body: JSON.stringify({
+				id: review.id,
+				voteChange: event.detail.change
+			})
+		});
 	}
-
 </script>
 
 {#if isDeletingReview == true && $isOverlayOpen}
@@ -74,18 +73,18 @@
 				{#if review.user != undefined && review.user.profilePic != 'default'}
 					<img src={review.user.profilePic} alt="user profile pic" />
 				{:else}
-				<svg
-					xmlns="http://www.w3.org/2000/svg"
-					viewBox="0 0 24 24"
-					fill="currentColor"
-					class="w-full h-full text-primary-3"
-				>
-					<path
-						fill-rule="evenodd"
-						d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
-						clip-rule="evenodd"
-					/>
-				</svg>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						fill="currentColor"
+						class="w-full h-full text-primary-3"
+					>
+						<path
+							fill-rule="evenodd"
+							d="M18.685 19.097A9.723 9.723 0 0021.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 003.065 7.097A9.716 9.716 0 0012 21.75a9.716 9.716 0 006.685-2.653zm-12.54-1.285A7.486 7.486 0 0112 15a7.486 7.486 0 015.855 2.812A8.224 8.224 0 0112 20.25a8.224 8.224 0 01-5.855-2.438zM15.75 9a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"
+							clip-rule="evenodd"
+						/>
+					</svg>
 				{/if}
 			</div>
 
@@ -96,13 +95,15 @@
 				</div>
 				<div class="flex items-center space-x-1">
 					{#if review.user != undefined}
-						<a href="/profile/{review.user?.id}"class="hover:underline text-primary-2">{review.user.name}</a>
+						<a href="/profile/{review.user?.id}" class="hover:underline text-primary-2"
+							>{review.user.name}</a
+						>
 					{/if}
-					
+
 					<p class="text-primary-3 text-body2 font-body">- {diff}</p>
-					
+
 					{#if review.isEdited == true}
-					<p class='text-primary-3 text-body2 ml-1'>| edited</p>
+						<p class="text-primary-3 text-body2 ml-1">| edited</p>
 					{/if}
 				</div>
 			</div>
@@ -110,11 +111,21 @@
 
 		{#if writtenByUser}
 			<div>
-				<button on:click={() => dispatch('edit')} class='hover:opacity-70'>
-					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-accent">
-						<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
-					  </svg>
-					  
+				<button on:click={() => dispatch('edit')} class="hover:opacity-70">
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24"
+						stroke-width="1.5"
+						stroke="currentColor"
+						class="w-6 h-6 text-accent"
+					>
+						<path
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+						/>
+					</svg>
 				</button>
 				<button on:click={showDeleteReviewConfirmation} class=" ml-3 hover:opacity-70">
 					<svg
@@ -133,9 +144,8 @@
 					</svg>
 				</button>
 			</div>
-			
 		{:else}
-			<VoteButtons voteCount={review.upvotes} on:change={handleVoteChange}/>
+			<VoteButtons voteCount={review.upvotes} on:change={handleVoteChange} />
 		{/if}
 	</div>
 	<p class="text-primary-3 pb-3">{review.comment}</p>
