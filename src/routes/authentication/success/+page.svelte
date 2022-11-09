@@ -10,8 +10,9 @@
 	if ($session) {
 		if (browser) {
 			setTimeout(function () {
+				isOverlayOpen.set(false)
 				goto('/');
-			}, 2000);
+			}, 1000);
 		}
 	}
 
@@ -19,7 +20,7 @@
 </script>
 
 <div id="main">
-	<p class="text-primary font-heading text-heading2">Login successful!</p>
+	<p class="text-primary font-heading text-heading2 mb-3">Login successful!</p>
 	<RingLoader color="rgb(255, 102, 99)" size="60" unit="px" duration="1.5s"/>
 
 </div>

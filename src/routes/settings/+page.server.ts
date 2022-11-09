@@ -35,11 +35,11 @@ export async function load({ request }: ServerLoadEvent) {
 
         } else {
             //not authenticated
-            throw redirect(307, '/authentication/login');
+            throw redirect(307, '/authentication');
         }
     } catch (err) {
         console.log(err);
         //not authenticated
-        throw redirect(307, '/authentication/login');
+        throw redirect(307, '/authentication');
     }
 }

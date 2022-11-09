@@ -4,7 +4,9 @@
 	import AbbreviatedBookCard from '../../../components/AbbreviatedBookCard.svelte';
 	import SaveToBookshelf from '../../../components/BookPageComponents/SaveToBookshelf.svelte';
 	import { isOverlayOpen } from '../../../stores/OverlayStore';
-	// TODO: make +page.js or +page.server.js to load book data from api and database when connected to backend
+	import { getSession } from 'lucia-sveltekit/client';
+
+	const session = getSession();
 
 	import type { Book, Bookshelf } from '../../../types/book.type';
 	// import { getSession } from 'lucia-sveltekit/client'
@@ -15,7 +17,7 @@
 
 	let book: Book = data.book;
 	let bookshelves: Bookshelf[] = data.bookshelves
-	let similarBooks: Book[] = data.books;
+	let similarBooks: Book[] = data.similarBooks;
 
 	let isSavingBook: boolean = false
 	function saveBook() {
@@ -30,6 +32,7 @@
 		return '';
 	}
 
+
 	$: {
 		if ($isOverlayOpen == false) {
 			isSavingBook = false;
@@ -41,9 +44,6 @@
 <SaveToBookshelf bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
 {/if}
 
-<!-- {#await bookPromise} -->
-<!-- <h1>Loading Book</h1>  -->
-<!-- {:then book}  -->
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
 	<!-- left column - cover image and info -->
 	<div class=" col-span-3 flex justify-center items-center flex-col self-start">
@@ -51,13 +51,13 @@
 			<img src={book.imageURL} alt="book cover" class=" w-full h-full object-contain" />
 		</div>
 
-		{#if book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0}
+		{#if $session && (book.savedBookshelfIDs == undefined || book.savedBookshelfIDs.length == 0)}
 		<button
 			on:click={saveBook}
 			class=" bg-secondary rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
 			>+ Save Book</button
 		>
-		{:else}
+		{:else if $session}
 		<button
 			on:click={saveBook}
 			class=" bg-accent rounded-3xl text-white text-body1 font-body px-4 py-1 btn"
@@ -75,7 +75,13 @@
 
 		<ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
 			<li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>
-			<li><p><span class=" text-secondary">Genres: </span>{convertToString(book.genres)}</p></li>
+			<li><p><span class=" text-secondary">Genres: </span>
+			<div class="flex flex-col ml-3">
+				{#each book.genres as genre}
+						<a class="hover:underline" href="/search?Genres={genre}">- {genre}</a>
+				{/each}
+			</div>
+			</li>
 			<li><p><span class=" text-secondary">Number of Pages: </span>{book.pageCount}</p></li>
 			<li><p><span class=" text-secondary">ISBN: </span>{book.isbn}</p></li>
 		</ul>
@@ -103,11 +109,12 @@
 		<hr class=" border-1 border-primary-3" />
 
 		<div class=" space-y-3 mt-3">
-			{#each similarBooks.slice(0,8) as book}
+			{#each ((similarBooks) && (similarBooks.length >= 8) ? similarBooks.slice(0,8) : similarBooks) as book}
 				<AbbreviatedBookCard book={book} />
 			{/each}
 		</div>
 	</div>
 </div>
+
 
 <!-- {/await} -->

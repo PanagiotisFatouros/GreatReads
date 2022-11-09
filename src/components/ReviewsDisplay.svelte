@@ -28,8 +28,8 @@
 			</a>
 		</span>
 	</div>
-	<div id="reviews-container" class=" flex flex-col justify-center items-center ">
-		{#each reviews as review}
+	<div id="reviews-container" class=" flex flex-col justify-start items-center ">
+		{#each reviews.sort(function (a, b) {return (a.upvotes < b.upvotes ? 1 : -1)}) as review}
 			<BookReview {review} displayText={false}/>
 		{/each}
 	</div>

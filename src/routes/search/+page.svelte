@@ -109,9 +109,13 @@
 
 <div class="mx-6 flex flex-row flex-wrap justify-start items-center">
 
-	{#each booksShown as book}
-		<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
-	{/each}
+	{#if booksShown.length > 0}
+		{#each booksShown as book}
+			<BookCard on:click={() => goto(`/books/${book.id}`)} book={book} bookshelves={bookshelves}/>
+		{/each}
+	{:else}
+		<h2 class="text-primary-3 ml-2 mt-5">No Books Found</h2>
+	{/if}
 </div>
 
 {:else}
@@ -122,8 +126,12 @@
 </div>
 
 <div class="mx-6 flex flex-row flex-wrap grow justify-items-center items-center">
-	{#each users as user}
-		<UserCard user={user}/>
-	{/each}
+	{#if users.length > 0}
+		{#each users as user}
+			<UserCard user={user}/>
+		{/each}
+	{:else}
+		<h2 class="text-primary-3 ml-2 mt-3">No Users Found</h2>
+	{/if}
 </div>
 {/if}

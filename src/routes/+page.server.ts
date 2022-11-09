@@ -2,13 +2,13 @@ import type { ServerLoadEvent } from '@sveltejs/kit';
 import type { Client, Bookshelf, Book, Review, Collection } from '../types/book.type';
 import { prismaClient, auth } from '../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
-import { readJSONToBook } from '../scripts';
+import { readJSONToBook } from '../lib/scripts';
 import { error, redirect } from '@sveltejs/kit';
 import type { PrismaBookshelf, PrismaCollection, PrismaBook } from '@prisma/client';
 
 
 /** @type {import('./$types').PageServerLoad} */
-export async function load({request}: ServerLoadEvent) {
+export async function load({ request }: ServerLoadEvent) {
 
     try {
         const session = await auth.validateRequestByCookie(request);
@@ -22,8 +22,8 @@ export async function load({request}: ServerLoadEvent) {
                     userId: userId,
                     isDeletable: false,
                     OR: [
-                        {name: 'Favourites'},
-                        {name: "Currently Reading"}
+                        { name: 'Favourites' },
+                        { name: "Currently Reading" }
                     ]
                 },
                 include: {
@@ -32,13 +32,13 @@ export async function load({request}: ServerLoadEvent) {
                     }
                 }
             })
-            
+
 
             const collectionsProm = prismaClient.prismaCollection.findMany({
-                take: 3,
-                orderBy: {
-                    creationDate: 'desc'
-                },
+                // take: 3,
+                // orderBy: {
+                //     creationDate: 'desc'
+                // },
                 where: {
                     userId: userId
                 },
@@ -50,12 +50,18 @@ export async function load({request}: ServerLoadEvent) {
                     upvotes: true,
                     bookId: true,
                     _count: {
-                        select: {notes: true}
+                        select: { notes: true }
+                    },
+                    notes: {
+                        take: 1,
+                        orderBy: {
+                            creationDate: 'desc'
+                        },
+                        select: { creationDate: true }
                     }
-
                 }
             })
-            
+
 
             const bookProm = prismaClient.prismaBook.findMany({
                 take: 5,
@@ -69,8 +75,8 @@ export async function load({request}: ServerLoadEvent) {
                 }
             })
 
-            let prismaBookshelves:any, prismaCollections:any, prismaPopularBooks:any;
-            
+            let prismaBookshelves: any, prismaCollections: any, prismaPopularBooks: any;
+
             //get everything from database
             [prismaBookshelves, prismaCollections, prismaPopularBooks] = await Promise.all([bookshelvesProm, collectionsProm, bookProm])
 
@@ -78,9 +84,9 @@ export async function load({request}: ServerLoadEvent) {
             // console.log(prismaCollections)
             // console.log(prismaPopularBooks)
 
-            const bookshelfBooksProms:any = []
+            const bookshelfBooksProms: any = []
             prismaBookshelves.forEach(bookshelf => {
-                const bookProms:any = []
+                const bookProms: any = []
 
                 bookshelf.books.forEach(book => {
                     bookProms.push(getBookInfoFromGoogleBooksAPI(book.googleBooksId))
@@ -89,12 +95,41 @@ export async function load({request}: ServerLoadEvent) {
                 bookshelfBooksProms.push(Promise.all(bookProms))
             })
 
-            const collectionBookProms:any = []
+            let collections: Collection[] = []
+            const collectionBookProms: any = []
+
+
             prismaCollections.forEach(prismaCollection => {
-                collectionBookProms.push(getBookInfoFromGoogleBooksAPI(prismaCollection.bookId))
+
+                const collection: Collection = {
+                    id: prismaCollection.id,
+                    title: prismaCollection.title,
+                    creationDate: prismaCollection.creationDate,
+                    isPublic: prismaCollection.isPublic,
+                    upvotes: prismaCollection.upvotes,
+                    numNotes: prismaCollection._count.notes,
+                    bookId: prismaCollection.bookId,
+
+                }
+                if (prismaCollection.notes.length > 0) {
+                    collection.lastUpdateDate = prismaCollection.notes[0].creationDate;
+                }
+                collections.push(collection)
+            })
+            collections.sort((a: Collection, b: Collection) => {
+                const aDate: Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
+                const bDate: Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
+
+                return aDate > bDate ? -1 : 1;
             })
 
-            const popBooksProms:any = []
+            collections = collections.slice(0, 3);
+            collections.forEach(collection => {
+                // console.log(collection.bookId)
+                collectionBookProms.push(getBookInfoFromGoogleBooksAPI(collection.bookId || ''))
+            })
+
+            const popBooksProms: any = []
             prismaPopularBooks.forEach(book => {
                 popBooksProms.push(getBookInfoFromGoogleBooksAPI(book.googleBooksId))
             })
@@ -102,7 +137,7 @@ export async function load({request}: ServerLoadEvent) {
             //get everything from google books api
             const [bookshelfBooks, collectionBooks, popBooksRes] = await Promise.all([Promise.all(bookshelfBooksProms), Promise.all(collectionBookProms), Promise.all(popBooksProms)])
 
-            // console.log(bookshelfBooks)
+            // console.log(collectionBooks)
 
             const bookshelves: Bookshelf[] = []
 
@@ -133,22 +168,14 @@ export async function load({request}: ServerLoadEvent) {
             // console.log(favsBookshelf)
             // console.log(readingBookshelf)
 
-            const collections:Collection[] = []
+
 
             collectionBooks.forEach((bookRes, i) => {
-                const prismaCollection = prismaCollections[i]
+                const collection = collections[i]
+                // console.log(bookRes)
 
-                const collection:Collection = {
-                    id: prismaCollection.id,
-                    title: prismaCollection.title,
-                    creationDate: prismaCollection.creationDate,
-                    isPublic: prismaCollection.isPublic,
-                    upvotes: prismaCollection.upvotes,
-                    numNotes: prismaCollection._count.notes,
-                    bookId: prismaCollection.bookId,
-                    imgURL: readJSONToBook(bookRes).imageURL
-                }
-                collections.push(collection)
+                collection.imgURL = readJSONToBook(bookRes).imageURL;
+
             })
             // console.log(collections)
 
@@ -159,14 +186,25 @@ export async function load({request}: ServerLoadEvent) {
 
                 if (prismaBook.reviews) {
                     const numRatings = prismaBook.reviews?.length
-                    const avgRating = prismaBook.reviews?.reduce((total, rev) => total + rev.rating, 0) / numRatings;
+
+                    let avgRating;
+                    if (numRatings > 0) {
+                        avgRating = prismaBook.reviews?.reduce((total, rev) => total + rev.rating, 0) / numRatings;
+                    }
+                    else {
+                        avgRating = 0;
+                    }
 
                     book.numRatings = numRatings;
                     book.avgRating = avgRating;
 
                 }
-                
-                
+                else {
+                    book.numRatings = 0;
+                    book.avgRating = 0;
+                }
+
+
                 popularBooks.push(book)
             })
 
@@ -182,14 +220,14 @@ export async function load({request}: ServerLoadEvent) {
 
         }
         else {
-			//not authenticated
-			throw redirect(307, '/authentication/login');
-		}
-        
+            //not authenticated
+            throw redirect(307, '/authentication');
+        }
+
 
     }
     catch (err) {
         console.log(err);
-        throw redirect(307, '/authentication/login');
+        throw redirect(307, '/authentication');
     }
 }

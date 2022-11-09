@@ -39,7 +39,7 @@ h1 {
 	}
 
 	.std_button {
-		@apply bg-accent w-24 text-white rounded-full btn;
+		@apply bg-accent w-24 px-3 py-0.5 text-white rounded-full btn;
 	}
 
 	.std_input {
@@ -51,7 +51,11 @@ h1 {
 	}
 
 	.profile_pic_small {
-		@apply w-14 h-14 bg-gray-600 rounded-full overflow-hidden flex justify-center items-center;
+		@apply w-14 h-14 bg-primary-1 rounded-full overflow-hidden flex justify-center items-center;
+	}
+
+	.profile_pic_med {
+		@apply w-24 h-24 bg-primary-1 rounded-full overflow-hidden flex justify-center items-center;
 	}
 
 	.profile_pic_large {

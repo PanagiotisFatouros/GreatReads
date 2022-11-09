@@ -6,7 +6,7 @@
 	export let pageMax: number = 100000;
 	export let ratingSelect = 0; // 0 = all ratings, 1 = 4+, 2 = 3+
 	export let books: Book[];
-	export let booksShown: Book[];
+	export let booksShown: Book[] | undefined;
 	let intWarn = false;
 	let pageWarn = false;
 
@@ -59,35 +59,39 @@
 </script>
 
 <div
-	class="bg-white w-96 pb-3 rounded border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
+	class="bg-white w-96 pb-3 rounded-2xl border-solid border-2 border-primary-3 p-1 text-primary-3 font-body text-body2"
 >
-	<svg
-		on:click={() => (show = false)}
-		xmlns="http://www.w3.org/2000/svg"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke-width="3"
-		stroke="currentColor"
-		class="w-3 h-3 float-right cursor-pointer"
-	>
-		<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-	</svg>
+	<div class="flex w-full items-center justify-center">
+		<div class="flex ml-auto">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				fill="none"
+				viewBox="0 0 24 24"
+				stroke-width="2"
+				stroke="currentColor"
+				class="w-6 h-6 mt-1 mx-1 float-left"
+			>
+				<path
+					stroke-linecap="round"
+					stroke-linejoin="round"
+					d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
+				/>
+			</svg>
+			<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
+		</div>
 
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		fill="none"
-		viewBox="0 0 24 24"
-		stroke-width="2"
-		stroke="currentColor"
-		class="w-6 h-6 mt-1 mx-1 float-left"
-	>
-		<path
-			stroke-linecap="round"
-			stroke-linejoin="round"
-			d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-		/>
-	</svg>
-	<p class="text-heading2 font-heading ml-1 mr-3">Filter</p>
+		<svg
+			on:click={() => (show = false)}
+			xmlns="http://www.w3.org/2000/svg"
+			fill="none"
+			viewBox="0 0 24 24"
+			stroke-width="3"
+			stroke="currentColor"
+			class=" ml-auto w-5 h-5 mt-1 mr-1 float-right cursor-pointer hover:opacity-70"
+		>
+			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+		</svg>
+	</div>	
 
 	<div class="mx-2">
 		<!-- rating filter -->
@@ -185,7 +189,7 @@
 	<div class="flex justify-center">
 		<button
 			on:click={() => handleClick()}
-			class="bg-secondary w-28 h-7 rounded-full mt-2 text-white">Filter</button
+			class="std_button bg-secondary w-28 h-7 rounded-full mt-3 text-white">Filter</button
 		>
 	</div>
 </div>

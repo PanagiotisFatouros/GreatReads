@@ -1,5 +1,5 @@
-import type { Book } from "./types/book.type";
-import { searchTypes } from "./types/searchTypes.enum.js";
+import type { Book } from "../types/book.type";
+import { searchTypes } from "../types/searchTypes.enum.js";
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -56,31 +56,31 @@ export function readJSONToBook(jsonOject: any): Book {
 		title: jsonOject.volumeInfo.title,
 		authors: jsonOject.volumeInfo.authors,
 		pageCount: jsonOject.volumeInfo.pageCount,
-		description: jsonOject.volumeInfo.description,
-		genres: jsonOject.volumeInfo.categories,
+		description: jsonOject.volumeInfo.description || '',
+		genres: jsonOject.volumeInfo.categories || '-',
 		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
-		avgRating: jsonOject.volumeInfo.averageRating === undefined? 0 : jsonOject.volumeInfo.averageRating,
+		avgRating: jsonOject.volumeInfo.averageRating === undefined ? 0 : jsonOject.volumeInfo.averageRating,
 		//avgRating: 0,
-		numRatings: jsonOject.volumeInfo.ratingsCounts === undefined? 0 : jsonOject.volumeInfo.ratingsCounts, 
+		numRatings: jsonOject.volumeInfo.ratingsCounts === undefined ? 0 : jsonOject.volumeInfo.ratingsCounts,
 		//numRatings: 0,
 		datePublished: jsonOject.volumeInfo.publishedDate,
 		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
 			(BOOK_IMG_URL_PREFIX + jsonOject.id + BOOK_IMG_URL_SUFFIX) : missingImage
-		
+
 	};
 	return book;
 }
 
-function getISBN13(identifiers: any[]){
+function getISBN13(identifiers: any[]) {
 	let isbn;
-	if (identifiers !== undefined){
-		isbn = identifiers.find((identifier) => 
-		identifier.type === "ISBN_13")?.identifier
+	if (identifiers !== undefined) {
+		isbn = identifiers.find((identifier) =>
+			identifier.type === "ISBN_13")?.identifier
 
-		if (isbn === undefined ){
+		if (isbn === undefined) {
 			isbn = identifiers[0]?.identifier
 
-			if (isbn === undefined){
+			if (isbn === undefined) {
 				isbn = "-"
 			}
 		}
@@ -91,8 +91,8 @@ function getISBN13(identifiers: any[]){
 
 
 // For google books api search
-export function getCriteria(searchType: searchTypes): string{
-	switch(searchType) {
+export function getCriteria(searchType: searchTypes): string {
+	switch (searchType) {
 		case searchTypes.books:
 			return "intitle";
 		case searchTypes.authors:
@@ -101,5 +101,14 @@ export function getCriteria(searchType: searchTypes): string{
 			return "subject";
 		default:
 			return "intitle";
+	}
+}
+
+export function getNoteText(numNotes: number) {
+	if (numNotes == 1) {
+		return "Note"
+	}
+	else {
+		return "Notes"
 	}
 }

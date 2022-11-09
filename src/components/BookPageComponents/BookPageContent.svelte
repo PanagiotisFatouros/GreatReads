@@ -6,26 +6,40 @@
 	import ReviewsTab from './Reviews/ReviewsTab.svelte';
 	import NotesTab from './Notes/NotesTab.svelte';
 	import PublicNotesTab from './Notes/PublicNotesTab.svelte';
+	import { onMount } from 'svelte';
 
 	export let book: Book;
 
 	// TODO: changed based on if book is already saved or not
 	let selectedTab: Tabs = Tabs.reviews;
 
-	if (book.userNotes != undefined && book.userNotes != undefined) {
-		book.userNotes.forEach(collection => {
-			if (collection.isPublic) {
-				//remove duplicate object
-				book.publicNotes?.splice(book.publicNotes.findIndex(publicCollection => collection.id == publicCollection.id), 1);
+	onMount(() => {
+		if (book.userNotes != undefined && book.publicNotes != undefined) {
+			book.userNotes.forEach(collection => {
+				if (collection.isPublic) {
+					//remove duplicate object
+					book.publicNotes?.splice(book.publicNotes.findIndex(publicCollection => collection.id == publicCollection.id), 1);
 
-				//replace with original object so both are updated when changed
-				book.publicNotes?.push(collection);
-			}
-		})
+					//replace with original object so both are updated when changed
+					book.publicNotes?.push(collection);
+				}
+			})
+
+			sortPublicCollections()
+		}
+	})
+
+	function sortPublicCollections() {
+		if (book.publicNotes) {
+			book.publicNotes.sort((a,b) => b.upvotes - a.upvotes)
+		}
 	}
+
+	
 
 	function addToPublicCollections(event:any) {
 		book.publicNotes?.push(event.detail.collection);
+		sortPublicCollections()
 	}
 
 	function updateCollection(event:any) {
@@ -37,16 +51,23 @@
 
 			if (index == -1) {
 				book.publicNotes?.push(collection);
+				sortPublicCollections()
 			}
 		}
 		else {
 			//check if in public collection, remove if it is
 			let index = book.publicNotes?.findIndex(publicCollection => collection.id == publicCollection.id);
 
-			if (index != -1) {
+			if (index != undefined && index != -1) {
 				book.publicNotes?.splice(index, 1);
 			}
 		}
+	}
+	function deleteCollection(event:any) {
+		if (book.publicNotes != undefined) {
+			book.publicNotes = book.publicNotes.filter(collection => collection.id != event.detail.collection.id)
+		}
+		
 	}
 </script>
 
@@ -56,7 +77,7 @@
 	{#if selectedTab === Tabs.reviews}
 		<ReviewsTab bind:reviews={book.reviews} />
 	{:else if selectedTab === Tabs.notes}
-		<NotesTab bind:collections={book.userNotes} on:newPublicCollection={addToPublicCollections} on:update={updateCollection}/>
+		<NotesTab bind:collections={book.userNotes} on:newPublicCollection={addToPublicCollections} on:update={updateCollection} on:delete={deleteCollection}/>
 	{:else}
 		<PublicNotesTab bind:collections={book.publicNotes} />
 	{/if}

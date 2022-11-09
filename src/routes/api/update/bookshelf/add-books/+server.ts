@@ -22,11 +22,11 @@ export async function PUT({ request }: RequestEvent) {
 
     try {
         // Check if Book already exists in database, if not then add it
-        const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(bookId);
+        // const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(bookId);
 
-        if (restBookInfo.error) {
-            throw error(400, '404 Google Book Does not Exist')
-        }
+        // if (restBookInfo.error) {
+        //     throw error(400, '404 Google Book Does not Exist')
+        // }
 
 
         targetBook = await prismaClient.prismaBook.findUnique({
@@ -41,57 +41,53 @@ export async function PUT({ request }: RequestEvent) {
             targetBook = await prismaClient.prismaBook.create({data: newBookInput})
         }
 
-        for await (const bookshelfId of bookshelfIds) {
-            // Add Book to Bookshelf
-            targetBookshelf = await prismaClient.prismaBookshelf.findUnique({
+        const bookshelves = await prismaClient.prismaBookshelf.findMany({
+            where: {
+                id: {
+                    in: bookshelfIds
+                }
+            },
+            include: {
+                books: true
+            }
+        })
+        // console.log(bookshelves)
+
+        const updateProms:any = []
+        bookshelves.forEach(bookshelf => {
+            const currentBooksInBookshelf: PrismaBook[] = bookshelf.books     
+              
+            //skip bookshelf if it already has book
+            for (const book of currentBooksInBookshelf) {
+                if (book.googleBooksId == bookId){
+                    //ignore this bookshelf
+                    // console.log("ALREADY IN BOOKSHELF")
+                    return;
+                }
+                
+            }
+
+            const updateProm = prismaClient.prismaBookshelf.update({
                 where:{
-                    id: bookshelfId
+                    id: bookshelf.id
                 },
-                include: {
-                    books: true
+                data:{
+                    books:{
+                        connect:{googleBooksId: bookId}
+                    }
                 }
             })
+            updateProms.push(updateProm)
+        })
 
-            if (targetBookshelf){
-                const currentBooksInBookshelf: PrismaBook[] = targetBookshelf.books     
-                
-                for (const book of currentBooksInBookshelf) {
-                    if (book.googleBooksId == bookId){
-                        //throw error(400, `Book is already in Bookshelf!`)
-                        
-                        //ignore this book
-                        continue;
-                    }
-                }
-                
-                targetBookshelf = await prismaClient.prismaBookshelf.update({
-                    where:{
-                        id: targetBookshelf.id
-                    },
-                    data:{
-                        books:{
-                            connect:{googleBooksId: bookId}
-                        }
-                    }
-                })
+        const responses = await Promise.all(updateProms);
 
-                addedBookshelfIds.push(targetBookshelf.id);
-    
-                // returnedBookshelf = {
-                //     id: targetBookshelf.id,
-                //     name: targetBookshelf.name,
-                //     isDeletable: targetBookshelf.isDeletable,
-                //     creationDate: targetBookshelf.creationDate,
-                //     user: {
-                //         id: targetBookshelf.user.id,
-                //         name: targetBookshelf.user.name,
-                //         profilePic: targetBookshelf.user.profilePic
-                //     },
-                //     books: books
-                // }
-                // return new Response(JSON.stringify(returnedBookshelf));
-            }
-        }
+        responses.forEach(bookshelf => {
+            // console.log(bookshelf)
+            addedBookshelfIds.push(bookshelf.id)
+        })
+        // console.log(addedBookshelfIds)
+
         return new Response(JSON.stringify({addedBookshelfIds: addedBookshelfIds}))
     }
     catch(err){

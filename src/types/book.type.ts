@@ -73,7 +73,8 @@ export type Collection = {
 	notes?: Note[];
 	numNotes?: number;
 	bookId?: string,
-	imgURL?: string
+	imgURL?: string,
+	lastUpdateDate?: Date,
 
 };
 

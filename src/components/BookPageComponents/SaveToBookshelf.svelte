@@ -28,7 +28,8 @@
     }
 
     async function handleConfirm() {
-        //console.log(selectedIDs)
+        // console.log(savedBookshelfIDs)
+        // console.log(selectedIDs)
         let addedBookshelves: number[] = []
         let removedBookshelves: number[] = []
 
@@ -44,12 +45,16 @@
             }
         })
 
+        // console.log(addedBookshelves)
+        // console.log(removedBookshelves)
+
         dispatch('maybeRemoved', {
             bookshelfIDs: removedBookshelves
         })
 
         if (addedBookshelves.length > 0) {
-            await fetch(`${baseURL}/api/update/bookshelf/add-books`, {
+            //no need for await since updated locally
+            fetch(`${baseURL}/api/update/bookshelf/add-books`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     bookId: bookId,
@@ -59,7 +64,7 @@
         }
 
         if (removedBookshelves.length > 0) {
-            await fetch(`${baseURL}/api/update/bookshelf/remove-books`, {
+            fetch(`${baseURL}/api/update/bookshelf/remove-books`, {
                 method: 'PUT',
                 body: JSON.stringify({
                     bookId: bookId,

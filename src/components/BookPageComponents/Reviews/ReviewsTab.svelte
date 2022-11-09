@@ -63,19 +63,25 @@
 </script>
 
 <div class=" mt-3 w-full">
-	{#if userReview === undefined || edittingReview}
+	{#if $session && userReview === undefined || edittingReview}
 		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false} on:postReview={pushNewReview}/>
-	{:else}
+	{:else if $session && userReview != undefined}
 		<!-- TODO: not catching delete event for some reason -->
 		<ReviewCard review={userReview} on:delete={deleteUserReview} on:edit={handleEdit} />
+	{:else}
+	<p class="my-3"><a href="/authentication/login" class="text-accent">Log in</a> or <a href="/authentication/register" class="text-accent">Register</a> to write a review</p>
 	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />
 
-	<div>
-		{#each otherReviews as review}
-			<!-- on:delete never occurs here but without it, it doesn't work above -->
-			<ReviewCard {review} on:delete={deleteUserReview} on:edit={handleEdit} />
-		{/each}
+	<div class="flex flex-col w-full">
+		{#if otherReviews.length > 0}
+			{#each otherReviews as review}
+				<!-- on:delete never occurs here but without it, it doesn't work above -->
+				<ReviewCard {review} on:delete={deleteUserReview} on:edit={handleEdit} />
+			{/each}
+		{:else}
+			<p class="mt-3 mx-auto">No Reviews Posted</p>
+		{/if}
 	</div>
 </div>

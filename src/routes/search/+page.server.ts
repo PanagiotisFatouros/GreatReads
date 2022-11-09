@@ -1,14 +1,14 @@
 import type { ServerLoadEvent } from '@sveltejs/kit';
 import { searchTypes } from '../../types/searchTypes.enum';
 import type { Book, Client, Bookshelf } from '../../types/book.type'
-import { getCriteria, readGoogleBooksResponse } from '../../scripts'
+import { getCriteria, readGoogleBooksResponse } from '../../lib/scripts'
 import { prismaClient } from '$lib/lucia';
 import { getSession } from 'lucia-sveltekit/load';
 
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-	const url = event.url;
+    const url = event.url;
     const host = url.host
     const session = await getSession(event);
 
@@ -18,11 +18,24 @@ export async function load(event: ServerLoadEvent) {
     let users: Client[] = [];
 
     try {
-		
+
         console.log(url.searchParams);
 
-        let searchType:string = ''
-        let searchString:string = ''
+
+
+        let searchType: string = ''
+        let searchString: string = ''
+
+        //no search params
+        if (url.searchParams.entries().next().done == true) {
+            return {
+                searchType,
+                searchString,
+                books,
+                bookshelves,
+                users
+            }
+        }
 
         // assumes only one search parameter is entered
         url.searchParams.forEach((val, key) => {
@@ -35,51 +48,109 @@ export async function load(event: ServerLoadEvent) {
         })
 
         if (searchType != '') {
-            if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres ){
+            if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres) {
                 const searchCriteria = `${getCriteria(searchType)}:${searchString}`
                 console.log(searchCriteria)
-                const response = await (await fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`)).json()
-                const googleBooks = readGoogleBooksResponse(response)
 
-                bookshelves = await (
-                    await fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`)
-                ).json();
+                const searchProm = fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`).then(res => res.json())
 
-                
-                // get ratings from database 
-                for await (const googleBook of googleBooks) {
-                    const ratingResponse = await (await fetch(`http://${host}/api/read/books/${googleBook.id}/rating`)).json()
-                    googleBook.avgRating = ratingResponse.avgRating
-                    googleBook.numRatings = ratingResponse.numRatings
-                    
+                let searchRes;
+
+                if (session) {
+                    const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json());
+
+                    [searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
+                }
+                else {
+                    searchRes = await searchProm;
+                }
+                console.log(searchRes);
+
+                if (searchRes.totalItems > 0) {
+
+                    const googleBooks = readGoogleBooksResponse(searchRes);
+
+                    // get ratings from database 
+                    const bookIds: string[] = []
+                    googleBooks.forEach(googleBook => {
+                        bookIds.push(googleBook.id)
+                    })
+
+                    let prismaBooks: any;
+
                     if (session) {
-                        let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
-                            where: { googleBooksId: googleBook.id },
-                            include: {
+                        prismaBooks = await prismaClient.prismaBook.findMany({
+                            where: {
+                                googleBooksId: { in: bookIds }
+                            },
+                            select: {
+                                googleBooksId: true,
                                 bookshelves: {
-                                    where: {userId: session.user.user_id},
+                                    where: { userId: session.user.user_id },
                                     select: {
                                         id: true
                                     }
+                                },
+                                reviews: {
+                                    select: {
+                                        rating: true
+                                    }
                                 }
                             }
-                        });
-
-                        if (existingBookInDatabase != null) {
-                            let savedBookshelfIDs: number[] = [];
-
-                            existingBookInDatabase.bookshelves.forEach(bookshelf => {
-                                savedBookshelfIDs.push(bookshelf.id);
-                            })
-
-                            googleBook.savedBookshelfIDs = savedBookshelfIDs;
-                        }
+                        })
+                    }
+                    else {
+                        prismaBooks = await prismaClient.prismaBook.findMany({
+                            where: {
+                                googleBooksId: { in: bookIds }
+                            },
+                            select: {
+                                googleBooksId: true,
+                                reviews: {
+                                    select: {
+                                        rating: true
+                                    }
+                                }
+                            }
+                        })
                     }
 
-                    books.push(googleBook);
-                    
+                    console.log(prismaBooks)
+
+                    googleBooks.forEach(book => {
+                        const prismaBook = prismaBooks.find(pBook => pBook.googleBooksId == book.id)
+
+                        if (prismaBook == undefined) {
+                            book.avgRating = 0;
+                            book.numRatings = 0;
+                            book.savedBookshelfIDs = [];
+                        }
+                        else {
+                            const numRatings: number = prismaBook.reviews.length;
+                            let avgRating: number = 0;
+
+                            if (numRatings > 0) {
+                                const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
+                                avgRating = sum / numRatings
+                            }
+                            book.avgRating = avgRating;
+                            book.numRatings = numRatings;
+
+                            let savedBookshelfIDs: number[] = [];
+
+                            if (session) {
+                                prismaBook.bookshelves.forEach(bookshelf => {
+                                    savedBookshelfIDs.push(bookshelf.id);
+                                })
+                            }
+                            book.savedBookshelfIDs = savedBookshelfIDs;
+                        }
+
+                        books.push(book);
+                    })
+                    console.log(books);
                 }
-                // console.log(googleBooks[0])
+
             }
             else {
 
@@ -90,7 +161,7 @@ export async function load(event: ServerLoadEvent) {
                             contains: searchString
                         }
                     },
-                    select:{
+                    select: {
                         id: true,
                         name: true,
                         profilePic: true
@@ -101,12 +172,12 @@ export async function load(event: ServerLoadEvent) {
                     const user: Client = {
                         id: prismaUser.id,
                         name: prismaUser.name,
-                        profilePic: prismaUser.profilePic || ''
+                        profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
                     }
                     return user
                 })
             }
-            
+
             return {
                 searchType,
                 searchString,
@@ -116,7 +187,7 @@ export async function load(event: ServerLoadEvent) {
             }
         }
 
-	} catch (err) {
-		console.log(err);
-	}
+    } catch (err) {
+        console.log(err);
+    }
 }

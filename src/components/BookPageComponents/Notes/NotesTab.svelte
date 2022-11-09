@@ -1,8 +1,12 @@
 <script lang="ts">
 	import NotesCollection from './NotesCollection.svelte';
 	import type { Collection } from 'src/types/book.type';
-	import { getTimeAgo } from '../../../scripts';
+	import { getTimeAgo } from '../../../lib/scripts';
 	import { createEventDispatcher } from 'svelte';
+	import { getSession } from 'lucia-sveltekit/client';
+	import { getNoteText } from '../../../lib/scripts';
+
+	const session = getSession();
 
 	export let collections: Collection[] | undefined;
 
@@ -19,20 +23,22 @@
 
 	async function deleteCollection() {
 		if (selectedCollection != null) {
-
 			const response = await fetch(`${baseURL}/api/delete/collection/${selectedCollection.id}`, {
-					method: 'DELETE'
+				method: 'DELETE'
 			});
-			
-			let deletedCollection:Collection = await response.json();
-			
+
+			let deletedCollection: Collection = await response.json();
+
 			if (deletedCollection != undefined && collections != undefined) {
 				//successful
 				collections = collections.filter((c) => c.id !== selectedCollection!.id);
+
+				dispatch('delete', {
+					collection: selectedCollection
+				});
 				selectedCollection = null;
-			}
-			else {
-				alert("Something went wrong. Collection not deleted");
+			} else {
+				alert('Something went wrong. Collection not deleted');
 			}
 		}
 	}
@@ -40,9 +46,9 @@
 	async function getCollectionNotes(collection: Collection) {
 		if (collection.notes === undefined) {
 			const response = await fetch(`${baseURL}/api/read/collections/${collection.id}`);
-			console.log(response.body);
+			// console.log(response.body);
 			const returnedCollection: Collection = await response.json();
-			console.log(returnedCollection);
+			// console.log(returnedCollection);
 
 			//replace collection with one that has its notes loaded
 			collection.notes = returnedCollection.notes;
@@ -54,14 +60,15 @@
 	function displayNewCollection() {
 		if (newCollection != undefined && collections != undefined) {
 			collections.push(newCollection);
-			
+			newCollection.numNotes = 0;
+
 			//trigger refresh
 			collections = collections;
 
 			if (newCollection.isPublic) {
 				dispatch('newPublicCollection', {
 					collection: newCollection
-				})
+				});
 			}
 
 			newCollection = undefined;
@@ -75,25 +82,30 @@
 	<!-- TODO: maybe move to new component -->
 	<!-- show form to create new collection -->
 	{#if $isOverlayOpen && selectedCollection == null}
-		<CollectionInput bind:collection={newCollection} on:newCollection={displayNewCollection}/>
-
+		<CollectionInput bind:collection={newCollection} on:newCollection={displayNewCollection} />
 	{:else if selectedCollection != null}
 		<!-- show selected collection -->
 		<NotesCollection bind:collection={selectedCollection} on:delete={deleteCollection} on:update />
-
 	{:else}
 		<!-- show list of collections -->
 		<div class=" mt-3 flex">
 			<h2 class=" text-accent mr-3">Collections</h2>
-			<button
-				on:click={() => isOverlayOpen.set(true)}
-				class="btn rounded-full w-6 h-6 text-white bg-accent self-center"
-				><p class=" text-xl leading-none">+</p></button
-			>
+			{#if $session}
+				<button
+					on:click={() => isOverlayOpen.set(true)}
+					class="btn rounded-full w-6 h-6 text-white bg-accent self-center"
+					><p class=" text-xl leading-none">+</p></button
+				>
+			{/if}
 		</div>
 
 		<div class="flex flex-col mt-1">
-			{#if collections == undefined || collections.length == 0}
+			{#if !$session}
+				<p class="my-3">
+					<a href="/authentication/login" class="text-accent">Log in</a> or
+					<a href="/authentication/register" class="text-accent">Register</a> to write a review
+				</p>
+			{:else if collections == undefined || collections.length == 0}
 				<p class="mt-3">No Collections Found</p>
 			{:else}
 				{#each collections as collection}
@@ -104,7 +116,21 @@
 						<div>
 							<p class="text-secondary">{collection.title}</p>
 							<!-- TODO: maybe change to last edited -->
-							<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+							<div class="flex space-x-1 items-center">
+								{#if collection.numNotes != undefined}
+									<p class="text-body2">
+										{collection.numNotes | 0}
+										{getNoteText(collection.numNotes | 0)}
+									</p>
+								{/if}
+								<p>-</p>
+
+								{#if collection.lastUpdateDate}
+									<p class="text-body2">Updated {getTimeAgo(collection.lastUpdateDate)}</p>
+								{:else}
+									<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+								{/if}
+							</div>
 						</div>
 
 						<svg
@@ -123,4 +149,3 @@
 		</div>
 	{/if}
 </div>
-

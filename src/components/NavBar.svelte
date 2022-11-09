@@ -1,36 +1,14 @@
 <script lang="ts">
 	import HeaderSearchBar from './HeaderSearchBar.svelte';
-    import { isOverlayOpen } from '../stores/OverlayStore';
-    import { page } from '$app/stores';
-    
-    export let loggedIn: Boolean;
-
-    function openOverlay() {
-        isOverlayOpen.set(true)
-    }
-
-
+  
 </script>
 
 
-<div id="navBar" class="{$page.url.pathname !== '/authentication' 
-                        && $page.url.pathname !== '/authentication/login'
-                        && $page.url.pathname !== '/authentication/register'
-                        && $page.url.pathname !== '/authentication/success'
-                        && $page.url.pathname !== '/authentication/failed' ? 
-                        'bg-primary-3' : 'bg-primary-1 bg-opacity-25'} w-full h-14  flex justify-between content-center m-0">
-<a id="logo" href={loggedIn === true ? '/' : '/authentication'} class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
+<div id="navBar" class="bg-primary-3 w-full h-14  flex justify-between content-center m-0">
+  <a id="logo" href='/' class="self-center p-4 font-logo text-primary-1 text-2xl">GreatReads</a>
 
-    {#if $page.url.pathname !== '/authentication' 
-    && $page.url.pathname !== '/authentication/login'
-    && $page.url.pathname !== '/authentication/register'
-    && $page.url.pathname !== '/authentication/success'
-    && $page.url.pathname !== '/authentication/failed'}
-        <HeaderSearchBar />
-    {/if}
+    <HeaderSearchBar />
 
-
-    {#if loggedIn}
        <div id="rightNav" class="bg-primary-3 flex justify-around content-center space-x-2">
           <ul class="flex justify-around">
             <li class="hover:bg-hover-primary-3 list-none flex justify-center items-center text-primary-1 font-heading text-lg"><a href="/library" class=" w-full h-full px-3 flex justify-center items-center">My Library</a></li>
@@ -64,13 +42,6 @@
           </div>
 
         </div>
-    {:else}
-        <div id="rightNav" class="flex justify-around content-center">
-            <a href="/authentication/login" on:click={openOverlay}><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Log In</p></a>
-            <p class="list-none p-3 text-primary-1 font-heading text-lg font-300">|</p>
-            <a href="/authentication/register"><p class="list-none p-3 text-primary-1 font-heading text-lg font-300">Register</p></a>
-        </div>
-    {/if}
 </div>
 	
 
