@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Collection } from 'src/types/book.type';
 	import VoteButtons from '../../VoteButtons.svelte';
-	import { getTimeAgo } from '../../../scripts';
+	import { getTimeAgo } from '../../../lib/scripts';
 	import NoteCard from './NoteCard.svelte';
 
 	//selected collection

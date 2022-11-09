@@ -1,4 +1,4 @@
-import { readJSONToBook } from "../scripts";
+import { readJSONToBook } from "./scripts";
 
 export async function getBookInfoFromGoogleBooksAPI(bookId: String) {
 	const googleBooksApiURL = 'https://www.googleapis.com/books/v1/volumes/';

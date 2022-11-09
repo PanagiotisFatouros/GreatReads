@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Review } from 'src/types/book.type';
 	import StarRating from './StarRating.svelte';
-	import { getTimeAgo } from '../scripts';
+	import { getTimeAgo } from '../lib/scripts';
 
 	export let review: Review;
 	export let displayText: boolean;
@@ -9,7 +9,7 @@
 	let diff = getTimeAgo(review.date);
 </script>
 
-<div id="{displayText ? 'displayAll' : 'review'}" class="bg-primary-1">
+<div id={displayText ? 'displayAll' : 'review'} class="bg-primary-1">
 	<div id="cover"><img src={review.img} alt="" /></div>
 	<div id="text">
 		<div class="flex items-center text-secondary">
@@ -17,7 +17,7 @@
 			<StarRating rating={review.rating} showRating={false} />
 		</div>
 		<p class="text-primary-3 text-body2 font-body">{diff}</p>
-		{#if (displayText == true)}
+		{#if displayText == true}
 			<p id="allText" class="text-primary-3">{review.comment}</p>
 		{:else}
 			<p id="comment" class="text-primary-3 text-body2">{review.comment}</p>
@@ -36,8 +36,7 @@
 		border-radius: 10px;
 		margin-bottom: 10px;
 		padding: 8px;
-
-	} 
+	}
 
 	#displayAll {
 		display: flex;

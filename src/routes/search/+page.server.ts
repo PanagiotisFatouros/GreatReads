@@ -1,14 +1,14 @@
 import type { ServerLoadEvent } from '@sveltejs/kit';
 import { searchTypes } from '../../types/searchTypes.enum';
 import type { Book, Client, Bookshelf } from '../../types/book.type'
-import { getCriteria, readGoogleBooksResponse } from '../../scripts'
+import { getCriteria, readGoogleBooksResponse } from '../../lib/scripts'
 import { prismaClient } from '$lib/lucia';
 import { getSession } from 'lucia-sveltekit/load';
 
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-	const url = event.url;
+    const url = event.url;
     const host = url.host
     const session = await getSession(event);
 
@@ -18,13 +18,13 @@ export async function load(event: ServerLoadEvent) {
     let users: Client[] = [];
 
     try {
-		
+
         console.log(url.searchParams);
 
-        
 
-        let searchType:string = ''
-        let searchString:string = ''
+
+        let searchType: string = ''
+        let searchString: string = ''
 
         //no search params
         if (url.searchParams.entries().next().done == true) {
@@ -48,10 +48,10 @@ export async function load(event: ServerLoadEvent) {
         })
 
         if (searchType != '') {
-            if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres ){
+            if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres) {
                 const searchCriteria = `${getCriteria(searchType)}:${searchString}`
                 console.log(searchCriteria)
-                
+
                 const searchProm = fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`).then(res => res.json())
 
                 let searchRes;
@@ -71,22 +71,22 @@ export async function load(event: ServerLoadEvent) {
                     const googleBooks = readGoogleBooksResponse(searchRes);
 
                     // get ratings from database 
-                    const bookIds:string[] = []
+                    const bookIds: string[] = []
                     googleBooks.forEach(googleBook => {
                         bookIds.push(googleBook.id)
                     })
 
-                    let prismaBooks:any;
+                    let prismaBooks: any;
 
                     if (session) {
                         prismaBooks = await prismaClient.prismaBook.findMany({
                             where: {
-                                googleBooksId: {in: bookIds}
+                                googleBooksId: { in: bookIds }
                             },
                             select: {
                                 googleBooksId: true,
                                 bookshelves: {
-                                    where: {userId: session.user.user_id},
+                                    where: { userId: session.user.user_id },
                                     select: {
                                         id: true
                                     }
@@ -102,7 +102,7 @@ export async function load(event: ServerLoadEvent) {
                     else {
                         prismaBooks = await prismaClient.prismaBook.findMany({
                             where: {
-                                googleBooksId: {in: bookIds}
+                                googleBooksId: { in: bookIds }
                             },
                             select: {
                                 googleBooksId: true,
@@ -114,7 +114,7 @@ export async function load(event: ServerLoadEvent) {
                             }
                         })
                     }
-                    
+
                     console.log(prismaBooks)
 
                     googleBooks.forEach(book => {
@@ -126,13 +126,13 @@ export async function load(event: ServerLoadEvent) {
                             book.savedBookshelfIDs = [];
                         }
                         else {
-                            const numRatings:number = prismaBook.reviews.length;
-                            let avgRating:number = 0;
+                            const numRatings: number = prismaBook.reviews.length;
+                            let avgRating: number = 0;
 
-                            if (numRatings > 0){
+                            if (numRatings > 0) {
                                 const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-                                avgRating = sum / numRatings 
-                            } 
+                                avgRating = sum / numRatings
+                            }
                             book.avgRating = avgRating;
                             book.numRatings = numRatings;
 
@@ -150,7 +150,7 @@ export async function load(event: ServerLoadEvent) {
                     })
                     console.log(books);
                 }
-                
+
             }
             else {
 
@@ -161,7 +161,7 @@ export async function load(event: ServerLoadEvent) {
                             contains: searchString
                         }
                     },
-                    select:{
+                    select: {
                         id: true,
                         name: true,
                         profilePic: true
@@ -177,7 +177,7 @@ export async function load(event: ServerLoadEvent) {
                     return user
                 })
             }
-            
+
             return {
                 searchType,
                 searchString,
@@ -187,7 +187,7 @@ export async function load(event: ServerLoadEvent) {
             }
         }
 
-	} catch (err) {
-		console.log(err);
-	}
+    } catch (err) {
+        console.log(err);
+    }
 }

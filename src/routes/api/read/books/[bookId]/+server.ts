@@ -4,7 +4,7 @@ import type { Book, Collection, Review } from 'src/types/book.type';
 import type { Prisma } from '@prisma/client';
 import { prismaClient } from '../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
-import { readJSONToBook } from '../../../../../scripts';
+import { readJSONToBook } from '../../../../../lib/scripts';
 
 
 export async function GET({ params }: RequestEvent) {
@@ -40,7 +40,7 @@ export async function GET({ params }: RequestEvent) {
 			}
 		});
 		// console.log(existingBookInDatabase)
-		
+
 		// if yes: proceed normally,
 		// else: create new entry for book then proceed
 		let reviews: Review[] = [];
@@ -55,9 +55,9 @@ export async function GET({ params }: RequestEvent) {
 			avgRating = 0
 			numRating = 0
 
-		} 
-        else {
-			
+		}
+		else {
+
 			const prismaReviews = existingBookInDatabase.reviews
 
 			if (prismaReviews.length == 0) {
@@ -123,7 +123,7 @@ export async function GET({ params }: RequestEvent) {
 					publicCollections.push(publicCollection);
 				});
 			}
-			
+
 		}
 
 		// creating google book object
