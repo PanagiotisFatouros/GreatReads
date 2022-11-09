@@ -83,9 +83,9 @@
 			<SearchBar bind:searchText placeholder="Search by title or author..." />
 		</div>
 
-		<div>
+		<div class="flex flex-col space-y-0">
 			{#if filteredCollections == undefined || filteredCollections.length == 0}
-				<p class="mt-3">No Collections Found</p>
+				<p class="mt-5 mx-auto">No Collections Found</p>
 			{:else}
 				{#each filteredCollections as collection}
 					<div
