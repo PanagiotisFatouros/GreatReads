@@ -1,5 +1,6 @@
 <script lang="ts">
 	import HeaderSearchBar from './HeaderSearchBar.svelte';
+  
 </script>
 
 

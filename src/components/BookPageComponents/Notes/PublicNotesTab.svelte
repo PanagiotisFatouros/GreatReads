@@ -1,10 +1,10 @@
 <script lang="ts">
-	import { getTimeAgo } from '../../../scripts';
+	import { getTimeAgo } from '../../../lib/scripts';
 	import type { Collection } from 'src/types/book.type';
 	import SearchBar from '../../SearchBar.svelte';
 	import VoteButtons from '../../VoteButtons.svelte';
 	import PublicCollection from './PublicCollection.svelte';
-	import { getNoteText } from '../../../scripts'
+	import { getNoteText } from '../../../lib/scripts';
 
 	import { page } from '$app/stores';
 
@@ -18,17 +18,19 @@
 	let searchText: string = '';
 
 	// runs every time searchText changes
-	$: filteredCollections = collections != undefined ? collections.filter((collection) => {
-		let titleCheck: boolean = collection.title
-			.toLocaleLowerCase()
-			.startsWith(searchText.toLocaleLowerCase());
-		let authorCheck: boolean = collection.user ? collection.user.name
-			.toLocaleLowerCase()
-			.startsWith(searchText.toLocaleLowerCase())
-			: false;
+	$: filteredCollections =
+		collections != undefined
+			? collections.filter((collection) => {
+					let titleCheck: boolean = collection.title
+						.toLocaleLowerCase()
+						.startsWith(searchText.toLocaleLowerCase());
+					let authorCheck: boolean = collection.user
+						? collection.user.name.toLocaleLowerCase().startsWith(searchText.toLocaleLowerCase())
+						: false;
 
-		return titleCheck || authorCheck;
-	}) : [];
+					return titleCheck || authorCheck;
+			  })
+			: [];
 
 	let selectedCollection: Collection | null = null;
 
@@ -47,24 +49,24 @@
 		selectedCollection = collection;
 	}
 
-	async function handleVoteChange(event:any, collectionId: number) {
+	async function handleVoteChange(event: any, collectionId: number) {
 		// console.log(event.detail.change)
 
-		const voteChange = event.detail.change
+		const voteChange = event.detail.change;
 
 		await fetch(`${baseURL}/api/update/collection/vote`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    id: collectionId,
-					voteChange: voteChange
-                })
-            })
-		console.log(collectionId)
-		let collection: Collection | undefined = collections?.find(c => c.id == collectionId)
-		console.log(collection)
+			method: 'PUT',
+			body: JSON.stringify({
+				id: collectionId,
+				voteChange: voteChange
+			})
+		});
+		console.log(collectionId);
+		let collection: Collection | undefined = collections?.find((c) => c.id == collectionId);
+		console.log(collection);
 
 		if (collection) {
-			collection.upvotes += voteChange
+			collection.upvotes += voteChange;
 		}
 	}
 </script>
@@ -81,16 +83,19 @@
 			<SearchBar bind:searchText placeholder="Search by title or author..." />
 		</div>
 
-		<div>
+		<div class="flex flex-col space-y-0">
 			{#if filteredCollections == undefined || filteredCollections.length == 0}
-				<p class='mt-3'>No Collections Found</p>
+				<p class="mt-5 mx-auto">No Collections Found</p>
 			{:else}
 				{#each filteredCollections as collection}
 					<div
 						on:click={() => getCollectionNotes(collection)}
 						class=" bg-primary-1 my-4 rounded-3xl pl-2 pr-1 py-2 flex items-center cursor-pointer hover:bg-opacity-70"
 					>
-						<VoteButtons voteCount={collection.upvotes} on:change={e => handleVoteChange(e, collection.id)}/>
+						<VoteButtons
+							voteCount={collection.upvotes}
+							on:change={(e) => handleVoteChange(e, collection.id)}
+						/>
 
 						<div class="flex ml-3 space-x-3 items-center">
 							<div class="profile_pic_small">
@@ -116,17 +121,20 @@
 
 								<div class="flex items-center">
 									{#if collection.user}
-									<p class=" text-primary-2 mr-1">{collection.user.name}</p>
+										<p class=" text-primary-2 mr-1">{collection.user.name}</p>
 									{/if}
 
 									{#if collection.numNotes != undefined}
-									<p class="text-body2 mr-1">- {collection.numNotes | 0} {getNoteText(collection.numNotes | 0)},</p>
+										<p class="text-body2 mr-1">
+											- {collection.numNotes | 0}
+											{getNoteText(collection.numNotes | 0)},
+										</p>
 									{/if}
-									
+
 									{#if collection.lastUpdateDate}
-									<p class="text-body2">Updated {getTimeAgo(collection.lastUpdateDate)}</p>
+										<p class="text-body2">Updated {getTimeAgo(collection.lastUpdateDate)}</p>
 									{:else}
-									<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
+										<p class="text-body2">Created {getTimeAgo(collection.creationDate)}</p>
 									{/if}
 								</div>
 							</div>

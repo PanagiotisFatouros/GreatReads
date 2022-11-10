@@ -32,6 +32,7 @@
 		return '';
 	}
 
+
 	$: {
 		if ($isOverlayOpen == false) {
 			isSavingBook = false;
@@ -43,9 +44,6 @@
 <SaveToBookshelf bookshelves={bookshelves} bind:savedBookshelfIDs={book.savedBookshelfIDs} bookId={book.id} bind:isShowing={isSavingBook} />
 {/if}
 
-<!-- {#await bookPromise} -->
-<!-- <h1>Loading Book</h1>  -->
-<!-- {:then book}  -->
 <div class=" grid grid-cols-10 text-body1 font-body text-primary-3 mt-1">
 	<!-- left column - cover image and info -->
 	<div class=" col-span-3 flex justify-center items-center flex-col self-start">
@@ -77,7 +75,13 @@
 
 		<ul class=" mt-5 space-y-1 font-body text-body1 ml-14 mr-9">
 			<li><p><span class=" text-secondary">Published: </span>{book.datePublished}</p></li>
-			<li><p><span class=" text-secondary">Genres: </span>{convertToString(book.genres)}</p></li>
+			<li><p><span class=" text-secondary">Genres: </span>
+			<div class="flex flex-col ml-3">
+				{#each book.genres as genre}
+						<a class="hover:underline" href="/search?Genres={genre}">- {genre}</a>
+				{/each}
+			</div>
+			</li>
 			<li><p><span class=" text-secondary">Number of Pages: </span>{book.pageCount}</p></li>
 			<li><p><span class=" text-secondary">ISBN: </span>{book.isbn}</p></li>
 		</ul>
@@ -111,5 +115,6 @@
 		</div>
 	</div>
 </div>
+
 
 <!-- {/await} -->

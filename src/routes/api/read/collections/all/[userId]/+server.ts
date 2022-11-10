@@ -2,7 +2,7 @@ import type { RequestEvent } from '@sveltejs/kit';
 import type { Collection } from '../../../../../../types/book.type';
 import { prismaClient } from '../../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
-import { readJSONToBook } from '../../../../../../scripts';
+import { readJSONToBook } from '../../../../../../lib/scripts';
 
 export async function GET({ params }: RequestEvent) {
 	const userId = params.userId || '';
@@ -11,9 +11,9 @@ export async function GET({ params }: RequestEvent) {
 		return new Response('User not specified/ incorrectly mapped.');
 	}
 
-	
+
 	const prismaCollections = await prismaClient.prismaCollection.findMany({
-		where: { userId: userId},
+		where: { userId: userId },
 		select: {
 			id: true,
 			title: true,
@@ -28,7 +28,7 @@ export async function GET({ params }: RequestEvent) {
 				}
 			},
 			_count: {
-				select: {notes: true}
+				select: { notes: true }
 			},
 			notes: {
 				take: 1,
@@ -78,9 +78,9 @@ export async function GET({ params }: RequestEvent) {
 
 		collections.push(collection)
 	})
-	collections.sort((a:Collection, b:Collection) => {
-		const aDate:Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
-		const bDate:Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
+	collections.sort((a: Collection, b: Collection) => {
+		const aDate: Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
+		const bDate: Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
 
 		return aDate > bDate ? -1 : 1;
 	})

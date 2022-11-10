@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { readGoogleBooksResponse } from '../src/scripts.js';
+import { readGoogleBooksResponse } from '../src/lib/scripts.js';
 import { googleBooksResponse, expectedResponse } from './values.js';
 
 

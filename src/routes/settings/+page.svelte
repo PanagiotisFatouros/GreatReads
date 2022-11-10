@@ -165,7 +165,7 @@
 
 <div class="mx-5 my-4">
 	<div class="flex justify-between items-center w-full">
-		<h1 class=" text-secondary">Account Settings</h1>
+		<h1 class="font-body text-heading1 font-black text-secondary">Account Settings</h1>
 
 		<button on:click={() => goto(`/profile/${user.id}`)} class="btn bg-secondary w-32 h-8 text-body2 text-white rounded-full">View Profile</button>
 	</div>
@@ -195,7 +195,7 @@
 					</svg>
 				{/if}
 			</div>
-			<button on:click={() => fileInput.click()} class="std_button w-44"
+			<button on:click={() => fileInput.click()} class="std_button w-44 h-8"
 				>Upload New Photo</button
 			>
 			<input

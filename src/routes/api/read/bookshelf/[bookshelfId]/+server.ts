@@ -4,20 +4,20 @@ import type { Bookshelf, Book } from 'src/types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { auth } from "$lib/lucia";
-import { readJSONToBook } from '../../../../../scripts'
+import { readJSONToBook } from '../../../../../lib/scripts'
 
 
-export async function GET({params, request}: RequestEvent) {
+export async function GET({ params, request }: RequestEvent) {
 
     const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
 
 
-	if (bookshelfId == -1) {
-		throw error(400, 'Book not specified/ incorrectly mapped.');
-	}
-    
+    if (bookshelfId == -1) {
+        throw error(400, 'Book not specified/ incorrectly mapped.');
+    }
+
     try {
-        
+
 
         const prismaBookshelf = await prismaClient.prismaBookshelf.findUnique({
             where: { id: bookshelfId },
@@ -44,7 +44,7 @@ export async function GET({params, request}: RequestEvent) {
             console.log(prismaBookshelf.books)
             let books: Book[] = []
             for await (const prismaBook of prismaBookshelf.books) {
-                const restBookInfo:any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
+                const restBookInfo: any = await getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId)
 
                 const book: Book = readJSONToBook(restBookInfo)
 
