@@ -36,8 +36,9 @@ Ensure the application is not running, then run the following command:
 
     npm run test
 
-# Formatting code
-To check code adherance to style and to automatically format whatever is possible, run the following:
+# Coding Style
+Please ensure you follow our coding style.
+To check code adherence to style and to automatically format whatever is possible, run the following:
     
     npm run lint
     npm run format
@@ -58,7 +59,20 @@ then go to a linux terminal and run:
     sed -i "s/0.0.0.0/::/" ./build/index.js
 
 # Environment Variables
-
 Our application is deployed to Azure where our environment variables are securely stored
 If you need to add a new environment variable please request the help of one of our code owners to assist you.
 Note that all environment variables are given default values in the .env file and are not for production usage.
+
+# Writing new code
+Please ensure you are descriptive in your issues and PRs that you create.
+If you have any questions or ideas don't hesitate to contact one of our code owners to assist you!
+
+## Some ideas of what to implement in future:
+Responsive design.
+
+A following your friends feature
+
+A separate account type for authors
+
+More code testing and implement code coverage.
+
