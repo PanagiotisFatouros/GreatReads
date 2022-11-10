@@ -11,7 +11,7 @@ GreatReads is a social book archiving web application, with the following funtio
 
 Visit https://greatreads.azurewebsites.net/ to view the application
 
-To test locally:
+To view locally:
 
 1. Clone the git repository
 
@@ -29,9 +29,7 @@ Following this you can either click “connect” on the overview page to be gra
 Note: team members will not add you as an owner and will only grant the permission you require.
 
 # Running tests
-Ensure the application is not runnning before testing
-
-To test, run the following command:
+Ensure the application is not runnning, then run the following command:
 
     npm run test
 
