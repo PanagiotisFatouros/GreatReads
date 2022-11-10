@@ -19,7 +19,7 @@
 </script>
 
 <div id="main">
-	<p class="text-primary font-heading text-heading2">Invalid credentials, Please try again</p>
+	<p class="text-primary font-heading text-heading2 mb-3">Invalid credentials, Please try again</p>
 	<RingLoader color="rgb(255, 102, 99)" size="60" unit="px" duration="1.5s"/>
 </div>
 

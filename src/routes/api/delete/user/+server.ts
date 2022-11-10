@@ -5,10 +5,10 @@ import { prismaClient } from '$lib/lucia'
 import type { User } from '@prisma/client'
  
 /** @type {import('./$types').RequestHandler} */
-export async function DELETE ({ params }:RequestEvent){
-    const userId: string = params.userId || ""
+export async function DELETE ({ request }:RequestEvent){
+    const { userId } = await request.json();
     let user: User | null
-    if (userId == ""){
+    if (userId == undefined) {
         throw error(400, `userId not specified/invalid, delete user failed!`)
     }
     try {
@@ -28,5 +28,5 @@ export async function DELETE ({ params }:RequestEvent){
     catch(err){
         throw error(400, `User not deleted, unknown error: ${err}`)
     }
-    return new Response(`User successfully deleted! Deleted review: ${JSON.stringify(user)}`)
+    return new Response(JSON.stringify(user))
 }

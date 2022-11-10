@@ -3,6 +3,8 @@
 	import { page } from '$app/stores';
     import { goto } from '$app/navigation'
 	import { RingLoader } from 'svelte-loading-spinners';
+	import { isOverlayOpen } from '../../stores/OverlayStore'
+	import Confirmation from '../../components/Confirmation.svelte';
 
 	/** @type {import('./$types').PageData} */
 	export let data;
@@ -25,6 +27,8 @@
 	let isEdittingProfileDetails: boolean = false;
 
 	let isUpdatingProfilePic: boolean = false;
+	let isDeletingAccount: boolean = false;
+
 
 	function onEditAccountInfo() {
 		isEdittingAccountInfo = true;
@@ -154,6 +158,26 @@
 			alert('Only jpg/jpeg and png files are allowed.');
 		}
 	}
+
+	function showDeleteAccountConfirmation() {
+		isOverlayOpen.set(true);
+		isDeletingAccount = true;
+	}
+	function cancelDeleteAccount() {
+		isOverlayOpen.set(false);
+		isDeletingAccount = false;
+	}
+
+	async function deleteAccount() {
+		await fetch(`${baseURL}/api/delete/user`, {
+			method: 'DELETE',
+			body: JSON.stringify({
+				userId: user.id
+			})
+		});
+		
+		goto('/sign-out');
+	}
 </script>
 
 {#if isUpdatingProfilePic}
@@ -161,6 +185,15 @@
 	<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
 	<RingLoader color={'#FF6663'} />
 </div>
+{/if}
+
+{#if isDeletingAccount}
+	<Confirmation
+	title="Delete Account"
+	description="Are you sure you want to your account? <br/>This can not be undone."
+	on:cancel={cancelDeleteAccount}
+	on:confirm={deleteAccount}
+	/>
 {/if}
 
 <div class="mx-5 my-4">
@@ -208,9 +241,9 @@
 		</div>
 
 		<!-- right side - account info/profile details -->
-		<div class=" mt-8 mr-24 w-full font-body space-y-8">
+		<div class=" mt-3 mr-24 w-full font-body space-y-6">
 			<!-- account info -->
-			<div class="flex flex-col space-y-5">
+			<div class="flex flex-col space-y-3">
 				<div class="flex space-x-2">
 					<h2 class="text-secondary">Account Information</h2>
 
@@ -318,7 +351,7 @@
 			</div>
 
 			<!-- profile details -->
-			<div class="flex flex-col space-y-5">
+			<div class="flex flex-col space-y-3">
 				<div class="flex space-x-2">
 					<h2 class="text-secondary">Profile Details</h2>
 
@@ -437,6 +470,11 @@
 						<button on:click={updateProfileDetails} class="std_button w-32 py-1">Update</button>
 					</div>
 				{/if}
+			</div>
+
+			<div class="flex flex-col space-y-3">
+				<h2 class=" text-secondary">Manage Account</h2>
+				<button on:click={showDeleteAccountConfirmation} class=" h-8 std_button w-40">Delete Account</button>
 			</div>
 		</div>
 	</div>
