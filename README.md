@@ -43,6 +43,6 @@ If you are building on windows, run
 
 then go to a linux terminal and run:
 
-    npm run ipv6_fix // Runs the below command
+    npm run ipv6_fix (Runs the below command)
 
     sed -i "s/0.0.0.0/::/" ./build/index.js
