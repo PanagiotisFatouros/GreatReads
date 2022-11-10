@@ -28,7 +28,7 @@
 			title = review.title;
 			comment = review.comment;
 		}
-	})
+	});
 
 	// async function getBookInfo(){
 	//     const response = await fetch(`${baseURL}/api/read/books/${bookId}/${client.user_id}`, )
@@ -65,7 +65,6 @@
 
 	async function updateReview() {
 		if (review != undefined && rating != 0 && title != '' && comment != '') {
-			
 			const response = await fetch(`${baseURL}/api/update/review`, {
 				method: 'PUT',
 				body: JSON.stringify({
@@ -87,9 +86,8 @@
 				review.rating = updatedReview.rating;
 			}
 
-
 			//tell Reviews Tab to go back to displaying ReviewCard
-			dispatch('cancel')
+			dispatch('cancel');
 		}
 	}
 </script>
@@ -110,9 +108,10 @@
 	{:else}
 		<!-- editting review -->
 		<div class="self-end">
-			<button on:click={() => dispatch('cancel')} class=" std_button bg-primary-1 text-primary-3">Cancel</button>
+			<button on:click={() => dispatch('cancel')} class=" std_button bg-primary-1 text-primary-3"
+				>Cancel</button
+			>
 			<button on:click={updateReview} class=" std_button">Update</button>
 		</div>
-		
 	{/if}
 </div>

@@ -1,193 +1,194 @@
 import type { ServerLoadEvent } from '@sveltejs/kit';
 import { searchTypes } from '../../types/searchTypes.enum';
-import type { Book, Client, Bookshelf } from '../../types/book.type'
-import { getCriteria, readGoogleBooksResponse } from '../../lib/scripts'
+import type { Book, Client, Bookshelf } from '../../types/book.type';
+import { getCriteria, readGoogleBooksResponse } from '../../lib/scripts';
 import { prismaClient } from '$lib/lucia';
 import { getSession } from 'lucia-sveltekit/load';
 
-
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-    const url = event.url;
-    const host = url.host
-    const session = await getSession(event);
+	const url = event.url;
+	const host = url.host;
+	const session = await getSession(event);
 
-    let books: Book[] = [];
-    let bookshelves: Bookshelf[] = [];
+	let books: Book[] = [];
+	let bookshelves: Bookshelf[] = [];
 
-    let users: Client[] = [];
+	let users: Client[] = [];
 
-    try {
+	try {
+		console.log(url.searchParams);
 
-        console.log(url.searchParams);
+		let searchType: string = '';
+		let searchString: string = '';
 
+		//no search params
+		if (url.searchParams.entries().next().done == true) {
+			return {
+				searchType,
+				searchString,
+				books,
+				bookshelves,
+				users
+			};
+		}
 
+		// assumes only one search parameter is entered
+		url.searchParams.forEach((val, key) => {
+			console.log(`key: ${key}, val: ${val}`);
 
-        let searchType: string = ''
-        let searchString: string = ''
+			if (Object.values<string>(searchTypes).includes(key)) {
+				searchType = key;
+				searchString = val;
+			}
+		});
 
-        //no search params
-        if (url.searchParams.entries().next().done == true) {
-            return {
-                searchType,
-                searchString,
-                books,
-                bookshelves,
-                users
-            }
-        }
+		if (searchType != '') {
+			if (
+				searchType == searchTypes.books ||
+				searchType == searchTypes.authors ||
+				searchType == searchTypes.genres
+			) {
+				const searchCriteria = `${getCriteria(searchType)}:${searchString}`;
+				console.log(searchCriteria);
 
-        // assumes only one search parameter is entered
-        url.searchParams.forEach((val, key) => {
-            console.log(`key: ${key}, val: ${val}`);
+				const searchProm = fetch(
+					`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`
+				).then((res) => res.json());
 
-            if (Object.values<string>(searchTypes).includes(key)) {
-                searchType = key;
-                searchString = val;
-            }
-        })
+				let searchRes;
 
-        if (searchType != '') {
-            if (searchType == searchTypes.books || searchType == searchTypes.authors || searchType == searchTypes.genres) {
-                const searchCriteria = `${getCriteria(searchType)}:${searchString}`
-                console.log(searchCriteria)
+				if (session) {
+					const bookshelvesProm = fetch(
+						`http://${host}/api/read/bookshelves/${session.user.user_id}/names`
+					).then((res) => res.json());
 
-                const searchProm = fetch(`https://www.googleapis.com/books/v1/volumes?q=?${searchCriteria}`).then(res => res.json())
+					[searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
+				} else {
+					searchRes = await searchProm;
+				}
+				console.log(searchRes);
 
-                let searchRes;
+				if (searchRes.totalItems > 0) {
+					const googleBooks = readGoogleBooksResponse(searchRes);
 
-                if (session) {
-                    const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json());
+					// get ratings from database
+					const bookIds: string[] = [];
+					googleBooks.forEach((googleBook) => {
+						bookIds.push(googleBook.id);
+					});
 
-                    [searchRes, bookshelves] = await Promise.all([searchProm, bookshelvesProm]);
-                }
-                else {
-                    searchRes = await searchProm;
-                }
-                console.log(searchRes);
+					let prismaBooks: any;
 
-                if (searchRes.totalItems > 0) {
+					if (session) {
+						prismaBooks = await prismaClient.prismaBook.findMany({
+							where: {
+								googleBooksId: { in: bookIds }
+							},
+							select: {
+								googleBooksId: true,
+								bookshelves: {
+									where: { userId: session.user.user_id },
+									select: {
+										id: true
+									}
+								},
+								reviews: {
+									select: {
+										rating: true
+									}
+								}
+							}
+						});
+					} else {
+						prismaBooks = await prismaClient.prismaBook.findMany({
+							where: {
+								googleBooksId: { in: bookIds }
+							},
+							select: {
+								googleBooksId: true,
+								reviews: {
+									select: {
+										rating: true
+									}
+								}
+							}
+						});
+					}
 
-                    const googleBooks = readGoogleBooksResponse(searchRes);
+					console.log(prismaBooks);
 
-                    // get ratings from database 
-                    const bookIds: string[] = []
-                    googleBooks.forEach(googleBook => {
-                        bookIds.push(googleBook.id)
-                    })
+					googleBooks.forEach((book) => {
+						const prismaBook = prismaBooks.find((pBook) => pBook.googleBooksId == book.id);
 
-                    let prismaBooks: any;
+						if (prismaBook == undefined) {
+							book.avgRating = 0;
+							book.numRatings = 0;
+							book.savedBookshelfIDs = [];
+						} else {
+							const numRatings: number = prismaBook.reviews.length;
+							let avgRating: number = 0;
 
-                    if (session) {
-                        prismaBooks = await prismaClient.prismaBook.findMany({
-                            where: {
-                                googleBooksId: { in: bookIds }
-                            },
-                            select: {
-                                googleBooksId: true,
-                                bookshelves: {
-                                    where: { userId: session.user.user_id },
-                                    select: {
-                                        id: true
-                                    }
-                                },
-                                reviews: {
-                                    select: {
-                                        rating: true
-                                    }
-                                }
-                            }
-                        })
-                    }
-                    else {
-                        prismaBooks = await prismaClient.prismaBook.findMany({
-                            where: {
-                                googleBooksId: { in: bookIds }
-                            },
-                            select: {
-                                googleBooksId: true,
-                                reviews: {
-                                    select: {
-                                        rating: true
-                                    }
-                                }
-                            }
-                        })
-                    }
+							if (numRatings > 0) {
+								const sum = prismaBook.reviews.reduce(
+									(partialSum, review) => partialSum + review.rating,
+									0
+								);
+								avgRating = sum / numRatings;
+							}
+							book.avgRating = avgRating;
+							book.numRatings = numRatings;
 
-                    console.log(prismaBooks)
+							let savedBookshelfIDs: number[] = [];
 
-                    googleBooks.forEach(book => {
-                        const prismaBook = prismaBooks.find(pBook => pBook.googleBooksId == book.id)
+							if (session) {
+								prismaBook.bookshelves.forEach((bookshelf) => {
+									savedBookshelfIDs.push(bookshelf.id);
+								});
+							}
+							book.savedBookshelfIDs = savedBookshelfIDs;
+						}
 
-                        if (prismaBook == undefined) {
-                            book.avgRating = 0;
-                            book.numRatings = 0;
-                            book.savedBookshelfIDs = [];
-                        }
-                        else {
-                            const numRatings: number = prismaBook.reviews.length;
-                            let avgRating: number = 0;
+						books.push(book);
+					});
+					console.log(books);
+				}
+			} else {
+				// find users with name that contains string
+				const prismaUsers = await prismaClient.user.findMany({
+					where: {
+						name: {
+							contains: searchString
+						}
+					},
+					select: {
+						id: true,
+						name: true,
+						profilePic: true
+					}
+				});
 
-                            if (numRatings > 0) {
-                                const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-                                avgRating = sum / numRatings
-                            }
-                            book.avgRating = avgRating;
-                            book.numRatings = numRatings;
+				users = prismaUsers.map((prismaUser) => {
+					const user: Client = {
+						id: prismaUser.id,
+						name: prismaUser.name,
+						profilePic: prismaUser.profilePic
+							? process.env.PROFILE_PHOTOS_URL + prismaUser.id
+							: 'default'
+					};
+					return user;
+				});
+			}
 
-                            let savedBookshelfIDs: number[] = [];
-
-                            if (session) {
-                                prismaBook.bookshelves.forEach(bookshelf => {
-                                    savedBookshelfIDs.push(bookshelf.id);
-                                })
-                            }
-                            book.savedBookshelfIDs = savedBookshelfIDs;
-                        }
-
-                        books.push(book);
-                    })
-                    console.log(books);
-                }
-
-            }
-            else {
-
-                // find users with name that contains string
-                const prismaUsers = await prismaClient.user.findMany({
-                    where: {
-                        name: {
-                            contains: searchString
-                        }
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        profilePic: true
-                    }
-                })
-
-                users = prismaUsers.map((prismaUser) => {
-                    const user: Client = {
-                        id: prismaUser.id,
-                        name: prismaUser.name,
-                        profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
-                    }
-                    return user
-                })
-            }
-
-            return {
-                searchType,
-                searchString,
-                books,
-                bookshelves,
-                users
-            }
-        }
-
-    } catch (err) {
-        console.log(err);
-    }
+			return {
+				searchType,
+				searchString,
+				books,
+				bookshelves,
+				users
+			};
+		}
+	} catch (err) {
+		console.log(err);
+	}
 }

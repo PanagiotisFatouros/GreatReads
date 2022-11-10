@@ -31,22 +31,29 @@ export const actions: Actions = {
 			setCookie(cookies, ...userSession.cookies);
 			// console.log(userSession);
 
-			const bookshelfNames = ['Favourites', 'Currently Reading', 'Want to Read', 'Finished Reading']
+			const bookshelfNames = [
+				'Favourites',
+				'Currently Reading',
+				'Want to Read',
+				'Finished Reading'
+			];
 
-			const promises:any[] = []
+			const promises: any[] = [];
 
-			bookshelfNames.forEach(name => {
+			bookshelfNames.forEach((name) => {
 				const bookshelfInput: Prisma.PrismaBookshelfCreateInput = {
 					name: name,
 					isDeletable: false,
 					creationDate: new Date(),
-					user: {connect: {id: userSession.user.user_id}}
-				}
+					user: { connect: { id: userSession.user.user_id } }
+				};
 
-				promises.push(prismaClient.prismaBookshelf.create({
-					data: bookshelfInput
-				}))
-			})
+				promises.push(
+					prismaClient.prismaBookshelf.create({
+						data: bookshelfInput
+					})
+				);
+			});
 
 			//wait for all bookshelves to be created
 			Promise.all(promises);
@@ -59,4 +66,4 @@ export const actions: Actions = {
 			throw redirect(303, '/authentication/failed');
 		}
 	}
-}
+};

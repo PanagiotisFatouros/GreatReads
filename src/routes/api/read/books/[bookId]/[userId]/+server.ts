@@ -6,7 +6,6 @@ import { prismaClient } from '../../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { readJSONToBook } from '../../../../../../lib/scripts';
 
-
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
 	const userId = params.userId || '';
@@ -91,27 +90,26 @@ export async function GET({ params }: RequestEvent) {
 				googleBooksId: googleBooksId
 			};
 			await prismaClient.prismaBook.create({ data: newBookInput });
-			avgRating = 0
+			avgRating = 0;
 			// avgRating =
 			// 	restBookInfo.volumeInfo.averageRating == null
 			// 		? 0
 			// 		: Number(restBookInfo.volumeInfo.averageRating);
-			numRating = 0
+			numRating = 0;
 			// numRating =
 			// 	restBookInfo.volumeInfo.ratingsCount == null
 			// 		? 0
 			// 		: Number(restBookInfo.volumeInfo.ratingsCount);
 		} else {
-
-			const prismaReviews = existingBookInDatabase.reviews
+			const prismaReviews = existingBookInDatabase.reviews;
 
 			if (prismaReviews.length == 0) {
-				avgRating = 0
+				avgRating = 0;
 				// avgRating =
 				// 	restBookInfo.volumeInfo.averageRating == null
 				// 		? 0
 				// 		: Number(restBookInfo.volumeInfo.averageRating);
-				numRating = 0
+				numRating = 0;
 				// numRating =
 				// 	restBookInfo.volumeInfo.ratingsCount == null
 				// 		? 0
@@ -130,7 +128,9 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaReview.user.id,
 							name: prismaReview.user.name,
-							profilePic: prismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id : "default"
+							profilePic: prismaReview.user.profilePic
+								? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id
+								: 'default'
 						}
 					};
 					avgRating += review.rating;
@@ -142,7 +142,7 @@ export async function GET({ params }: RequestEvent) {
 			}
 
 			// building collections
-			const prismaCollections = existingBookInDatabase.collections
+			const prismaCollections = existingBookInDatabase.collections;
 			prismaCollections.forEach((prismaCollection) => {
 				const collection: Collection = {
 					id: prismaCollection.id,
@@ -153,7 +153,9 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						id: prismaCollection.user.id,
 						name: prismaCollection.user.name,
-						profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+						profilePic: prismaCollection.user.profilePic
+							? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id
+							: 'default'
 					},
 					numNotes: prismaCollection._count.notes
 				};
@@ -203,7 +205,9 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaCollection.user.id,
 							name: prismaCollection.user.name,
-							profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+							profilePic: prismaCollection.user.profilePic
+								? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id
+								: 'default'
 						},
 						numNotes: prismaCollection._count.notes
 					};
@@ -214,17 +218,17 @@ export async function GET({ params }: RequestEvent) {
 				});
 			}
 
-
-			existingBookInDatabase.bookshelves.forEach(bookshelf => {
+			existingBookInDatabase.bookshelves.forEach((bookshelf) => {
 				savedBookshelfIDs.push(bookshelf.id);
-			})
+			});
 		}
 
 		// console.log(publicCollections)
 
 		// Add public collection of user to collection
-		collections = collections.concat(publicCollections
-			.filter((publicCollection) => publicCollection.user?.id === userId))
+		collections = collections.concat(
+			publicCollections.filter((publicCollection) => publicCollection.user?.id === userId)
+		);
 
 		// creating google book object
 		targetGoogleBook = {

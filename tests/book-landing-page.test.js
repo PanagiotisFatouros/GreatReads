@@ -28,8 +28,8 @@ test('Valid Book Page (Logged In)', async ({ page, baseURL }) => {
 	await page.goto(`${baseURL}/books/${validBookId}`);
 	await page.waitForURL(`**/${validBookId}`);
 	expect(await page.innerText(h1ClassName)).toBe(bookName);
-	await page.goto('/sign-out')
-	await page.waitForURL('**/authentication')
+	await page.goto('/sign-out');
+	await page.waitForURL('**/authentication');
 });
 
 test('Invalid Book Page', async ({ page, baseURL }) => {

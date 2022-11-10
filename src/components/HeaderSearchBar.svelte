@@ -1,7 +1,7 @@
-<script lang='ts'>
-	import { goto } from "$app/navigation";
+<script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { searchTypes } from '../types/searchTypes.enum'
+	import { searchTypes } from '../types/searchTypes.enum';
 
 	const baseURL: string = $page.url.origin;
 
@@ -11,11 +11,11 @@
 
 	function handleSubmit() {
 		//TODO: test for empty search text
-		let url:URL = new URL(`/search?${selected}=${searchText}`, baseURL);
+		let url: URL = new URL(`/search?${selected}=${searchText}`, baseURL);
 
 		console.log(url);
 
-		goto(url, {replaceState: true});
+		goto(url, { replaceState: true });
 
 		searchText = '';
 

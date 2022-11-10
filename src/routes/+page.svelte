@@ -5,11 +5,11 @@
 	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import { isOverlayOpen } from '../stores/OverlayStore';
-	import type { Bookshelf, Collection, Book } from '../types/book.type'
+	import type { Bookshelf, Collection, Book } from '../types/book.type';
 	import CollectionCard from '../components/CollectionCard.svelte';
 	import MostPopular from '../components/MostPopular.svelte';
 
-	isOverlayOpen.set(false)
+	isOverlayOpen.set(false);
 
 	const session = getSession();
 
@@ -20,7 +20,7 @@
 			goto('/authentication');
 		}
 	}
-	
+
 	/** @type {import('./$types').PageData} */
 	export let data;
 
@@ -28,17 +28,16 @@
 	const readingBookshelf: Bookshelf = data.readingBookshelf;
 	const collections: Collection[] = data.collections;
 	const popularBooks: Book[] = data.popularBooks;
-
 </script>
 
 <div id="page">
 	<div id="left">
 		<div id="bookshelves">
 			<div class="display">
-				<BooksDisplay bookshelf={favsBookshelf}/>
+				<BooksDisplay bookshelf={favsBookshelf} />
 			</div>
 			<div class="display">
-				<BooksDisplay bookshelf={readingBookshelf}/>
+				<BooksDisplay bookshelf={readingBookshelf} />
 			</div>
 		</div>
 		<div id="notes">
@@ -46,13 +45,13 @@
 			<hr class=" border-1 border-primary-3 my-3" />
 			<div id="collections" class=" space-x-3">
 				{#each collections as collection}
-					<CollectionCard collection={collection}/>
+					<CollectionCard {collection} />
 				{/each}
 			</div>
 		</div>
 	</div>
 	<div id="right">
-		<MostPopular mostPopular={popularBooks}/>
+		<MostPopular mostPopular={popularBooks} />
 	</div>
 </div>
 

@@ -1,11 +1,10 @@
-import { redirect } from "@sveltejs/kit";
-import type { Actions } from "@sveltejs/kit";
-import { auth } from "../../../lib/lucia";
-import { setCookie } from "lucia-sveltekit"
+import { redirect } from '@sveltejs/kit';
+import type { Actions } from '@sveltejs/kit';
+import { auth } from '../../../lib/lucia';
+import { setCookie } from 'lucia-sveltekit';
 // import { createNewEntity } from "../../database/mysql";
 
 export const actions: Actions = {
-
 	default: async ({ cookies, request, url }) => {
 		const data = await request.formData();
 		const email = data.get('email')?.toString() || '';

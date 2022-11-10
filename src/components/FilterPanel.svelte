@@ -36,13 +36,17 @@
 			let p: boolean = true;
 			let r: boolean = true;
 			if (pageMin || pageMax) {
-				if ((book.pageCount < pageMin) || (book.pageCount > pageMax)) {
+				if (book.pageCount < pageMin || book.pageCount > pageMax) {
 					p = false;
 				}
-			} 
+			}
 
 			if (ratingSelect != 0) {
-				if ((!book.avgRating) || ((ratingSelect == 1) && (book.avgRating < 4.0)) || ((ratingSelect == 2) && (book.avgRating < 3.0))) {
+				if (
+					!book.avgRating ||
+					(ratingSelect == 1 && book.avgRating < 4.0) ||
+					(ratingSelect == 2 && book.avgRating < 3.0)
+				) {
 					r = false;
 				}
 			}
@@ -91,7 +95,7 @@
 		>
 			<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
 		</svg>
-	</div>	
+	</div>
 
 	<div class="mx-2">
 		<!-- rating filter -->

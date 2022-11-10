@@ -9,7 +9,7 @@ import { getSession } from 'lucia-sveltekit/load';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-	const { request, url, params } = event
+	const { request, url, params } = event;
 
 	const session = await getSession(event);
 
@@ -23,20 +23,17 @@ export async function load(event: ServerLoadEvent) {
 		let bookshelves: Bookshelf[] = [];
 
 		if (session) {
-			const bookProm = fetch(`http://${host}/api/read/books/${bookID}/${session.user.user_id}`)
-				.then(res => res.json());
+			const bookProm = fetch(
+				`http://${host}/api/read/books/${bookID}/${session.user.user_id}`
+			).then((res) => res.json());
 
-			const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/names`).then(res => res.json());
-
-
+			const bookshelvesProm = fetch(
+				`http://${host}/api/read/bookshelves/${session.user.user_id}/names`
+			).then((res) => res.json());
 
 			[book, bookshelves] = await Promise.all([bookProm, bookshelvesProm]);
-
 		} else {
-
-			book = await fetch(`http://${host}/api/read/books/${bookID}`)
-				.then(res => res.json());
-
+			book = await fetch(`http://${host}/api/read/books/${bookID}`).then((res) => res.json());
 		}
 
 		// search for list of similar books based on author
@@ -49,27 +46,30 @@ export async function load(event: ServerLoadEvent) {
 
 		if (authors != undefined) {
 			for (const author of authors) {
-				similarBookProms.push(fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`).then(res => res.json()))
-			};
+				similarBookProms.push(
+					fetch(`https://www.googleapis.com/books/v1/volumes?q=inauthor:${author}`).then((res) =>
+						res.json()
+					)
+				);
+			}
 
 			const similarBooksRes = await Promise.all(similarBookProms);
 
 			for (const response of similarBooksRes) {
-				const googleBooks = readGoogleBooksResponse(response)
-				similarBooks = similarBooks.concat(googleBooks)
-			};
-
+				const googleBooks = readGoogleBooksResponse(response);
+				similarBooks = similarBooks.concat(googleBooks);
+			}
 
 			//make list of ids
-			const similarBookIds: string[] = []
-			similarBooks.forEach(book => {
+			const similarBookIds: string[] = [];
+			similarBooks.forEach((book) => {
 				if (book.id != bookID) {
 					similarBookIds.push(book.id);
 				}
 
 				book.avgRating = 0;
 				book.numRatings = 0;
-			})
+			});
 
 			//get avgRating for each book
 			const prismaBooks = await prismaClient.prismaBook.findMany({
@@ -84,29 +84,32 @@ export async function load(event: ServerLoadEvent) {
 						}
 					}
 				}
-			})
+			});
 
-			prismaBooks.forEach(prismaBook => {
-				const book: Book | undefined = similarBooks.find(b => b.id == prismaBook.googleBooksId)
+			prismaBooks.forEach((prismaBook) => {
+				const book: Book | undefined = similarBooks.find((b) => b.id == prismaBook.googleBooksId);
 
 				if (book != undefined) {
 					const numRatings: number = prismaBook.reviews.length;
 					let avgRating: number = 0;
 
 					if (numRatings > 0) {
-						const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-						avgRating = sum / numRatings
+						const sum = prismaBook.reviews.reduce(
+							(partialSum, review) => partialSum + review.rating,
+							0
+						);
+						avgRating = sum / numRatings;
 					}
 					book.avgRating = avgRating;
 					book.numRatings = numRatings;
 				}
-			})
+			});
 
-			//sort by rating 
-			similarBooks.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0))
+			//sort by rating
+			similarBooks.sort((a, b) => (b.avgRating || 0) - (a.avgRating || 0));
 
 			//take 8
-			similarBooks = similarBooks.slice(0, 8)
+			similarBooks = similarBooks.slice(0, 8);
 		}
 
 		// console.log(books)
@@ -115,8 +118,6 @@ export async function load(event: ServerLoadEvent) {
 			bookshelves,
 			similarBooks
 		};
-
-
 	} catch (err) {
 		console.log(err);
 		//TODO: find better redirect - maybe error page
