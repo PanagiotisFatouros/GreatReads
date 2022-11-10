@@ -74,7 +74,6 @@ Clone the git repository
 
 Run the following commands
 
-
 npm install
 npm run build
 npm run dev

@@ -8,47 +8,42 @@ export async function GET({ params }: RequestEvent) {
 
 	if (googleBooksId === '') {
 		throw error(400, 'Book Id invalid / not specified');
-	}
-    else{
+	} else {
+		let numRatings = 0;
+		let avgRating = 0;
+		let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
+			where: {
+				googleBooksId: googleBooksId
+			}
+		});
 
-        let numRatings = 0
-        let avgRating = 0
-        let existingBookInDatabase = await prismaClient.prismaBook.findUnique({
-            where:{
-                googleBooksId: googleBooksId
-            }
-        })
-
-        if (existingBookInDatabase == null) {
+		if (existingBookInDatabase == null) {
 			let newBookInput: Prisma.PrismaBookCreateInput = {
 				googleBooksId: googleBooksId
 			};
 			await prismaClient.prismaBook.create({ data: newBookInput });
-        }
-        else {
-            const reviews = await prismaClient.prismaReview.findMany({
-                where:{
-                    bookId: googleBooksId
-                },
-                select:{
-                    rating: true
-                }
-            })
+		} else {
+			const reviews = await prismaClient.prismaReview.findMany({
+				where: {
+					bookId: googleBooksId
+				},
+				select: {
+					rating: true
+				}
+			});
 
-            numRatings = reviews.length
-            
-            if (numRatings > 0){
-                const sum = reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-                avgRating = sum / numRatings 
-            } 
-        }
+			numRatings = reviews.length;
 
-        const returnedRatingObject = {
-            avgRating: avgRating,
-            numRatings: numRatings
-        }
-        return new Response(JSON.stringify(returnedRatingObject)); 
-    }
+			if (numRatings > 0) {
+				const sum = reviews.reduce((partialSum, review) => partialSum + review.rating, 0);
+				avgRating = sum / numRatings;
+			}
+		}
+
+		const returnedRatingObject = {
+			avgRating: avgRating,
+			numRatings: numRatings
+		};
+		return new Response(JSON.stringify(returnedRatingObject));
+	}
 }
-
-

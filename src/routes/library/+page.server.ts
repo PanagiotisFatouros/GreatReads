@@ -6,31 +6,32 @@ import type { Bookshelf, Collection } from '../../types/book.type';
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ request, url }: ServerLoadEvent) {
 	try {
-		
 		const session = await auth.validateRequestByCookie(request);
 		if (session) {
 			//console.log(session.access_token)
-			
-            const host = url.host;
+
+			const host = url.host;
 
 			let bookshelves: Bookshelf[];
 			let collections: Collection[];
 
-            const bookshelvesProm = fetch(`http://${host}/api/read/bookshelves/${session.user.user_id}/6`).then(res => res.json());
+			const bookshelvesProm = fetch(
+				`http://${host}/api/read/bookshelves/${session.user.user_id}/6`
+			).then((res) => res.json());
 
-            const collectionsProm = fetch(`http://${host}/api/read/collections/all/${session.user.user_id}`).then(res => res.json());
+			const collectionsProm = fetch(
+				`http://${host}/api/read/collections/all/${session.user.user_id}`
+			).then((res) => res.json());
 
-			[bookshelves, collections] = await Promise.all([bookshelvesProm, collectionsProm])
+			[bookshelves, collections] = await Promise.all([bookshelvesProm, collectionsProm]);
 
 			//console.log(bookshelves)
 			//console.log(collections)
 
-            return {
-                bookshelves: bookshelves,
-                collections: collections
-            }
-            
-
+			return {
+				bookshelves: bookshelves,
+				collections: collections
+			};
 		} else {
 			//not authenticated
 			throw redirect(307, '/authentication');

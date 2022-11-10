@@ -28,7 +28,7 @@ h1 {
 		@apply font-heading text-heading2;
 	}
 	p {
-		@apply font-body text-body1
+		@apply font-body text-body1;
 	}
 }
 

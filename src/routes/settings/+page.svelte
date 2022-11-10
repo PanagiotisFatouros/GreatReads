@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Client } from 'src/types/book.type';
 	import { page } from '$app/stores';
-    import { goto } from '$app/navigation'
+	import { goto } from '$app/navigation';
 	import { RingLoader } from 'svelte-loading-spinners';
-	import { isOverlayOpen } from '../../stores/OverlayStore'
+	import { isOverlayOpen } from '../../stores/OverlayStore';
 	import Confirmation from '../../components/Confirmation.svelte';
 
 	/** @type {import('./$types').PageData} */
@@ -29,7 +29,6 @@
 	let isUpdatingProfilePic: boolean = false;
 	let isDeletingAccount: boolean = false;
 
-
 	function onEditAccountInfo() {
 		isEdittingAccountInfo = true;
 	}
@@ -44,17 +43,19 @@
 	}
 
 	async function updateAccountInfo() {
-		if (fullName != ''  && password != '') {
+		if (fullName != '' && password != '') {
 			//TODO: save name and email changes to database
 
-			const body:any = {
+			const body: any = {
 				userId: user.id
-			}
+			};
 
 			if (password != hiddenPassword) {
 				if (!pwRE.test(password)) {
-					alert('Password must contain at least 8 characters including a number, a lowercase letter, and an uppercase letter.');
-					return
+					alert(
+						'Password must contain at least 8 characters including a number, a lowercase letter, and an uppercase letter.'
+					);
+					return;
 				} else if (password === confirmPassword) {
 					body.password = password;
 				} else {
@@ -64,10 +65,10 @@
 			}
 
 			if (fullName != user.name) {
-				body.name = fullName
+				body.name = fullName;
 			}
 			console.log(body);
-			
+
 			await fetch(`${baseURL}/api/update/settings/account-settings`, {
 				method: 'PUT',
 				body: JSON.stringify(body)
@@ -77,7 +78,6 @@
 			password = hiddenPassword;
 			confirmPassword = hiddenPassword;
 			isEdittingAccountInfo = false;
-
 		} else {
 			alert('Fields cannot be left empty.');
 		}
@@ -110,7 +110,7 @@
 				favGenre: favGenre,
 				bio: bio
 			})
-		})
+		});
 
 		user.favAuthor = favAuthor;
 		user.favGenre = favGenre;
@@ -124,7 +124,12 @@
 	let uploadedPic: string = user.profilePic;
 	$: uploadedPic;
 
-	async function updateUserProfilePic(id: String, mimeType: String, profilePic: String, length: Number) {
+	async function updateUserProfilePic(
+		id: String,
+		mimeType: String,
+		profilePic: String,
+		length: Number
+	) {
 		await fetch(`${baseURL}/api/update/settings/profilepic/`, {
 			method: 'POST',
 			body: JSON.stringify({
@@ -137,7 +142,6 @@
 	}
 
 	function handleFileSelected(event) {
-		
 		let image = event.target?.files[0];
 		const mimeType: string = image.type;
 
@@ -149,8 +153,8 @@
 			reader.onload = async (e) => {
 				let result = e.target?.result;
 				if (result && typeof result === 'string') {
-					isUpdatingProfilePic = false
-          			uploadedPic = result;
+					isUpdatingProfilePic = false;
+					uploadedPic = result;
 					updateUserProfilePic(user.id, mimeType, result, image.size);
 				}
 			};
@@ -175,24 +179,24 @@
 				userId: user.id
 			})
 		});
-		
+
 		goto('/sign-out');
 	}
 </script>
 
 {#if isUpdatingProfilePic}
-<div class='fixed w-full flex justify-center mt-5'>
-	<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
-	<RingLoader color={'#FF6663'} />
-</div>
+	<div class="fixed w-full flex justify-center mt-5">
+		<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
+		<RingLoader color={'#FF6663'} />
+	</div>
 {/if}
 
 {#if isDeletingAccount}
 	<Confirmation
-	title="Delete Account"
-	description="Are you sure you want to your account? <br/>This can not be undone."
-	on:cancel={cancelDeleteAccount}
-	on:confirm={deleteAccount}
+		title="Delete Account"
+		description="Are you sure you want to your account? <br/>This can not be undone."
+		on:cancel={cancelDeleteAccount}
+		on:confirm={deleteAccount}
 	/>
 {/if}
 
@@ -200,9 +204,12 @@
 	<div class="flex justify-between items-center w-full">
 		<h1 class="font-body text-heading1 font-black text-secondary">Account Settings</h1>
 
-		<button on:click={() => goto(`/profile/${user.id}`)} class="btn bg-secondary w-32 h-8 text-body2 text-white rounded-full">View Profile</button>
+		<button
+			on:click={() => goto(`/profile/${user.id}`)}
+			class="btn bg-secondary w-32 h-8 text-body2 text-white rounded-full">View Profile</button
+		>
 	</div>
-	
+
 	<div class="flex">
 		<!-- left side - profile pic -->
 		<div class="flex flex-col self-start justify-center items-center mt-5">
@@ -210,8 +217,7 @@
 			<div
 				class=" w-64 h-64 mx-24 mb-5 bg-white rounded-full overflow-hidden flex justify-center items-center"
 			>
-				
-				{#if uploadedPic != "default"}
+				{#if uploadedPic != 'default'}
 					<img src={uploadedPic} class=" w-full h-full object-cover" alt="profile" />
 				{:else}
 					<svg
@@ -298,7 +304,7 @@
 					</div>
 
 					<!-- to keep space even -->
-					<div class=" w-1/2 "></div>
+					<div class=" w-1/2 " />
 				</div>
 
 				<!-- row -->
@@ -306,8 +312,19 @@
 					<!-- input and label pair -->
 					<div class=" w-1/2 ">
 						<div class="flex text-accent ml-3 mb-1 space-x-2">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="w-6 h-6"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M13.5 10.5V6.75a4.5 4.5 0 119 0v3.75M3.75 21.75h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H3.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+								/>
 							</svg>
 							<p>New Password</p>
 						</div>
@@ -323,9 +340,20 @@
 
 					<div class=" w-1/2">
 						<div class="flex text-accent ml-3 mb-1 space-x-2">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-							  </svg>
+							<svg
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24"
+								stroke-width="1.5"
+								stroke="currentColor"
+								class="w-6 h-6"
+							>
+								<path
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+								/>
+							</svg>
 							<p>Confirm Password</p>
 						</div>
 						<input
@@ -474,7 +502,9 @@
 
 			<div class="flex flex-col space-y-3">
 				<h2 class=" text-secondary">Manage Account</h2>
-				<button on:click={showDeleteAccountConfirmation} class=" h-8 std_button w-40">Delete Account</button>
+				<button on:click={showDeleteAccountConfirmation} class=" h-8 std_button w-40"
+					>Delete Account</button
+				>
 			</div>
 		</div>
 	</div>

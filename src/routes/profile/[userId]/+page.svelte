@@ -7,9 +7,8 @@
 	/** @type {import('./$types').PageData} */
 	export let data;
 
-	let user:Client = data.user;
+	let user: Client = data.user;
 	// console.log(user)
-
 </script>
 
 <div id="page">
@@ -18,7 +17,7 @@
 		<div
 			class=" w-64 h-64 mx-24 mb-5 bg-white rounded-full overflow-hidden flex justify-center items-center"
 		>
-			{#if user.profilePic != "default"}
+			{#if user.profilePic != 'default'}
 				<img src={user.profilePic} class=" w-full h-full object-cover" alt="profile" />
 			{:else}
 				<svg
@@ -39,15 +38,15 @@
 		{#if user.bio != ''}
 			<p id="bio" class="font-body mt-3 mb-5">{user.bio}</p>
 		{/if}
-		<ProfileStatistics user={user}/>
+		<ProfileStatistics {user} />
 	</div>
 	<div id="right">
 		{#if user.favsBookshelf}
-			<BooksDisplay bookshelf={user.favsBookshelf}/>
+			<BooksDisplay bookshelf={user.favsBookshelf} />
 		{/if}
-		
+
 		{#if user.reviews}
-			<ReviewsDisplay name={user.name} reviews={user.reviews} clientID={user.id}/>
+			<ReviewsDisplay name={user.name} reviews={user.reviews} clientID={user.id} />
 		{/if}
 	</div>
 </div>
@@ -72,7 +71,6 @@
 		justify-content: flex-start;
 		align-items: center;
 		width: 65%;
-		
 	}
 
 	#bio {

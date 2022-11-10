@@ -13,7 +13,7 @@
 			{name}'s Reviews
 		</h2>
 		<span id="header-right">
-			<a href="/profile/{clientID}/reviews" ><p>See all</p></a>
+			<a href="/profile/{clientID}/reviews"><p>See all</p></a>
 			<a href="/profile/{clientID}/reviews">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"
@@ -29,8 +29,10 @@
 		</span>
 	</div>
 	<div id="reviews-container" class=" flex flex-col justify-start items-center ">
-		{#each reviews.sort(function (a, b) {return (a.upvotes < b.upvotes ? 1 : -1)}) as review}
-			<BookReview {review} displayText={false}/>
+		{#each reviews.sort(function (a, b) {
+			return a.upvotes < b.upvotes ? 1 : -1;
+		}) as review}
+			<BookReview {review} displayText={false} />
 		{/each}
 	</div>
 </div>
@@ -57,7 +59,6 @@
 		font-weight: 300;
 	}
 
-
 	#header-right {
 		display: flex;
 		align-self: center;
@@ -72,6 +73,5 @@
 		height: 92%;
 		padding-top: 10px;
 		padding-bottom: 5px;
-
 	}
 </style>

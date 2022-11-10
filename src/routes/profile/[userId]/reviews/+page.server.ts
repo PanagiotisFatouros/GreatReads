@@ -6,73 +6,69 @@ import { readJSONToBook } from '../../../../lib/scripts';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load({ params }: ServerLoadEvent) {
-    const userId = params.userId;
-    // console.log(userId)
+	const userId = params.userId;
+	// console.log(userId)
 
-    try {
-        let reviews: Review[] = []
+	try {
+		let reviews: Review[] = [];
 
+		const prismaUser = await prismaClient.user.findUnique({
+			where: { id: userId },
+			select: {
+				name: true,
+				id: true,
+				profilePic: true,
+				reviews: {
+					include: {
+						book: true
+					}
+				}
+			}
+		});
 
-        const prismaUser = await prismaClient.user.findUnique({
-            where: { id: userId },
-            select: {
-                name: true,
-                id: true,
-                profilePic: true,
-                reviews: {
-                    include: {
-                        book: true
-                    }
-                }
-            }
-        });
+		if (prismaUser?.reviews) {
+			console.log(prismaUser);
 
+			const user: Client = {
+				id: prismaUser.id,
+				name: prismaUser.name,
+				profilePic: prismaUser.profilePic
+					? process.env.PROFILE_PHOTOS_URL + prismaUser.id
+					: 'default'
+			};
 
-        if (prismaUser?.reviews) {
-            console.log(prismaUser);
+			const bookProms: any = [];
 
-            const user: Client = {
-                id: prismaUser.id,
-                name: prismaUser.name,
-                profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
-            }
+			prismaUser.reviews.forEach((review) => {
+				bookProms.push(getBookInfoFromGoogleBooksAPI(review.book.googleBooksId));
+			});
 
-            const bookProms: any = []
+			const booksRes = await Promise.all(bookProms);
 
-            prismaUser.reviews.forEach(review => {
-                bookProms.push(getBookInfoFromGoogleBooksAPI(review.book.googleBooksId))
-            })
+			booksRes.forEach((book, i) => {
+				const review = prismaUser.reviews[i];
 
-            const booksRes = await Promise.all(bookProms);
+				let clientReview: Review = {
+					id: review.id,
+					title: review.title,
+					comment: review.comment,
+					rating: review.rating,
+					date: review.creationDate,
+					upvotes: review.upvotes,
+					isEdited: review.isEdited,
+					img: readJSONToBook(book).imageURL
+				};
+				reviews.push(clientReview);
+			});
 
-            booksRes.forEach((book, i) => {
-                const review = prismaUser.reviews[i]
+			console.log(reviews);
 
-                let clientReview: Review = {
-                    id: review.id,
-                    title: review.title,
-                    comment: review.comment,
-                    rating: review.rating,
-                    date: review.creationDate,
-                    upvotes: review.upvotes,
-                    isEdited: review.isEdited,
-                    img: readJSONToBook(book).imageURL
-                };
-                reviews.push(clientReview);
-            })
-
-            console.log(reviews)
-
-            return {
-                user,
-                reviews
-            }
-        }
-
-
-
-    }
-    catch (err) {
-        console.log(err);
-    }
+			return {
+				user,
+				reviews
+			};
+		}
+	} catch (err) {
+		console.log(err);
+	}
 }

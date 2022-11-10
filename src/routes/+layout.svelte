@@ -8,21 +8,19 @@
 	import { navigating } from '$app/stores';
 	import { RingLoader } from 'svelte-loading-spinners';
 
-	import {getSession} from "lucia-sveltekit/client"
+	import { getSession } from 'lucia-sveltekit/client';
 	import { browser } from '$app/environment';
 
-	let session = getSession()
+	let session = getSession();
 	$: $session;
 
 	handleSilentRefresh();
-	
 
 	function disableScroll() {
 		const scrollY = window.scrollY;
 		// document.body.style.position = 'fixed';
 		document.body.style.top = `-${scrollY}px`;
 		document.body.style.overflow = 'hidden';
-		
 	}
 
 	function enableScroll() {
@@ -30,16 +28,14 @@
 		document.body.style.top = '';
 		document.body.style.overflow = '';
 		window.scrollTo(0, scrollY);
-
 	}
 
 	$: {
 		if (browser) {
 			if ($isOverlayOpen == true) {
 				disableScroll();
-			}
-			else {
-				enableScroll()
+			} else {
+				enableScroll();
 			}
 		}
 	}
@@ -49,21 +45,17 @@
 	<Overlay />
 {/if}
 
-
 {#if $session}
-	<NavBar/>
+	<NavBar />
 {:else}
-	<NavBarLanding/>
+	<NavBarLanding />
 {/if}
 
-
 {#if $navigating}
-<div class='w-full flex justify-center mt-10'>
-	<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
-	<RingLoader color={'#FF6663'} />
-</div>
+	<div class="w-full flex justify-center mt-10">
+		<!-- <Circle2 colorInner={'#424C55'} colorCenter={'#15B097'} colorOuter={'#FF6663'}/> -->
+		<RingLoader color={'#FF6663'} />
+	</div>
 {:else}
 	<slot />
 {/if}
-
-

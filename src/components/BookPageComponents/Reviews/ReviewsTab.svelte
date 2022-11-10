@@ -24,24 +24,22 @@
 			}
 		});
 	}
-	
 
 	async function deleteUserReview() {
 		if (userReview != undefined) {
 			//TODO: call deleteReview route
 			const response = await fetch(`${baseURL}/api/delete/review/${userReview.id}`, {
-					method: 'DELETE'
+				method: 'DELETE'
 			});
 			let deletedReview: Review = await response.json();
 			if (deletedReview != undefined) {
 				//successful
 				//remove from local reviews
-				reviews?.splice(reviews.indexOf(userReview), 1)
+				reviews?.splice(reviews.indexOf(userReview), 1);
 
 				userReview = undefined;
-			}
-			else {
-				alert("Something went wrong. Review not deleted");
+			} else {
+				alert('Something went wrong. Review not deleted');
 			}
 		}
 	}
@@ -50,10 +48,9 @@
 		if (userReview != undefined) {
 			reviews?.push(userReview);
 		}
-		
 	}
 
-	let edittingReview:boolean = false;
+	let edittingReview: boolean = false;
 
 	function handleEdit() {
 		edittingReview = true;
@@ -63,13 +60,20 @@
 </script>
 
 <div class=" mt-3 w-full">
-	{#if $session && userReview === undefined || edittingReview}
-		<ReviewInput bind:review={userReview} on:cancel={() => edittingReview = false} on:postReview={pushNewReview}/>
+	{#if ($session && userReview === undefined) || edittingReview}
+		<ReviewInput
+			bind:review={userReview}
+			on:cancel={() => (edittingReview = false)}
+			on:postReview={pushNewReview}
+		/>
 	{:else if $session && userReview != undefined}
 		<!-- TODO: not catching delete event for some reason -->
 		<ReviewCard review={userReview} on:delete={deleteUserReview} on:edit={handleEdit} />
 	{:else}
-	<p class="my-3"><a href="/authentication/login" class="text-accent">Log in</a> or <a href="/authentication/register" class="text-accent">Register</a> to write a review</p>
+		<p class="my-3">
+			<a href="/authentication/login" class="text-accent">Log in</a> or
+			<a href="/authentication/register" class="text-accent">Register</a> to write a review
+		</p>
 	{/if}
 
 	<hr class=" border-1 border-primary-3 my-3" />

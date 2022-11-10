@@ -13,11 +13,17 @@
 	function handleClick() {
 		if (!sortReviews) {
 			if (sortOption == 1) {
-				booksShown.sort(function (a, b) {return (a.title > b.title ? 1 : -1)})
+				booksShown.sort(function (a, b) {
+					return a.title > b.title ? 1 : -1;
+				});
 			} else if (sortOption == 2) {
-				booksShown.sort(function (a, b) {return ((a.avgRating ? a.avgRating : -1) < (b.avgRating ? b.avgRating : -1) ? 1 : -1)})
+				booksShown.sort(function (a, b) {
+					return (a.avgRating ? a.avgRating : -1) < (b.avgRating ? b.avgRating : -1) ? 1 : -1;
+				});
 			} else if (sortOption == 3) {
-				booksShown.sort(function (a, b) {return (a.datePublished > b.datePublished ? 1 : -1)})
+				booksShown.sort(function (a, b) {
+					return a.datePublished > b.datePublished ? 1 : -1;
+				});
 			}
 
 			if (sortOption == 0) {
@@ -33,15 +39,21 @@
 			}
 		} else {
 			if (sortOption == 1) {
-				reviewsShown.sort(function (a, b) {return (a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1)})
+				reviewsShown.sort(function (a, b) {
+					return a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1;
+				});
 			} else if (sortOption == 2) {
-				reviewsShown.sort(function (a, b) {return (a.rating < b.rating ? 1 : -1)})
+				reviewsShown.sort(function (a, b) {
+					return a.rating < b.rating ? 1 : -1;
+				});
 			} else if (sortOption == 3) {
-				reviewsShown.sort(function (a, b) {return (a.date > b.date ? 1 : -1)})
+				reviewsShown.sort(function (a, b) {
+					return a.date > b.date ? 1 : -1;
+				});
 			}
-			reviewsShown = ((sortOption == 0) ? reviews : reviewsShown)
+			reviewsShown = sortOption == 0 ? reviews : reviewsShown;
 		}
-		
+
 		show = false;
 	}
 </script>
@@ -68,7 +80,7 @@
 
 			<p class="text-heading2 font-heading ml-1">Sort</p>
 		</div>
-		
+
 		<svg
 			on:click={() => (show = false)}
 			xmlns="http://www.w3.org/2000/svg"

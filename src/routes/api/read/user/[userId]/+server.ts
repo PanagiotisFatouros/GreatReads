@@ -2,7 +2,6 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { prismaClient } from '../../../../../lib/lucia';
 import type { Client, Review } from '../../../../../types/book.type';
 
-
 export async function GET({ params }: RequestEvent) {
 	const userId = params.userId || null;
 	let client: Client;
@@ -28,7 +27,9 @@ export async function GET({ params }: RequestEvent) {
 					user: {
 						name: prismaUser.name,
 						id: prismaUser.id,
-						profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default',
+						profilePic: prismaUser.profilePic
+							? process.env.PROFILE_PHOTOS_URL + prismaUser.id
+							: 'default'
 					}
 				};
 				clientReviews.push(clientReview);
@@ -37,7 +38,9 @@ export async function GET({ params }: RequestEvent) {
 		client = {
 			name: prismaUser?.name || '',
 			id: prismaUser?.id || '',
-			profilePic: prismaUser?.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser?.id : 'default',
+			profilePic: prismaUser?.profilePic
+				? process.env.PROFILE_PHOTOS_URL + prismaUser?.id
+				: 'default',
 			bio: prismaUser?.bio || '',
 			reviews: clientReviews
 		};

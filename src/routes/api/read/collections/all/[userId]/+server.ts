@@ -11,7 +11,6 @@ export async function GET({ params }: RequestEvent) {
 		return new Response('User not specified/ incorrectly mapped.');
 	}
 
-
 	const prismaCollections = await prismaClient.prismaCollection.findMany({
 		where: { userId: userId },
 		select: {
@@ -41,21 +40,21 @@ export async function GET({ params }: RequestEvent) {
 		}
 	});
 
-	const bookProms: any = []
+	const bookProms: any = [];
 
-	prismaCollections.forEach(prismaCollection => {
-		bookProms.push(getBookInfoFromGoogleBooksAPI(prismaCollection.bookId))
-	})
+	prismaCollections.forEach((prismaCollection) => {
+		bookProms.push(getBookInfoFromGoogleBooksAPI(prismaCollection.bookId));
+	});
 
 	const bookRes = await Promise.all(bookProms);
 
 	let collections: Collection[] = [];
 
 	bookRes.forEach((book, i) => {
-		const prismaCollection = prismaCollections[i]
+		const prismaCollection = prismaCollections[i];
 
 		const imgURL = readJSONToBook(book).imageURL;
-		const prismaUser = prismaCollection.user
+		const prismaUser = prismaCollection.user;
 
 		const collection: Collection = {
 			id: prismaCollection.id,
@@ -66,24 +65,26 @@ export async function GET({ params }: RequestEvent) {
 			user: {
 				id: prismaCollection.user.id,
 				name: prismaCollection.user.name,
-				profilePic: prismaUser.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaUser.id : 'default'
+				profilePic: prismaUser.profilePic
+					? process.env.PROFILE_PHOTOS_URL + prismaUser.id
+					: 'default'
 			},
 			numNotes: prismaCollection._count.notes,
 			bookId: prismaCollection.bookId,
 			imgURL: imgURL
-		}
+		};
 		if (prismaCollection.notes.length > 0) {
 			collection.lastUpdateDate = prismaCollection.notes[0].creationDate;
 		}
 
-		collections.push(collection)
-	})
+		collections.push(collection);
+	});
 	collections.sort((a: Collection, b: Collection) => {
 		const aDate: Date = a.lastUpdateDate ? a.lastUpdateDate : a.creationDate;
 		const bDate: Date = b.lastUpdateDate ? b.lastUpdateDate : b.creationDate;
 
 		return aDate > bDate ? -1 : 1;
-	})
+	});
 
 	// if (collections.length == 0) {
 	// 	return new Response(`404 There are no existing collections for ${userId} in database`);

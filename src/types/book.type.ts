@@ -31,7 +31,7 @@ export type Client = {
 	id: string;
 
 	// only for accounts setting
-	email? : string
+	email?: string;
 
 	//link to image???
 	profilePic: string;
@@ -72,10 +72,9 @@ export type Collection = {
 	// could save time by not loading this until the user clicks into the collection, instead of loading every single note for every collection
 	notes?: Note[];
 	numNotes?: number;
-	bookId?: string,
-	imgURL?: string,
-	lastUpdateDate?: Date,
-
+	bookId?: string;
+	imgURL?: string;
+	lastUpdateDate?: Date;
 };
 
 export type Note = {
@@ -92,5 +91,5 @@ export type Bookshelf = {
 	isDeletable: boolean;
 	creationDate: Date;
 	user?: Client;
-	books?: Book[]
-}
+	books?: Book[];
+};

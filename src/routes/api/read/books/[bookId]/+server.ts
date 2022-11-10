@@ -6,7 +6,6 @@ import { prismaClient } from '../../../../../lib/lucia';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
 import { readJSONToBook } from '../../../../../lib/scripts';
 
-
 export async function GET({ params }: RequestEvent) {
 	const googleBooksId = params.bookId || '';
 
@@ -52,17 +51,14 @@ export async function GET({ params }: RequestEvent) {
 				googleBooksId: googleBooksId
 			};
 			await prismaClient.prismaBook.create({ data: newBookInput });
-			avgRating = 0
-			numRating = 0
-
-		}
-		else {
-
-			const prismaReviews = existingBookInDatabase.reviews
+			avgRating = 0;
+			numRating = 0;
+		} else {
+			const prismaReviews = existingBookInDatabase.reviews;
 
 			if (prismaReviews.length == 0) {
-				avgRating = 0
-				numRating = 0
+				avgRating = 0;
+				numRating = 0;
 			} else {
 				avgRating = 0;
 				prismaReviews.forEach((prismaReview) => {
@@ -77,7 +73,9 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaReview.user.id,
 							name: prismaReview.user.name,
-							profilePic: prismaReview.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id : "default"
+							profilePic: prismaReview.user.profilePic
+								? process.env.PROFILE_PHOTOS_URL + prismaReview.user.id
+								: 'default'
 						}
 					};
 					avgRating += review.rating;
@@ -117,13 +115,14 @@ export async function GET({ params }: RequestEvent) {
 						user: {
 							id: prismaCollection.user.id,
 							name: prismaCollection.user.name,
-							profilePic: prismaCollection.user.profilePic ? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id : "default"
+							profilePic: prismaCollection.user.profilePic
+								? process.env.PROFILE_PHOTOS_URL + prismaCollection.user.id
+								: 'default'
 						}
 					};
 					publicCollections.push(publicCollection);
 				});
 			}
-
 		}
 
 		// creating google book object

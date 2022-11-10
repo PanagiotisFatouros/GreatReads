@@ -12,7 +12,8 @@
 
 	// User can vote at most once in either direction, and can change their vote
 	function handleClickUp() {
-		if (!clickedUp && !clickedDown) { // on first click
+		if (!clickedUp && !clickedDown) {
+			// on first click
 			voteCount++;
 			colourUp = 'text-accent';
 			clickedUp = true;
@@ -21,16 +22,18 @@
 			hoverDown = 'hover:text-accent';
 			dispatch('change', {
 				change: 1
-			})
-		} else if (clickedUp && !clickedDown) { // already upvoted; undo upvote
+			});
+		} else if (clickedUp && !clickedDown) {
+			// already upvoted; undo upvote
 			voteCount--;
 			colourUp = 'text-primary-3';
 			clickedUp = false;
 			hoverUp = 'hover:text-accent';
 			dispatch('change', {
 				change: -1
-			})
-		} else if (!clickedUp && clickedDown) { // was downvoted, now upvoted
+			});
+		} else if (!clickedUp && clickedDown) {
+			// was downvoted, now upvoted
 			voteCount += 2;
 			colourUp = 'text-accent';
 			colourDown = 'text-primary-3';
@@ -40,11 +43,12 @@
 			hoverDown = 'hover:text-accent';
 			dispatch('change', {
 				change: 2
-			})
+			});
 		}
 	}
 	function handleClickDown() {
-		if (!clickedDown && !clickedUp) { // on first click
+		if (!clickedDown && !clickedUp) {
+			// on first click
 			voteCount--;
 			colourDown = 'text-accent';
 			clickedUp = false;
@@ -53,16 +57,18 @@
 			hoverDown = '';
 			dispatch('change', {
 				change: -1
-			})
-		} else if (!clickedUp && clickedDown) { // already downvoted; undo downvote
+			});
+		} else if (!clickedUp && clickedDown) {
+			// already downvoted; undo downvote
 			voteCount++;
 			colourDown = 'text-primary-3';
 			clickedDown = false;
 			hoverDown = 'hover:text-accent';
 			dispatch('change', {
 				change: 1
-			})
-		} else if (clickedUp && !clickedDown) { // was upvoted, now downvoted
+			});
+		} else if (clickedUp && !clickedDown) {
+			// was upvoted, now downvoted
 			voteCount -= 2;
 			colourUp = 'text-primary-3';
 			colourDown = 'text-accent';
@@ -72,7 +78,7 @@
 			hoverDown = '';
 			dispatch('change', {
 				change: -2
-			})
+			});
 		}
 	}
 </script>

@@ -5,28 +5,27 @@ import type { Bookshelf, Book } from '../../../../types/book.type';
 import { prismaClient } from '$lib/lucia';
 import { error } from '@sveltejs/kit';
 import { getBookInfoFromGoogleBooksAPI } from '$lib/functions';
-import { readJSONToBook } from '../../../../lib/scripts'
+import { readJSONToBook } from '../../../../lib/scripts';
 import { getSession } from 'lucia-sveltekit/load';
 
 /** @type {import('./$types').PageServerLoad} */
 export async function load(event: ServerLoadEvent) {
-	const { request, url, params } = event
+	const { request, url, params } = event;
 
 	const session = await getSession(event);
 
 	try {
 		const bookshelfId: number = params.bookshelfId == null ? -1 : parseInt(params.bookshelfId);
 
-
 		if (bookshelfId == -1) {
 			throw error(400, 'Book not specified/ incorrectly mapped.');
 		}
 
 		let prismaBookshelf: any;
-		let bookshelves: Bookshelf[] = []
+		let bookshelves: Bookshelf[] = [];
 
 		if (session) {
-			const user = session.user
+			const user = session.user;
 			const prismaBookshelfProm = prismaClient.prismaBookshelf.findUnique({
 				where: { id: bookshelfId },
 				select: {
@@ -51,11 +50,12 @@ export async function load(event: ServerLoadEvent) {
 				}
 			});
 
-			const bookshelvesProm = fetch(`http://${url.host}/api/read/bookshelves/${user.user_id}/names`).then(res => res.json());
+			const bookshelvesProm = fetch(
+				`http://${url.host}/api/read/bookshelves/${user.user_id}/names`
+			).then((res) => res.json());
 
-			[prismaBookshelf, bookshelves] = await Promise.all([prismaBookshelfProm, bookshelvesProm])
-		}
-		else {
+			[prismaBookshelf, bookshelves] = await Promise.all([prismaBookshelfProm, bookshelvesProm]);
+		} else {
 			prismaBookshelf = await prismaClient.prismaBookshelf.findUnique({
 				where: { id: bookshelfId },
 				select: {
@@ -75,31 +75,29 @@ export async function load(event: ServerLoadEvent) {
 			});
 		}
 
-
 		if (prismaBookshelf == null) {
-			throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`)
-		}
-		else {
-			const bookProms: any = []
+			throw error(400, `Bookshelf with id ${bookshelfId} does not exist!`);
+		} else {
+			const bookProms: any = [];
 
-			prismaBookshelf.books.forEach(prismaBook => {
-				bookProms.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId))
-			})
+			prismaBookshelf.books.forEach((prismaBook) => {
+				bookProms.push(getBookInfoFromGoogleBooksAPI(prismaBook.googleBooksId));
+			});
 
-			const booksRes = await Promise.all(bookProms)
+			const booksRes = await Promise.all(bookProms);
 
-			let books: Book[] = []
+			let books: Book[] = [];
 			booksRes.forEach((bookRes, i) => {
-				const prismaBook = prismaBookshelf.books[i]
+				const prismaBook = prismaBookshelf.books[i];
 
 				const book: Book = readJSONToBook(bookRes);
 
-				let savedBookshelfIDs: number[] = []
+				let savedBookshelfIDs: number[] = [];
 
 				if (session) {
-					prismaBook.bookshelves.forEach(bookshelf => {
+					prismaBook.bookshelves.forEach((bookshelf) => {
 						savedBookshelfIDs.push(bookshelf.id);
-					})
+					});
 				}
 				book.savedBookshelfIDs = savedBookshelfIDs;
 
@@ -107,15 +105,17 @@ export async function load(event: ServerLoadEvent) {
 				let avgRating: number = 0;
 
 				if (numRatings > 0) {
-					const sum = prismaBook.reviews.reduce((partialSum, review) => partialSum + review.rating, 0)
-					avgRating = sum / numRatings
+					const sum = prismaBook.reviews.reduce(
+						(partialSum, review) => partialSum + review.rating,
+						0
+					);
+					avgRating = sum / numRatings;
 				}
 				book.avgRating = avgRating;
 				book.numRatings = numRatings;
 
-				books.push(book)
-			})
-
+				books.push(book);
+			});
 
 			const bookshelf: Bookshelf = {
 				id: bookshelfId,
@@ -123,16 +123,14 @@ export async function load(event: ServerLoadEvent) {
 				isDeletable: prismaBookshelf.isDeletable,
 				creationDate: prismaBookshelf.creationDate,
 				books: books
-			}
+			};
 			//console.log(bookshelf)
 
 			return {
 				bookshelf: bookshelf,
 				bookshelves
-			}
-
+			};
 		}
-
 	} catch (err) {
 		console.log(err);
 		//not authenticated

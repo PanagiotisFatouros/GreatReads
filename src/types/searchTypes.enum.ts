@@ -1,6 +1,6 @@
 export enum searchTypes {
 	books = 'Books',
-    users = 'Users',
-    genres = 'Genres',
-    authors = 'Authors'
+	users = 'Users',
+	genres = 'Genres',
+	authors = 'Authors'
 }

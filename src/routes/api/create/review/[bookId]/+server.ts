@@ -10,9 +10,9 @@ export async function POST({ params, request }: RequestEvent) {
 	if (bookId == '') {
 		throw error(404, 'Book for Review not found/specified');
 	}
-	const { title, comment, rating, userId } = await request.json()
-	let createdPrismaReview: PrismaReview
-	let createdReview: Review
+	const { title, comment, rating, userId } = await request.json();
+	let createdPrismaReview: PrismaReview;
+	let createdReview: Review;
 
 	try {
 		const newReviewInput: Prisma.PrismaReviewCreateInput = {
@@ -24,14 +24,14 @@ export async function POST({ params, request }: RequestEvent) {
 			isEdited: false,
 			book: { connect: { googleBooksId: bookId } },
 			user: { connect: { id: userId } }
-		}
-		createdPrismaReview = await prismaClient.prismaReview.create({ data: newReviewInput })
+		};
+		createdPrismaReview = await prismaClient.prismaReview.create({ data: newReviewInput });
 
 		const user: User | null = await prismaClient.user.findUnique({
 			where: {
 				id: createdPrismaReview.userId
 			}
-		})
+		});
 		if (user != null) {
 			createdReview = {
 				id: createdPrismaReview.id,
@@ -44,14 +44,13 @@ export async function POST({ params, request }: RequestEvent) {
 				user: {
 					id: user.id,
 					name: user.name,
-					profilePic: user.profilePic ? process.env.PROFILE_PHOTOS_URL + user.id : "default"
+					profilePic: user.profilePic ? process.env.PROFILE_PHOTOS_URL + user.id : 'default'
 				}
-			}
-			return new Response(JSON.stringify(createdReview))
+			};
+			return new Response(JSON.stringify(createdReview));
 		}
-	}
-	catch (err) {
-		console.log(err)
-		throw error(404, `Review not successfully created, error: ${err}`)
+	} catch (err) {
+		console.log(err);
+		throw error(404, `Review not successfully created, error: ${err}`);
 	}
 }

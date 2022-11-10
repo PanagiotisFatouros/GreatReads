@@ -14,9 +14,9 @@ module.exports = {
 				accent: `rgb(255, 102, 99)`,
 				hover: {
 					primary: {
-						3: `rgb(51, 59, 67)`,
-					},
-				},
+						3: `rgb(51, 59, 67)`
+					}
+				}
 			},
 			fontFamily: {
 				logo: ['Crete Round', 'serif'],
@@ -51,7 +51,7 @@ module.exports = {
 			width: ['checked'],
 			height: ['checked'],
 			ring: ['checked'],
-			display: ["group-hover"],
+			display: ['group-hover']
 		}
 	}
 };

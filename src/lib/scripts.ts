@@ -1,5 +1,5 @@
-import type { Book } from "../types/book.type";
-import { searchTypes } from "../types/searchTypes.enum.js";
+import type { Book } from '../types/book.type';
+import { searchTypes } from '../types/searchTypes.enum.js';
 
 const MINUTE = 60;
 const HOUR = MINUTE * 60;
@@ -7,10 +7,10 @@ const DAY = HOUR * 24;
 const WEEK = DAY * 7;
 const MONTH = DAY * 30;
 const YEAR = DAY * 365;
-const missingImage = "https://www.lostbookproductions.com/wp-content/uploads/2019/01/logo-lost-book-lg.png"
-const BOOK_IMG_URL_PREFIX = "https://books.google.com/books/publisher/content/images/frontcover/"
-const BOOK_IMG_URL_SUFFIX = "?fife=w800-h1200&source=gbs_api"
-
+const missingImage =
+	'https://www.lostbookproductions.com/wp-content/uploads/2019/01/logo-lost-book-lg.png';
+const BOOK_IMG_URL_PREFIX = 'https://books.google.com/books/publisher/content/images/frontcover/';
+const BOOK_IMG_URL_SUFFIX = '?fife=w800-h1200&source=gbs_api';
 
 export function getTimeAgo(date: Date) {
 	if (typeof date === 'string') {
@@ -59,14 +59,16 @@ export function readJSONToBook(jsonOject: any): Book {
 		description: jsonOject.volumeInfo.description || '',
 		genres: jsonOject.volumeInfo.categories || '-',
 		isbn: getISBN13(jsonOject.volumeInfo.industryIdentifiers),
-		avgRating: jsonOject.volumeInfo.averageRating === undefined ? 0 : jsonOject.volumeInfo.averageRating,
+		avgRating:
+			jsonOject.volumeInfo.averageRating === undefined ? 0 : jsonOject.volumeInfo.averageRating,
 		//avgRating: 0,
-		numRatings: jsonOject.volumeInfo.ratingsCounts === undefined ? 0 : jsonOject.volumeInfo.ratingsCounts,
+		numRatings:
+			jsonOject.volumeInfo.ratingsCounts === undefined ? 0 : jsonOject.volumeInfo.ratingsCounts,
 		//numRatings: 0,
 		datePublished: jsonOject.volumeInfo.publishedDate,
-		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail ?
-			(BOOK_IMG_URL_PREFIX + jsonOject.id + BOOK_IMG_URL_SUFFIX) : missingImage
-
+		imageURL: jsonOject.volumeInfo?.imageLinks?.thumbnail
+			? BOOK_IMG_URL_PREFIX + jsonOject.id + BOOK_IMG_URL_SUFFIX
+			: missingImage
 	};
 	return book;
 }
@@ -74,41 +76,37 @@ export function readJSONToBook(jsonOject: any): Book {
 function getISBN13(identifiers: any[]) {
 	let isbn;
 	if (identifiers !== undefined) {
-		isbn = identifiers.find((identifier) =>
-			identifier.type === "ISBN_13")?.identifier
+		isbn = identifiers.find((identifier) => identifier.type === 'ISBN_13')?.identifier;
 
 		if (isbn === undefined) {
-			isbn = identifiers[0]?.identifier
+			isbn = identifiers[0]?.identifier;
 
 			if (isbn === undefined) {
-				isbn = "-"
+				isbn = '-';
 			}
 		}
 	}
-	return isbn
+	return isbn;
 }
-
-
 
 // For google books api search
 export function getCriteria(searchType: searchTypes): string {
 	switch (searchType) {
 		case searchTypes.books:
-			return "intitle";
+			return 'intitle';
 		case searchTypes.authors:
-			return "inauthor";
+			return 'inauthor';
 		case searchTypes.genres:
-			return "subject";
+			return 'subject';
 		default:
-			return "intitle";
+			return 'intitle';
 	}
 }
 
 export function getNoteText(numNotes: number) {
 	if (numNotes == 1) {
-		return "Note"
-	}
-	else {
-		return "Notes"
+		return 'Note';
+	} else {
+		return 'Notes';
 	}
 }
