@@ -46,13 +46,13 @@
 	},
 	"dependencies": {
 		"@azure/storage-blob": "^12.8.0",
-		"@lucia-sveltekit/adapter-prisma": "^0.3.3",
+		"@lucia-sveltekit/adapter-prisma": "^0.10.0",
 		"@prisma/client": "^4.4.0",
 		"@typescript-eslint/eslint-plugin": "^5.36.2",
 		"@typescript-eslint/parser": "^5.36.2",
 		"esbuild": "^0.15.7",
 		"into-stream": "^3.1.0",
-		"lucia-sveltekit": "^0.8.6",
+		"lucia-sveltekit": "^0.14.3",
 		"postcss-load-config": "^3.1.0",
 		"svelte-loading-spinners": "^0.1.7",
 		"svelte-local-storage-store": "^0.3.1"
